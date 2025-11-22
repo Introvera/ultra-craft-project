@@ -60,18 +60,9 @@ export default function Navbar() {
   return (
     <NavigationMenu viewport={isMobile}>
       <NavigationMenuList className="flex-wrap">
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/docs" className="flex items-center gap-2">
-              <Image
-                src="/logo.png"
-                alt="UltraCraft Logo"
-                width={100}
-                height={100}
-              />
-            </Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
+        <Link href="#" className="flex items-center gap-2">
+          <Image src="/logo.png" alt="UltraCraft Logo" width={100} height={100} />
+        </Link>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Home</NavigationMenuTrigger>
           {/* <NavigationMenuContent>
@@ -103,7 +94,7 @@ export default function Navbar() {
             </ul>
           </NavigationMenuContent> */}
         </NavigationMenuItem>
-        <NavigationMenuItem>
+        {/* <NavigationMenuItem>
           <NavigationMenuTrigger>Components</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-2 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px]">
@@ -118,13 +109,13 @@ export default function Navbar() {
               ))}
             </ul>
           </NavigationMenuContent>
-        </NavigationMenuItem>
+        </NavigationMenuItem> */}
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link href="#">About</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
-        <NavigationMenuItem className="hidden md:block">
+        {/* <NavigationMenuItem className="hidden md:block">
           <NavigationMenuTrigger>List</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[300px] gap-4">
@@ -156,7 +147,7 @@ export default function Navbar() {
               </li>
             </ul>
           </NavigationMenuContent>
-        </NavigationMenuItem>
+        </NavigationMenuItem> */}
         <NavigationMenuItem className="hidden md:block">
           <NavigationMenuTrigger>Product</NavigationMenuTrigger>
           <NavigationMenuContent>
