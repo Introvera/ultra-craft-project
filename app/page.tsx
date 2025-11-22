@@ -1,11 +1,6 @@
-import React from 'react'
+// app/page.tsx
+import { redirect } from "next/navigation";
 
-const Home = () => {
-  return (
-    <div>
-      welcome to next js
-    </div>
-  )
+export default function Page() {
+  redirect("/home");
 }
-
-export default Home
