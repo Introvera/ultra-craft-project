@@ -87,6 +87,21 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+    /* NEW: your custom palette */
+  --page-bg: #E6E8EC;
+
+  /* gradient colors */
+  --gradient-1: #92806A;
+  --gradient-2: #A89380;
+  --gradient-3: #BAB9B9;
+  --gradient-4: #D6D6D6;
+
+  /* text / topics / lines / icons */
+  --text-main: #FAFAFA;
+  --topic: #604D37;
+  --line: #A4A2A2;
+  --icon: #4F4F4F;
 }
 
 .dark {
@@ -121,21 +136,6 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-
-  /* NEW: your custom palette */
-  --page-bg: #E6E8EC;
-
-  /* gradient colors */
-  --gradient-1: #92806A;
-  --gradient-2: #A89380;
-  --gradient-3: #BAB9B9;
-  --gradient-4: #D6D6D6;
-
-  /* text / topics / lines / icons */
-  --text-main: #FAFAFA;
-  --topic: #604D37;
-  --line: #A4A2A2;
-  --icon: #4F4F4F;
 }
 
 @layer base {
