@@ -52,6 +52,7 @@
   --color-topic: var(--topic);           /* text-topic */
   --color-line: var(--line);             /* border-line */
   --color-icon: var(--icon);             /* text-icon */
+  --color-card-background: var(--card-background); /* bg-card-background */
 }
 
 :root {
@@ -101,6 +102,8 @@
   --topic: #604D37;
   --line: #A4A2A2;
   --icon: #4F4F4F;
+
+  --card-background: #F5E3D8;
 }
 
 .dark {

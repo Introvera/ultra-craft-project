@@ -71,7 +71,7 @@ export function AboutUs() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden pt-12 px-4 sm:px-6 md:px-10"
+      className="relative overflow-hidden pt-12 px-4 sm:px-6 md:px-10 mb-36"
     >
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 md:flex-row md:items-start md:gap-16">
         {/* Left: text + buttons + stats */}
