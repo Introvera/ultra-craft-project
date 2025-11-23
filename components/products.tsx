@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { ArrowUpRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Product = {
   id: number;
@@ -178,9 +179,8 @@ export function Products() {
                     </p>
                   </div>
 
-                  <button className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white text-lg hover:bg-neutral-900 transition cursor-pointer">
-                    ↗
-                  </button>
+                  
+                  <ArrowUpRight className="size-2 w-8 h-8 bg-black text-white items-center justify-center rounded-full over:bg-neutral-900 transition cursor-pointer" />
                 </div>
               </div>
             </div>
@@ -189,16 +189,17 @@ export function Products() {
             <div className="mt-6 flex items-center gap-4">
               <button
                 onClick={handlePrev}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-400 bg-white text-sm font-medium hover:bg-neutral-900 hover:text-white transition cursor-pointer"
-              >
-                ◀
-              </button>
-              <button
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-400 bg-white hover:bg-neutral-900 hover:text-white transition cursor-pointer"
+                >
+                <ChevronLeft className="w-5 h-5" />
+                </button>
+
+                <button
                 onClick={handleNext}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-400 bg-white text-sm font-medium hover:bg-neutral-900 hover:text-white transition cursor-pointer"
-              >
-                ▶
-              </button>
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-400 bg-white hover:bg-neutral-900 hover:text-white transition cursor-pointer"
+                >
+                <ChevronRight className="w-5 h-5" />
+                </button>
             </div>
           </div>
 
@@ -230,7 +231,7 @@ export function Products() {
                   "
                 >
                   Request Consultation
-                  <span className="ml-2 text-xs">↗</span>
+                  <ArrowUpRight className="ml-2 size-5" />
                 </button>
 
                 <button
@@ -241,7 +242,7 @@ export function Products() {
                   "
                 >
                   Explore Products
-                  <span className="ml-2 text-xs">↗</span>
+                  <ArrowUpRight className="ml-2 size-5" />
                 </button>
               </div>
             </div>
@@ -287,9 +288,7 @@ export function Products() {
                       </p>
                     </div>
 
-                    <button className="h-9 w-9 rounded-full bg-black text-white flex items-center justify-center text-sm hover:bg-neutral-900 transition cursor-pointer">
-                      ↗
-                    </button>
+                     <ArrowUpRight className="size-2 w-8 h-8 bg-black text-white items-center justify-center rounded-full over:bg-neutral-900 transition cursor-pointer" />
                   </div>
                 </div>
               </div>
