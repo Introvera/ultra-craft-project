@@ -188,7 +188,7 @@ export function AboutUs() {
           <div className="flex flex-col gap-5 md:hidden">
             <div className="relative h-56 w-full overflow-hidden rounded-3xl bg-card">
               <Image
-                src="/aboutus/aboutus03.jpg"
+                src="/aboutus/aboutus3.jpg"
                 alt="Interior main"
                 fill
                 className="object-cover"
@@ -197,7 +197,7 @@ export function AboutUs() {
 
             <div className="relative h-48 w-full overflow-hidden rounded-3xl bg-card">
               <Image
-                src="/aboutus/aboutus01.jpg"
+                src="/aboutus/aboutus1.jpg"
                 alt="Interior warm living room"
                 fill
                 className="object-cover"
@@ -206,7 +206,7 @@ export function AboutUs() {
 
             <div className="relative h-48 w-full overflow-hidden rounded-3xl bg-card">
               <Image
-                src="/aboutus/aboutus02.jpg"
+                src="/aboutus/aboutus2.jpg"
                 alt="Accent chair"
                 fill
                 className="object-cover"
