@@ -69,11 +69,11 @@ export function AboutUs() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden pt-12 px-4 sm:px-6 md:px-[68px]"
+      className="relative overflow-hidden pt-12 px-4 sm:px-6 md:px-10"
     >
-      <div className="mx-auto flex w-full flex-col gap-12 md:flex-row md:items-center md:gap-16">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 md:flex-row md:items-start md:gap-16">
         {/* Left: text + buttons + stats */}
-        <div className="flex-1">
+        <div className="w-full md:basis-[55%]">
           {/* Heading */}
           <h1
             className={`mb-4 text-3xl font-semibold text-[var(--color-topic)] md:text-4xl transition-all duration-700 ${
@@ -153,17 +153,19 @@ export function AboutUs() {
                     inView
                       ? "opacity-100 -translate-x-0"
                       : "opacity-0 -translate-x-4"
-                  } ${isMiddle ? "md:border-l-2 md:border-r-2 md:border-line md:px-4" : ""}`}
+                  } ${
+                    isMiddle
+                      ? "md:border-l-2 md:border-r-2 md:border-line md:px-4"
+                      : ""
+                  }`}
                   style={{ transitionDelay: `${350 + idx * 120}ms` }}
                 >
-                  {/* Number (fixed width to avoid animation layout shift) */}
                   <div className="w-[80px] tabular-nums text-3xl font-semibold md:text-4xl">
                     {stat.prefix ?? ""}
                     {animatedValue}
                     {stat.suffix ?? ""}
                   </div>
 
-                  {/* Label */}
                   <div className="text-xs font-bold tracking-[0.25em] uppercase leading-5">
                     <span className="block">{stat.label}</span>
                   </div>
@@ -174,7 +176,7 @@ export function AboutUs() {
         </div>
 
         {/* Right side: images */}
-        <div className="flex-1">
+        <div className="w-full md:basis-[45%]">
           {/* MOBILE VIEW */}
           <div className="flex flex-col gap-5 md:hidden">
             <div className="relative h-56 w-full overflow-hidden rounded-3xl bg-card">
@@ -206,46 +208,46 @@ export function AboutUs() {
           </div>
 
           {/* DESKTOP VIEW */}
-          <div className="relative hidden min-h-[420px] md:block md:min-h-[480px]">
-            {/* Main big image (left) */}
+          <div className="relative hidden md:block min-h-[460px] w-[420px] ml-auto">
+            {/* Main big image */}
             <div
-              className={`absolute left-6 top-10 h-[448px] w-[320px] overflow-hidden rounded-[80] md:border-4 md:border-[var(--page-bg)] bg-card transition-all duration-[1500ms] ${
+              className={`absolute left-[-50] top-10 h-[448px] w-[320px] overflow-hidden rounded-[80px] md:border-4 md:border-[var(--page-bg)] bg-card transition-all duration-[1500ms] ${
                 inView ? "translate-y-2 opacity-100" : "translate-y-8 opacity-0"
               }`}
             >
               <Image
-                src="/aboutus/aboutus03.jpg"
+                src="/aboutus/aboutus1.jpg"
                 alt="Main interior"
                 fill
-                className="object-cover rounded-[80]"
+                className="object-cover"
               />
             </div>
 
             {/* Top-right image */}
             <div
-              className={`absolute right-0 -top-11 h-[239px] w-[314px] overflow-hidden rounded-[50] md:border-4 md:border-[var(--page-bg)] bg-card transition-all duration-[1500ms] delay-150 ${
+              className={`absolute right-0 -top-11 h-[239px] w-[314px] overflow-hidden rounded-[50px] md:border-4 md:border-[var(--page-bg)] transition-all duration-[1500ms] delay-150 ${
                 inView ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
               }`}
             >
               <Image
-                src="/aboutus/aboutus01.jpg"
+                src="/aboutus/aboutus2.jpg"
                 alt="Warm living room"
                 fill
-                className="object-cover rounded-[50]"
+                className="object-cover"
               />
             </div>
 
             {/* Bottom-right image */}
             <div
-              className={`absolute right-16 bottom-11 h-[223px] w-[207px] overflow-hidden rounded-[30] md:border-4 md:border-[var(--page-bg)] bg-card shadow-md transition-all duration-[1500ms] delay-300 ${
-                inView ? "translate-y-1 opacity-100" : "translate-y-6 opacity-0"
+              className={`absolute right-6 bottom-11 h-[223px] w-[207px] overflow-hidden rounded-[30px] md:border-4 md:border-[var(--page-bg)] bg-card shadow-md transition-all duration-[1500ms] delay-300 ${
+                inView ? "translate-y-10 opacity-100" : "translate-y-6 opacity-0"
               }`}
             >
               <Image
-                src="/aboutus/aboutus02.jpg"
+                src="/aboutus/aboutus3.jpg"
                 alt="Accent chair"
                 fill
-                className="object-cover rounded-[30]"
+                className="object-cover"
               />
             </div>
           </div>

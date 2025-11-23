@@ -1,5 +1,7 @@
 "use client";
 import { AboutUs } from "@/components/aboutus";
+import ContactUs from "@/components/contact";
+import Services from "@/components/services-component/services";
 import Uniqueness from "@/components/what-makes-us-different";
 
 const page = () => {
@@ -7,6 +9,8 @@ const page = () => {
     <>
       <AboutUs />
       <Uniqueness />
+      <Services />
+      <ContactUs />
     </>
   );
 };
