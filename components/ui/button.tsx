@@ -12,6 +12,7 @@ const buttonVariants = cva(
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         coffee: "bg-[#A8927A] text-white hover:bg-[#9C836B]",
         hero: "bg-white text-black hover:bg-gray-100",
+        primary: "bg-zinc-400 text-primary-foreground hover:bg-primary/90",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:

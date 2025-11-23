@@ -16,15 +16,17 @@ const NavLink = ({
   children: React.ReactNode;
 }) => {
   const pathname = usePathname();
-  const isActive = pathname === href || (href !== "/" && pathname.startsWith(href));
+  const isActive =
+    pathname === href || (href !== "/" && pathname.startsWith(href));
 
   return (
     <a
       href={href}
       className={`px-2 py-1 rounded-full transition-all font-semibold relative
-        ${isActive
-          ? "bg-[#cdb495] text-slate-900 shadow-sm"
-          : "hover:bg-[#cdb49559] text-inherit"
+        ${
+          isActive
+            ? "bg-[#cdb495] text-slate-900 shadow-sm"
+            : "hover:bg-[#cdb49559] text-inherit"
         }`}
     >
       <span className="inline-block transition-transform duration-300 hover:scale-105">
