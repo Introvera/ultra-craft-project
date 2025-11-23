@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import ParallaxHero from "@/components/hero_section";
 
 const page = () => {
   return (
-    <div>This is home page</div>
-  )
-}
+    //add hero section with background image and call to action button
+    <section>
+      <ParallaxHero />
+    </section>
+  );
+};
 
-export default page
+export default page;
