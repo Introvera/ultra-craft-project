@@ -1,13 +1,18 @@
-import React from "react";
-import ParallaxHero from "@/components/hero_section";
+"use client"
+import React from 'react'
+import { AboutUs } from '@/components/aboutus'
+import ContactUs from '@/components/contact'
+import Services from '@/components/services-component/services'
 
 const page = () => {
   return (
-    //add hero section with background image and call to action button
-    <section>
-      <ParallaxHero />
-    </section>
-  );
-};
+    <>
+      <AboutUs />
+      <Services />
+      <ContactUs />
+    </>
+      
+  )
+}
 
 export default page;

@@ -6,7 +6,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-poppins);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -44,7 +44,7 @@
 
   /* NEW: custom colors as Tailwind tokens */
   --color-page: var(--page-bg);          /* bg-page */
-  --color-gradient-1: var(--gradient-1); /* from-gradient-1, text-gradient-1, etc. */
+  --color-gradient-1: var(--gradient-1); 
   --color-gradient-2: var(--gradient-2);
   --color-gradient-3: var(--gradient-3);
   --color-gradient-4: var(--gradient-4);
@@ -87,6 +87,20 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* NEW: your custom palette */
+  --page-bg: #E6E8EC;
+
+  /* gradient colors */
+  --gradient-1: #92806A;
+  --gradient-2: #A89380;
+  --gradient-3: #BAB9B9;
+  --gradient-4: #D6D6D6;
+
+  /* text / topics / lines / icons */
+  --text-main: #FAFAFA;
+  --topic: #604D37;
+  --line: #A4A2A2;
+  --icon: #4F4F4F;
 }
 
 .dark {
@@ -121,21 +135,6 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-
-  /* NEW: your custom palette */
-  --page-bg: #E6E8EC;
-
-  /* gradient colors */
-  --gradient-1: #92806A;
-  --gradient-2: #A89380;
-  --gradient-3: #BAB9B9;
-  --gradient-4: #D6D6D6;
-
-  /* text / topics / lines / icons */
-  --text-main: #FAFAFA;
-  --topic: #604D37;
-  --line: #A4A2A2;
-  --icon: #4F4F4F;
 }
 
 /* @layer base {
@@ -144,5 +143,6 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-poppins), system-ui, sans-serif;
   }
 } */
