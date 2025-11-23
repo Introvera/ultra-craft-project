@@ -71,11 +71,11 @@ export function AboutUs() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden pt-12 px-4 sm:px-6 md:px-10 my-36"
+      className="relative overflow-hidden pt-12 pb-12 px-4 sm:px-6 md:px-10 my-24"
     >
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 md:flex-row md:items-start md:gap-16">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 lg:flex-row lg:items-start lg:gap-16">
         {/* Left: text + buttons + stats */}
-        <div className="w-full md:basis-[55%]">
+        <div className="w-full lg:basis-[55%]">
           {/* Heading */}
           <h1
             className={`mb-4 text-3xl font-semibold text-[var(--color-topic)] md:text-4xl transition-all duration-700 ${
@@ -103,24 +103,30 @@ export function AboutUs() {
 
           {/* Buttons */}
           <div className="mt-8 flex flex-wrap gap-4">
-            
             <Button
               size="pill"
               className={` bg-gradient-to-r from-[var(--gradient-3)] to-[var(--gradient-4)] text-black
                 transition-all duration-700 delay-300
-                ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}
+                ${
+                  inView
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-3"
+                }
               `}
             >
               Request Consultation
               <ArrowUpRight className="ml-2 size-5" />
             </Button>
 
-            {/* BUTTON 2 — gradient-1 → gradient-2 */}
             <Button
               size="pill"
               className={` bg-gradient-to-r from-[var(--gradient-1)] to-[var(--gradient-2)] text-white
                 transition-all duration-700 delay-300
-                ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}
+                ${
+                  inView
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-3"
+                }
               `}
             >
               Explore Our Products
@@ -131,8 +137,7 @@ export function AboutUs() {
           {/* Stats + horizontal line */}
           <div
             className={`
-              mt-12 flex flex-col gap-10 border-t border-line pt-8
-              md:flex-row md:items-start md:justify-between
+              mt-12 border-t border-line pt-8
               transition-all duration-700
               ${
                 inView
@@ -141,51 +146,53 @@ export function AboutUs() {
               }
             `}
           >
-            {stats.map((stat, idx) => {
-              const animatedValue = useCountUp(
-                stat.value,
-                inView,
-                1400 + idx * 200
-              );
+            <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+              {stats.map((stat, idx) => {
+                const animatedValue = useCountUp(
+                  stat.value,
+                  inView,
+                  1400 + idx * 200
+                );
 
-              const isMiddle = idx === 1;
+                const isMiddle = idx === 1;
 
-              return (
-                <div
-                  key={stat.label}
-                  className={`flex items-start gap-4 transition-all duration-700 ${
-                    inView
-                      ? "opacity-100 -translate-x-0"
-                      : "opacity-0 -translate-x-4"
-                  } ${
-                    isMiddle
-                      ? "md:border-l-2 md:border-r-2 md:border-line md:px-4"
-                      : ""
-                  }`}
-                  style={{ transitionDelay: `${350 + idx * 120}ms` }}
-                >
-                  <div className="w-[80px] tabular-nums text-3xl font-semibold md:text-4xl">
-                    {stat.prefix ?? ""}
-                    {animatedValue}
-                    {stat.suffix ?? ""}
+                return (
+                  <div
+                    key={stat.label}
+                    className={`flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-2 md:gap-4 transition-all duration-700 ${
+                      inView
+                        ? "opacity-100 -translate-x-0"
+                        : "opacity-0 -translate-x-4"
+                    } ${
+                      isMiddle
+                        ? "md:border-l-2 md:border-r-2 md:border-line md:px-4"
+                        : ""
+                    }`}
+                    style={{ transitionDelay: `${350 + idx * 120}ms` }}
+                  >
+                    <div className="tabular-nums text-3xl font-semibold md:text-4xl md:w-[80px]">
+                      {stat.prefix ?? ""}
+                      {animatedValue}
+                      {stat.suffix ?? ""}
+                    </div>
+
+                    <div className="text-[11px] font-bold tracking-[0.25em] uppercase leading-5">
+                      {stat.label}
+                    </div>
                   </div>
-
-                  <div className="text-xs font-bold tracking-[0.25em] uppercase leading-5">
-                    <span className="block">{stat.label}</span>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
 
         {/* Right side: images */}
-        <div className="w-full md:basis-[45%]">
-          {/* MOBILE VIEW */}
-          <div className="flex flex-col gap-5 md:hidden">
+        <div className="w-full lg:basis-[45%]">
+          {/* MOBILE + TABLET VIEW (images below text) */}
+          <div className="flex flex-col gap-5 lg:hidden">
             <div className="relative h-56 w-full overflow-hidden rounded-3xl bg-card">
               <Image
-                src="/aboutus/aboutus3.jpg"
+                src="/aboutus/about03.jpg"
                 alt="Interior main"
                 fill
                 className="object-cover"
@@ -194,7 +201,7 @@ export function AboutUs() {
 
             <div className="relative h-48 w-full overflow-hidden rounded-3xl bg-card">
               <Image
-                src="/aboutus/aboutus1.jpg"
+                src="/aboutus/about01.jpg"
                 alt="Interior warm living room"
                 fill
                 className="object-cover"
@@ -203,7 +210,7 @@ export function AboutUs() {
 
             <div className="relative h-48 w-full overflow-hidden rounded-3xl bg-card">
               <Image
-                src="/aboutus/aboutus2.jpg"
+                src="/aboutus/about02.jpg"
                 alt="Accent chair"
                 fill
                 className="object-cover"
@@ -211,37 +218,34 @@ export function AboutUs() {
             </div>
           </div>
 
-          {/* DESKTOP VIEW */}
-          <div className="relative hidden md:block min-h-[460px] w-[420px] ml-auto">
-            {/* Main big image */}
+          {/* DESKTOP VIEW (images on the right) */}
+          <div className="relative hidden lg:block min-h-[460px] w-[420px] ml-auto">
             <div
               className={`absolute left-[-50] top-10 h-[448px] w-[320px] overflow-hidden rounded-[80px] md:border-4 md:border-[var(--page-bg)] bg-card transition-all duration-[1500ms] ${
                 inView ? "translate-y-2 opacity-100" : "translate-y-8 opacity-0"
               }`}
             >
               <Image
-                src="/aboutus/aboutus1.jpg"
+                src="/aboutus/about01.jpg"
                 alt="Main interior"
                 fill
                 className="object-cover"
               />
             </div>
 
-            {/* Top-right image */}
             <div
               className={`absolute right-0 -top-11 h-[239px] w-[314px] overflow-hidden rounded-[50px] md:border-4 md:border-[var(--page-bg)] transition-all duration-[1500ms] delay-150 ${
                 inView ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
               }`}
             >
               <Image
-                src="/aboutus/aboutus2.jpg"
+                src="/aboutus/about02.jpg"
                 alt="Warm living room"
                 fill
                 className="object-cover"
               />
             </div>
 
-            {/* Bottom-right image */}
             <div
               className={`absolute right-6 bottom-11 h-[223px] w-[207px] overflow-hidden rounded-[30px] md:border-4 md:border-[var(--page-bg)] bg-card shadow-md transition-all duration-[1500ms] delay-300 ${
                 inView
@@ -250,7 +254,7 @@ export function AboutUs() {
               }`}
             >
               <Image
-                src="/aboutus/aboutus3.jpg"
+                src="/aboutus/about03.jpg"
                 alt="Accent chair"
                 fill
                 className="object-cover"

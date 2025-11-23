@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const mdify = (pos: string) =>
   pos
@@ -28,7 +29,7 @@ const services: Service[] = [
     image: "/backgrounds/service.jpg",
     imageMobile: "/backgrounds/service.jpg",
     mdSpan: "md:col-span-2 md:row-span-2",
-    posMd: "top-10 ",
+    posMd: "top-10",
     mColSpan: "col-span-2",
     mHeight: "h-72",
     posMobile: "top-6",
@@ -75,9 +76,12 @@ const services: Service[] = [
 
 export default function Uniqueness() {
   return (
-    <section id="services" className="py-28 max-w-7xl mx-4 sm:mx-auto md:mx-10">
-      <h2
-        className="text-left mb-3 font-bold"
+    <section
+      id="services"
+      className="max-w-7xl mx-4 sm:mx-10 md:mx-10 xl:mx-auto"
+    >
+      <motion.h2
+        className="text-left mb-6 font-bold"
         style={{
           fontWeight: 700,
           fontStyle: "bold",
@@ -87,21 +91,25 @@ export default function Uniqueness() {
           color: "#604D37",
           opacity: 1,
         }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.4 }}
+        transition={{ duration: 0.6 }}
       >
         What Makes Us Different
-      </h2>
+      </motion.h2>
 
       <div
         className="
-    grid gap-1 md:gap-2 lg:gap-3
-    grid-cols-2
-    md:grid-cols-6
-    md:auto-rows-[190px]
-    lg:auto-rows-[200px]
-  "
+          grid gap-1 md:gap-2 lg:gap-3
+          grid-cols-2
+          md:grid-cols-6
+          md:auto-rows-[190px]
+          lg:auto-rows-[200px]
+        "
       >
         {services.map((s, i) => (
-          <article
+          <motion.article
             key={i}
             className={`
               relative overflow-hidden group rounded-4xl border border-white/5
@@ -110,8 +118,15 @@ export default function Uniqueness() {
               md:h-auto md:col-span-1
               ${s.mdSpan}
               px-4 sm:px-6 md:px-8
-              
             `}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{
+              duration: 0.6,
+              delay: i * 0.1,
+              ease: "easeOut",
+            }}
           >
             {/* Tablet/Desktop image */}
             <Image
@@ -139,7 +154,7 @@ export default function Uniqueness() {
                 <h3 className="font-semibold leading-tight text-[#FAFAFA] tracking-wide text-base sm:text-lg md:text-[15px] lg:text-[24px]">
                   {s.title}
                 </h3>
-                <p className="text-[#FAFAFA] font-medium text-xs sm:text-sm md:text-[16px] lg:text-xs">
+                <p className="text-[#FAFAFA] font-medium text-xs sm:text-sm md:text-[16px] lg:text-xs mt-2">
                   {s.description}
                 </p>
               </div>
@@ -155,7 +170,7 @@ export default function Uniqueness() {
                 <h3 className="font-semibold leading-tight text-[#FAFAFA] tracking-wide text-base sm:text-lg md:text-[15px] lg:text-[24px]">
                   {s.title}
                 </h3>
-                <p className="text-[#FAFAFA] font-medium text-xs sm:text-sm md:text-[16px] lg:text-xs">
+                <p className="text-[#FAFAFA] font-medium text-xs sm:text-sm md:text-[16px] lg:text-xs mt-2">
                   {s.description}
                 </p>
               </div>
@@ -163,7 +178,7 @@ export default function Uniqueness() {
 
             {/* Hover ring */}
             <div className="pointer-events-none hidden md:block absolute inset-0 ring-0 ring-purple-400/0 group-hover:ring-2 group-hover:ring-purple-400/30 rounded-2xl transition-all duration-300" />
-          </article>
+          </motion.article>
         ))}
       </div>
     </section>

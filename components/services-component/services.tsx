@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Services() {
   return (
-    <section className="w-full max-w-[1440px] mx-auto flex flex-col items-start px-[20px] md:px-[56px] py-[60px]">
+    <section className="w-full max-w-[1440px] mx-auto flex flex-col items-start px-[20px] md:px-[56px] pt-4">
       {/* Section Title */}
       <h2 className="text-[#604D37] font-poppins font-[700] text-[32px]">
         Our Interior Solutions
