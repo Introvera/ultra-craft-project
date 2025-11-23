@@ -25,8 +25,8 @@ const services: Service[] = [
     title: "Complete Service Coverage",
     description:
       "We manage everything from concept and design to furniture production and project execution, so every stage feels effortless.",
-    image: "/backgrounds/service.png",
-    imageMobile: "/backgrounds/servicemobile.jpg",
+    image: "/backgrounds/service.jpg",
+    imageMobile: "/backgrounds/service.jpg",
     mdSpan: "md:col-span-2 md:row-span-2",
     posMd: "top-10 ",
     mColSpan: "col-span-2",
@@ -38,7 +38,7 @@ const services: Service[] = [
     description:
       "We shape interiors that enhance daily comfort, rhythm, and lifestyle.",
     image: "/backgrounds/designed.jpg",
-    imageMobile: "/backgrounds/designedmobile.png",
+    imageMobile: "/backgrounds/designed.jpg",
     mdSpan: "md:col-span-4",
     posMd: "top-10 left-6",
     mColSpan: "col-span-2",
@@ -50,7 +50,7 @@ const services: Service[] = [
     description:
       "Crafted with precision and durable materials to ensure timeless beauty and lasting performance.",
     image: "/backgrounds/trusted.jpg",
-    imageMobile: "/backgrounds/trustedmobile.png",
+    imageMobile: "/backgrounds/trusted.jpg",
     mdSpan: "md:col-span-2",
     posMd: "bottom-6 left-6",
     mColSpan: "col-span-1",
@@ -63,7 +63,7 @@ const services: Service[] = [
     description:
       "Crafted with precision and durable materials to ensure timeless beauty and lasting performance.",
     image: "/backgrounds/lasting.jpg",
-    imageMobile: "/backgrounds/lastingmobile.png",
+    imageMobile: "/backgrounds/lasting.jpg",
     mdSpan: "md:col-span-2",
     posMd: "bottom-26 left-6",
     mColSpan: "col-span-1",
