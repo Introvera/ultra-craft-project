@@ -1,9 +1,11 @@
-import React from 'react'
+import ContactUs from "@/components/contact";
 
 const page = () => {
   return (
-    <div>This is home page</div>
-  )
-}
+    <div>
+      <ContactUs />
+    </div>
+  );
+};
 
-export default page
+export default page;
