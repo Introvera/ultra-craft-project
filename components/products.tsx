@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "./ui/button";
+import { ArrowUpRight } from "lucide-react";
 
 type Product = {
   id: number;
@@ -119,27 +121,15 @@ export function Products() {
           </p>
 
           <div className="mt-6 flex flex-wrap gap-4">
-            <button
-              className="
-                inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
-                text-black shadow-sm
-                bg-gradient-to-r from-[var(--gradient-3)] to-[var(--gradient-4)]
-              "
-            >
+            <Button variant="primary" size="pill">
               Request Consultation
-              <span className="ml-2 text-xs">↗</span>
-            </button>
+              <ArrowUpRight className="ml-2 size-5" />
+            </Button>
 
-            <button
-              className="
-                inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
-                text-white shadow-sm
-                bg-gradient-to-r from-[var(--gradient-1)] to-[var(--gradient-2)]
-              "
-            >
+            <Button variant="coffee" size="pill">
               Explore Products
-              <span className="ml-2 text-xs">↗</span>
-            </button>
+              <ArrowUpRight className="ml-2 size-5" />
+            </Button>
           </div>
         </div>
 
