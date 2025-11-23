@@ -2,24 +2,25 @@ import React from "react";
 
 export default function Services() {
   return (
-    <section className="w-full flex flex-col items-start px-[20px] md:px-[56px] py-[60px]">
+    <section className="w-full max-w-[1440px] mx-auto flex flex-col items-start px-[20px] md:px-[56px] py-[60px]">
       {/* Section Title */}
       <h2 className="text-[#604D37] font-poppins font-[700] text-[32px]">
         Our Interior Solutions
       </h2>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-[32px] mt-[32px] w-full">
+      {/* 1 col (mobile) | 2 cols (tablet / small laptop) | 4 cols (big desktop) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[32px] mt-[32px] w-full">
         {/* CARD 1 */}
         <div className="flex flex-col items-start h-full">
           {/* Number + Line */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 w-full">
             <div className="w-[40px] h-[40px] bg-black rounded-[8px] flex justify-center items-center">
               <span className="text-[#FAFAFA] font-inter text-[16px] font-[600]">
                 1
               </span>
             </div>
-            <div className="w-[254px] h-[2px] bg-black" />
+            <div className="flex-1 h-[2px] bg-black max-w-[254px]" />
           </div>
 
           {/* Heading */}
@@ -35,7 +36,7 @@ export default function Services() {
           </p>
 
           {/* Image (bottom-aligned crop) */}
-          <div className="w-[302px] h-[302px] rounded-[28px] overflow-hidden mt-auto flex-shrink-0">
+          <div className="w-full max-w-[302px] h-[302px] rounded-[28px] overflow-hidden mt-auto flex-shrink-0">
             <img
               src="/services/image 56.png"
               alt="Commercial Interiors"
@@ -46,13 +47,13 @@ export default function Services() {
 
         {/* CARD 2 */}
         <div className="flex flex-col items-start h-full">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 w-full">
             <div className="w-[40px] h-[40px] bg-black rounded-[8px] flex justify-center items-center">
               <span className="text-[#FAFAFA] font-inter text-[16px] font-[600]">
                 2
               </span>
             </div>
-            <div className="w-[254px] h-[2px] bg-black" />
+            <div className="flex-1 h-[2px] bg-black max-w-[254px]" />
           </div>
 
           <h3 className="text-black font-poppins font-[600] text-[24px] mt-[20px]">
@@ -65,7 +66,7 @@ export default function Services() {
             function.
           </p>
 
-          <div className="w-[302px] h-[302px] rounded-[28px] overflow-hidden mt-auto flex-shrink-0">
+          <div className="w-full max-w-[302px] h-[302px] rounded-[28px] overflow-hidden mt-auto flex-shrink-0">
             <img
               src="/services/image 64.png"
               alt="Residential Interiors"
@@ -76,13 +77,13 @@ export default function Services() {
 
         {/* CARD 3 */}
         <div className="flex flex-col items-start h-full">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 w-full">
             <div className="w-[40px] h-[40px] bg-black rounded-[8px] flex justify-center items-center">
               <span className="text-[#FAFAFA] font-inter text-[16px] font-[600]">
                 3
               </span>
             </div>
-            <div className="w-[254px] h-[2px] bg-black" />
+            <div className="flex-1 h-[2px] bg-black max-w-[254px]" />
           </div>
 
           <h3 className="text-black font-poppins font-[600] text-[24px] mt-[20px]">
@@ -94,7 +95,7 @@ export default function Services() {
             furniture, and energy-efficient design choices for greener living.
           </p>
 
-          <div className="w-[302px] h-[302px] rounded-[28px] overflow-hidden mt-auto flex-shrink-0">
+          <div className="w-full max-w-[302px] h-[302px] rounded-[28px] overflow-hidden mt-auto flex-shrink-0">
             <img
               src="/services/image 65.png"
               alt="Sustainable Interiors"
@@ -105,13 +106,13 @@ export default function Services() {
 
         {/* CARD 4 */}
         <div className="flex flex-col items-start h-full">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 w-full">
             <div className="w-[40px] h-[40px] bg-black rounded-[8px] flex justify-center items-center">
               <span className="text-[#FAFAFA] font-inter text-[16px] font-[600]">
                 4
               </span>
             </div>
-            <div className="w-[254px] h-[2px] bg-black" />
+            <div className="flex-1 h-[2px] bg-black max-w-[254px]" />
           </div>
 
           <h3 className="text-black font-poppins font-[600] text-[24px] mt-[20px]">
@@ -123,7 +124,7 @@ export default function Services() {
             project execution.
           </p>
 
-          <div className="w-[302px] h-[302px] rounded-[28px] overflow-hidden mt-auto flex-shrink-0">
+          <div className="w-full max-w-[302px] h-[302px] rounded-[28px] overflow-hidden mt-auto flex-shrink-0">
             <img
               src="/services/image 67.png"
               alt="Project Management"
