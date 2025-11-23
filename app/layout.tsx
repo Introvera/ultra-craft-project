@@ -35,7 +35,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} ${geistMono.variable} antialiased bg-[var(--page-bg)]`}
       >
-        <Navbar/>
+        <Navbar />
         {children}
         <Footer/>
       </body>

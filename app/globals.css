@@ -1,7 +1,7 @@
 @import "tailwindcss";
 /* @import "tw-animate-css"; */
 
-@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:is(.dark *)); */
 
 @theme inline {
   --color-background: var(--background);
@@ -57,7 +57,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: hsl(220, 14%, 91%);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -140,7 +140,7 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border outline-ring/50;
   }
@@ -148,4 +148,4 @@
     @apply bg-background text-foreground;
     font-family: var(--font-poppins), system-ui, sans-serif;
   }
-}
+} */
