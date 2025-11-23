@@ -21,7 +21,7 @@ const products: Product[] = [
     price: "LKR 10,000",
     description:
       "A boucle upholstered accent chair with natural wooden legs and a modern silhouette.",
-    image: "/products/chair1.png",
+    image: "/products/ch1.png",
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ const products: Product[] = [
     description:
       "Soft boucle upholstery and slim oak legs for a refined, cozy dining look.",
     badge: "25% Off",
-    image: "/products/chair2.png",
+    image: "/products/ch2.png",
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ const products: Product[] = [
     price: "LKR 12,900",
     description:
       "Gently curved frame with generous cushioning, perfect for reading corners.",
-    image: "/products/chair1.png",
+    image: "/products/ch1.png",
   },
   {
     id: 4,
@@ -46,7 +46,7 @@ const products: Product[] = [
     price: "LKR 9,700",
     description:
       "Clean lines and soft padding for modern living rooms and studios.",
-    image: "/products/chair2.png",
+    image: "/products/ch2.png",
   },
   {
     id: 5,
@@ -54,7 +54,7 @@ const products: Product[] = [
     price: "LKR 11,200",
     description:
       "Scandinavian-inspired design with warm wood tones and textured fabric.",
-    image: "/products/chair1.png",
+    image: "/products/ch1.png",
   },
 ];
 
@@ -144,13 +144,13 @@ export function Products() {
           >
             <div className="relative w-full h-full rounded-[40px] bg-[#E9EDF2] shadow-[0_28px_80px_rgba(0,0,0,0.18)] px-8 sm:px-12 pt-10 pb-8 overflow-visible">
               {/* chair image */}
-              <div className="absolute left-[-15] sm:left-[10] -top-24 sm:-top-28">
+              <div className="absolute left-5 sm:left-[40] -top-24 sm:-top-28">
                 <Image
                   src={bigCard.image}
                   alt={bigCard.name}
                   width={800}
                   height={800}
-                  className="w-[300px] sm:w-[560px] h-auto object-contain"
+                  className="w-[220px] sm:w-[350px] h-auto object-contain"
                 />
               </div>
 
@@ -167,7 +167,7 @@ export function Products() {
               </div>
 
               {/* bottom content */}
-              <div className="flex h-full flex-col justify-end pt-40 sm:pt-80 pb-4">
+              <div className="flex h-full flex-col justify-end pt-40 sm:pt-75 pb-4">
                 <div className="flex items-end justify-between gap-6">
                   <div className="w-full">
                     <h3 className="text-lg sm:text-xl font-semibold tracking-tight">
@@ -255,13 +255,13 @@ export function Products() {
               `}
             >
               <div className="relative w-full max-w-md h-full rounded-[40px] bg-(--color-card-background) shadow-[0_24px_70px_rgba(0,0,0,0.18)] px-8 pt-10 pb-8 overflow-visible">
-                <div className="absolute left-[-15] sm:left-[-20] -top-20 sm:-top-24">
+                <div className="absolute left-5 sm:left-10 -top-20 sm:-top-24">
                   <Image
                     src={smallCard.image}
                     alt={smallCard.name}
                     width={600}
                     height={600}
-                    className="w-[360px] sm:w-[400px] h-auto object-contain"
+                    className="w-[220px] sm:w-[250px] h-auto object-contain"
                   />
                 </div>
 
@@ -276,7 +276,7 @@ export function Products() {
                   )}
                 </div>
 
-                <div className="flex h-full flex-col justify-end pt-50 pb-4">
+                <div className="flex h-full flex-col justify-end pt-45 pb-4">
                   <div className="flex items-end justify-between gap-6">
                     <div className="w-full">
                       <h3 className="text-base font-semibold tracking-tight">
