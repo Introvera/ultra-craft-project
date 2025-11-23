@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "./ui/button";
+import { ArrowUpRight } from "lucide-react";
 
 type Stat = {
   label: string;
@@ -102,30 +104,31 @@ export function AboutUs() {
           {/* Buttons */}
           <div className="mt-8 flex flex-wrap gap-4">
             {/* BUTTON 1 — gradient-3 → gradient-4 */}
-            <button
+            {/* <button
               className={`
                 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium
                 text-black shadow-sm transition-all duration-700 delay-200
                 bg-gradient-to-r from-[var(--gradient-3)] to-[var(--gradient-4)]
-                ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}
+                ${
+                  inView
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-3"
+                }
               `}
             >
               Request Consultation
               <span className="ml-2 text-xs">↗</span>
-            </button>
+            </button> */}
+            <Button variant="primary" size="pill">
+              Request Consultation
+              <ArrowUpRight className="ml-2 size-5" />
+            </Button>
 
             {/* BUTTON 2 — gradient-1 → gradient-2 */}
-            <button
-              className={`
-                inline-flex items-center rounded-full px-6 py-3 text-sm font-medium
-                text-white shadow-sm transition-all duration-700 delay-300
-                bg-gradient-to-r from-[var(--gradient-1)] to-[var(--gradient-2)]
-                ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}
-              `}
-            >
-              Explore Products
-              <span className="ml-2 text-xs">↗</span>
-            </button>
+            <Button variant="coffee" size="pill">
+              Explore Our Products
+              <ArrowUpRight className="ml-2 size-5" />
+            </Button>
           </div>
 
           {/* Stats + horizontal line */}
@@ -134,7 +137,11 @@ export function AboutUs() {
               mt-12 flex flex-col gap-10 border-t border-line pt-8
               md:flex-row md:items-start md:justify-between
               transition-all duration-700
-              ${inView ? "opacity-100 -translate-x-0" : "opacity-0 -translate-x-4"}
+              ${
+                inView
+                  ? "opacity-100 -translate-x-0"
+                  : "opacity-0 -translate-x-4"
+              }
             `}
           >
             {stats.map((stat, idx) => {
@@ -240,7 +247,9 @@ export function AboutUs() {
             {/* Bottom-right image */}
             <div
               className={`absolute right-6 bottom-11 h-[223px] w-[207px] overflow-hidden rounded-[30px] md:border-4 md:border-[var(--page-bg)] bg-card shadow-md transition-all duration-[1500ms] delay-300 ${
-                inView ? "translate-y-10 opacity-100" : "translate-y-6 opacity-0"
+                inView
+                  ? "translate-y-10 opacity-100"
+                  : "translate-y-6 opacity-0"
               }`}
             >
               <Image
