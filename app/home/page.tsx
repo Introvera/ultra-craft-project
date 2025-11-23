@@ -1,8 +1,10 @@
+"use client"
 import React from 'react'
+import { AboutUs } from '@/components/aboutus'
 
 const page = () => {
   return (
-    <div>This is home page</div>
+      <AboutUs />
   )
 }
 
