@@ -75,7 +75,7 @@ const services: Service[] = [
 
 export default function Uniqueness() {
   return (
-    <section id="services" className="py-28 max-w-7xl mx-auto">
+    <section id="services" className="py-28 max-w-7xl mx-4 sm:mx-auto md:mx-10">
       <h2
         className="text-left mb-3 font-bold"
         style={{
