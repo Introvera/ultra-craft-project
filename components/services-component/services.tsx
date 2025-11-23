@@ -20,7 +20,7 @@ export default function Services() {
                 1
               </span>
             </div>
-            <div className="flex-1 h-[2px] bg-black max-w-[254px]" />
+            <div className="flex-1 h-[2px] bg-black max-w-[250px]" />
           </div>
 
           {/* Heading */}
@@ -53,7 +53,7 @@ export default function Services() {
                 2
               </span>
             </div>
-            <div className="flex-1 h-[2px] bg-black max-w-[254px]" />
+            <div className="flex-1 h-[2px] bg-black max-w-[250px]" />
           </div>
 
           <h3 className="text-black font-poppins font-[600] text-[24px] mt-[20px]">
@@ -83,7 +83,7 @@ export default function Services() {
                 3
               </span>
             </div>
-            <div className="flex-1 h-[2px] bg-black max-w-[254px]" />
+            <div className="flex-1 h-[2px] bg-black max-w-[250px]" />
           </div>
 
           <h3 className="text-black font-poppins font-[600] text-[24px] mt-[20px]">
@@ -112,7 +112,7 @@ export default function Services() {
                 4
               </span>
             </div>
-            <div className="flex-1 h-[2px] bg-black max-w-[254px]" />
+            <div className="flex-1 h-[2px] bg-black max-w-[250px]" />
           </div>
 
           <h3 className="text-black font-poppins font-[600] text-[24px] mt-[20px]">
