@@ -71,7 +71,7 @@ export function AboutUs() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden pt-12 px-4 sm:px-6 md:px-10 mb-36"
+      className="relative overflow-hidden pt-12 px-4 sm:px-6 md:px-10 my-36"
     >
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 md:flex-row md:items-start md:gap-16">
         {/* Left: text + buttons + stats */}
@@ -103,29 +103,26 @@ export function AboutUs() {
 
           {/* Buttons */}
           <div className="mt-8 flex flex-wrap gap-4">
-            {/* BUTTON 1 — gradient-3 → gradient-4 */}
-            {/* <button
-              className={`
-                inline-flex items-center rounded-full px-6 py-3 text-sm font-medium
-                text-black shadow-sm transition-all duration-700 delay-200
-                bg-gradient-to-r from-[var(--gradient-3)] to-[var(--gradient-4)]
-                ${
-                  inView
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-3"
-                }
+            
+            <Button
+              size="pill"
+              className={` bg-gradient-to-r from-[var(--gradient-3)] to-[var(--gradient-4)] text-black
+                transition-all duration-700 delay-300
+                ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}
               `}
             >
-              Request Consultation
-              <span className="ml-2 text-xs">↗</span>
-            </button> */}
-            <Button variant="primary" size="pill">
               Request Consultation
               <ArrowUpRight className="ml-2 size-5" />
             </Button>
 
             {/* BUTTON 2 — gradient-1 → gradient-2 */}
-            <Button variant="coffee" size="pill">
+            <Button
+              size="pill"
+              className={` bg-gradient-to-r from-[var(--gradient-1)] to-[var(--gradient-2)] text-white
+                transition-all duration-700 delay-300
+                ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}
+              `}
+            >
               Explore Our Products
               <ArrowUpRight className="ml-2 size-5" />
             </Button>
