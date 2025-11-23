@@ -216,24 +216,24 @@ export function AboutUs() {
               }`}
             >
               <Image
-                src="/aboutus/aboutus03.jpg"
+                src="/aboutus/aboutus1.jpg"
                 alt="Main interior"
                 fill
-                className="object-cover rounded-[80px]"
+                className="object-cover"
               />
             </div>
 
             {/* Top-right image */}
             <div
-              className={`absolute right-0 -top-11 h-[239px] w-[314px] overflow-hidden rounded-[50px] md:border-4 md:border-[var(--page-bg)] bg-card transition-all duration-[1500ms] delay-150 ${
+              className={`absolute right-0 -top-11 h-[239px] w-[314px] overflow-hidden rounded-[50px] md:border-4 md:border-[var(--page-bg)] transition-all duration-[1500ms] delay-150 ${
                 inView ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
               }`}
             >
               <Image
-                src="/aboutus/aboutus01.jpg"
+                src="/aboutus/aboutus2.jpg"
                 alt="Warm living room"
                 fill
-                className="object-cover rounded-[50px]"
+                className="object-cover"
               />
             </div>
 
@@ -244,10 +244,10 @@ export function AboutUs() {
               }`}
             >
               <Image
-                src="/aboutus/aboutus02.jpg"
+                src="/aboutus/aboutus3.jpg"
                 alt="Accent chair"
                 fill
-                className="object-cover rounded-[30px]"
+                className="object-cover"
               />
             </div>
           </div>
