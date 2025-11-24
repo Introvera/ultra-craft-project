@@ -61,7 +61,7 @@ const ContactUs = () => {
     const formData = new FormData(formRef.current);
 
     if (!validateForm(formData)) {
-      setStatus("Please fix the errors before submitting.");
+      setStatus("Please fill the form before submitting.");
       return;
     }
 
