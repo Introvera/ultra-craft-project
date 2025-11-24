@@ -21,21 +21,33 @@ const ContactUs = () => {
     const fullName = formData.get("fullName")?.toString().trim() || "";
     const email = formData.get("email")?.toString().trim() || "";
     const phone = formData.get("phone")?.toString().trim() || "";
+    const message = formData.get("message")?.toString().trim() || "";
 
-    // Name validation: letters only
-    if (fullName && !/^[a-zA-Z\s]+$/.test(fullName)) {
+    // Name validation: required + letters only
+    if (!fullName) {
+      newErrors.fullName = "Name is required.";
+    } else if (!/^[a-zA-Z\s]+$/.test(fullName)) {
       newErrors.fullName = "Name can only contain letters and spaces.";
     }
 
-    // Email validation
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    // Email validation: required + proper format
+    if (!email) {
+      newErrors.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = "Please enter a valid email address.";
     }
 
-    // Phone validation: optional but numbers only
-    if (phone && !/^[0-9+()\-\s]*$/.test(phone)) {
+    // Phone validation: required + numbers only
+    if (!phone) {
+      newErrors.phone = "Phone number is required.";
+    } else if (!/^[0-9+()\-\s]*$/.test(phone)) {
       newErrors.phone =
         "Phone number can only contain numbers and symbols +, -, ().";
+    }
+
+    // Message validation: required
+    if (!message) {
+      newErrors.message = "Message is required.";
     }
 
     setErrors(newErrors);
@@ -293,8 +305,15 @@ const ContactUs = () => {
                   <textarea
                     name="message"
                     placeholder="Tell us how you would like to collaborate"
-                    className="w-full h-[178px] rounded-[12px] bg-[#FAFAFA] border border-[#D4B896] text-black placeholder:text-gray-400 outline-none resize-none p-4"
+                    className={`w-full h-[178px] rounded-[12px] bg-[#FAFAFA] border ${
+                      errors.message ? "border-red-600" : "border-[#D4B896]"
+                    } text-black placeholder:text-gray-400 outline-none resize-none p-4`}
                   />
+                  {errors.message && (
+                    <span className="text-red-600 text-sm">
+                      {errors.message}
+                    </span>
+                  )}
                 </div>
 
                 <button
