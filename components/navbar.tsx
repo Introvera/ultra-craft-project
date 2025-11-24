@@ -22,21 +22,21 @@ const NavLink = ({
   return (
     <a
       href={href}
-      className={`px-2 py-1 rounded-full transition-all font-semibold relative
+      className={`px-3 py-1 rounded-full transition-all font-semibold relative
         ${
           isActive
             ? "bg-[#cdb495] text-slate-900 shadow-sm"
             : "hover:bg-[#cdb49559] text-inherit"
         }`}
     >
-      <span className="inline-block transition-transform duration-300 hover:scale-105">
+      <span className="inline-block transition-transform duration-300 hover:scale-101">
         {children}
       </span>
 
       {/* Optional: subtle underline indicator for active (extra polish) */}
-      {isActive && (
+      {/* {isActive && (
         <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-[#a67c52] rounded-full" />
-      )}
+      )} */}
     </a>
   );
 };
@@ -53,41 +53,41 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
+  const pathname = usePathname();
+
   useEffect(() => {
     setIsMenuOpen(false);
-  }, [usePathname()]);
+  }, [pathname]);
 
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-[#cdb49529] backdrop-blur-md py-4 shadow-sm text-slate-900"
+          ? "bg-[#cdb49529] backdrop-blur-lg py-4 text-slate-900"
           : "bg-transparent py-6 text-white"
       }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
         {/* Logo */}
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <Link href="/">
             <Image
               src="/logo.png"
               alt="UltraCraft Logo"
-              width={64}
-              height={64}
+              width={100}
+              height={100}
             />
           </Link>
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-6 text-sm font-medium tracking-wide bg-white/10 backdrop-blur-md px-4 py-1 rounded-full border border-white/20">
-          <NavLink href="/">Home</NavLink>
+        <div className="hidden md:flex items-center space-x-6 text-sm font-inter font-medium tracking-wide bg-white/10 backdrop-blur-md px-4 py-1 rounded-full border border-white/20">
+          <NavLink href="/home">Home</NavLink>
           <NavLink href="/about">About Us</NavLink>
           <NavLink href="/products">Products</NavLink>
           <NavLink href="/projects">Projects</NavLink>
         </div>
 
-        {/* CTA Button + Mobile Toggle */}
         <div className="flex items-center space-x-6">
           <Button variant="coffee" size="pill" className="hidden sm:flex">
             Explore Products
