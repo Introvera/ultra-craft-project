@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 type Service = {
   number: number;
@@ -13,7 +14,7 @@ type Service = {
 type DragEvent = React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>;
 
 // Animation variants
-const sectionVariants = {
+const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
@@ -25,7 +26,7 @@ const sectionVariants = {
   },
 };
 
-const cardsContainerVariants = {
+const cardsContainerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -34,7 +35,7 @@ const cardsContainerVariants = {
   },
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
