@@ -104,6 +104,10 @@
   --icon: #4F4F4F;
 
   --card-background: #F5E3D8;
+
+  --uc-dot-active-bg: #92806A;
+  --uc-dot-inactive-strong: rgba(146, 128, 106, 0.40);
+  --uc-dot-inactive-weak: rgba(146, 128, 106, 0.20);
 }
 
 .dark {

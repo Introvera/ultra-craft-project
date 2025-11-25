@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 type Service = {
   number: number;
@@ -10,6 +12,40 @@ type Service = {
 };
 
 type DragEvent = React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>;
+
+// Animation variants
+const sectionVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 0.61, 0.36, 1],
+    },
+  },
+};
+
+const cardsContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 0.61, 0.36, 1],
+    },
+  },
+};
 
 export default function Services() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,19 +82,22 @@ export default function Services() {
     {
       number: 4,
       title: "Project Management",
-      description: "End-to-end coordination, scheduling, vendor management, and smooth project execution.",
+      description:
+        "End-to-end coordination, scheduling, vendor management, and smooth project execution.",
       image: "/services/image 67.png",
     },
     {
       number: 5,
       title: "Project Management",
-      description: "End-to-end coordination, scheduling, vendor management, and smooth project execution.",
+      description:
+        "End-to-end coordination, scheduling, vendor management, and smooth project execution.",
       image: "/services/image 67.png",
     },
     {
       number: 6,
       title: "Project Management",
-      description: "End-to-end coordination, scheduling, vendor management, and smooth project execution.",
+      description:
+        "End-to-end coordination, scheduling, vendor management, and smooth project execution.",
       image: "/services/image 67.png",
     },
   ];
@@ -82,8 +121,7 @@ export default function Services() {
       setItemsPerView(getItemsPerView());
     };
 
-    // Correct value right after mount
-    handleResize();
+    handleResize(); // correct value right after mount
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -168,18 +206,28 @@ export default function Services() {
   };
 
   return (
-    <section
+    <motion.section
       id="services"
       className="w-full max-w-[1440px] mx-auto flex flex-col items-start px-[20px] md:px-[56px] pt-4 pb-8"
+      variants={sectionVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.25 }}
     >
       {/* Section Title */}
-      <h2 className="text-[#604D37] font-poppins font-[700] text-[32px] mb-8">
+      <motion.h2
+        className="text-[#604D37] font-poppins font-[700] text-[32px] mb-8"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
+      >
         Our Interior Solutions
-      </h2>
+      </motion.h2>
 
       {/* Carousel Container */}
       <div className="relative w-full">
-        <div
+        <motion.div
           ref={sliderRef}
           className="overflow-hidden cursor-grab active:cursor-grabbing"
           onMouseDown={handleDragStart}
@@ -189,6 +237,10 @@ export default function Services() {
           onTouchStart={handleDragStart}
           onTouchMove={handleDragMove}
           onTouchEnd={handleDragEnd}
+          variants={cardsContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
         >
           <div
             className="flex transition-transform ease-in-out"
@@ -198,10 +250,11 @@ export default function Services() {
             }}
           >
             {services.map((service) => (
-              <div
+              <motion.div
                 key={service.number}
                 className="flex-shrink-0 px-4"
                 style={{ width: `${100 / itemsPerView}%` }}
+                variants={cardVariants}
               >
                 <div className="flex flex-col items-start h-full">
                   {/* Number + Line */}
@@ -233,25 +286,57 @@ export default function Services() {
                     />
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Dots Indicator */}
-      <div className="flex justify-center gap-2 mt-8 w-full">
-        {Array.from({ length: maxIndex + 1 }).map((_, index) => (
+      <motion.div
+      className="flex justify-center items-center gap-2 mt-8 w-full"
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.2, duration: 0.4 }}
+    >
+      {Array.from({ length: maxIndex + 1 }).map((_, index) => {
+        const isActive = index === currentIndex;
+
+        return (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              index === currentIndex ? "w-8 bg-[#604D37]" : "w-2 bg-gray-300 hover:bg-gray-400"
-            }`}
             aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div>
-    </section>
+            className="transition-all duration-300"
+          >
+            {isActive ? (
+              <div
+                className="
+                  rounded-full
+                  transition-all duration-300
+                  sm:w-[24px] sm:h-[10px]
+                  w-[20px] h-[8px]
+                "
+                style={{
+                  backgroundColor: "var(--uc-dot-color)",
+                }}
+              />
+            ) : (
+              <svg width="10" height="10" viewBox="0 0 10 10">
+                <circle
+                  cx="5"
+                  cy="5"
+                  r="5"
+                  fill="var(--uc-dot-color)"
+                  fillOpacity={index === currentIndex - 1 ? "0.40" : "0.20"}
+                />
+              </svg>
+            )}
+          </button>
+        );
+      })}
+    </motion.div>
+    </motion.section>
   );
 }
