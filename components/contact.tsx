@@ -54,6 +54,24 @@ const ContactUs = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Remove or update specific field errors while typing:
+  const handleFieldChange = (name: string, value: string) => {
+    // If there's no error currently for this field, nothing to do
+    if (!errors[name]) return;
+
+    const trimmed = value.toString().trim();
+
+    // For simplicity: remove the error once user types something non-empty.
+    // (If you prefer stricter live validation, replace these checks with full validation per-field.)
+    if (trimmed !== "") {
+      setErrors((prev) => {
+        const copy = { ...prev };
+        delete copy[name];
+        return copy;
+      });
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!formRef.current) return;
@@ -103,7 +121,7 @@ const ContactUs = () => {
   return (
     <div
       ref={ref}
-      className="mx-auto px-6 sm:px-8 md:px-10 lg:px-16 mt-36"
+      className="mx-auto px-6 sm:px-8 md:px-10 lg:px-16 mt-24 sm:mt-36"
       id="contact"
     >
       {inView ? (
@@ -274,12 +292,18 @@ const ContactUs = () => {
                     name="fullName"
                     placeholder="John Doe"
                     error={errors.fullName}
+                    onChange={(val: string) =>
+                      handleFieldChange("fullName", val)
+                    }
                   />
                   <InputField
                     label="Company"
                     name="company"
                     placeholder="Company Name"
                     error={errors.company}
+                    onChange={(val: string) =>
+                      handleFieldChange("company", val)
+                    }
                   />
                 </div>
                 <div className="flex flex-col md:flex-row gap-3">
@@ -289,12 +313,14 @@ const ContactUs = () => {
                     placeholder="johndoe@example.com"
                     type="email"
                     error={errors.email}
+                    onChange={(val: string) => handleFieldChange("email", val)}
                   />
                   <InputField
                     label="Phone"
                     name="phone"
                     placeholder="+94 77 123 4567"
                     error={errors.phone}
+                    onChange={(val: string) => handleFieldChange("phone", val)}
                   />
                 </div>
 
@@ -305,6 +331,9 @@ const ContactUs = () => {
                   <textarea
                     name="message"
                     placeholder="Tell us how you would like to collaborate"
+                    onChange={(e) =>
+                      handleFieldChange("message", e.target.value)
+                    }
                     className={`w-full h-[178px] rounded-[12px] bg-[#FAFAFA] border ${
                       errors.message ? "border-red-600" : "border-[#D4B896]"
                     } text-black placeholder:text-gray-400 outline-none resize-none p-4`}
@@ -356,6 +385,7 @@ const InputField = ({
   placeholder,
   type = "text",
   error,
+  onChange,
 }: any) => (
   <div className="flex flex-col gap-1 w-full">
     <label className="font-poppins font-semibold text-[16px] text-black">
@@ -365,6 +395,7 @@ const InputField = ({
       type={type}
       name={name}
       placeholder={placeholder}
+      onChange={(e) => onChange && onChange(e.target.value)}
       className={`w-full h-[48px] rounded-[12px] bg-[#FAFAFA] border ${
         error ? "border-red-600" : "border-[#D4B896]"
       } text-black placeholder:text-gray-400 outline-none px-4`}
@@ -373,7 +404,7 @@ const InputField = ({
   </div>
 );
 
-// Contact Info Component
+// Contact Info Component (responsive fonts)
 const ContactInfo = ({ title, text, icon, bgColor }: any) => (
   <div className="flex flex-row items-center gap-3 w-full">
     <div
@@ -383,10 +414,11 @@ const ContactInfo = ({ title, text, icon, bgColor }: any) => (
       <div className="w-[24px] h-[24px]">{icon}</div>
     </div>
     <div className="flex flex-col gap-1">
-      <h3 className="font-poppins font-semibold text-[20px] leading-[28px]">
+      {/* responsive: smaller on very small screens, normal on sm+ */}
+      <h3 className="font-poppins font-semibold text-[16px] sm:text-[20px] leading-[28px]">
         {title}
       </h3>
-      <p className="font-poppins font-medium text-[20px] leading-[28px]">
+      <p className="font-poppins font-medium text-[16px] sm:text-[20px] leading-[28px]">
         {text}
       </p>
     </div>

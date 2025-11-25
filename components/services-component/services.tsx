@@ -175,7 +175,7 @@ export default function Services() {
       {/* Section Title */}
       <h2 className="text-[#604D37] font-poppins font-[700] text-[32px] mb-8">
         Our Interior Solutions
-      </h2>
+      </motion.h2>
 
       {/* Carousel Container */}
       <div className="relative w-full">
@@ -252,6 +252,6 @@ export default function Services() {
           />
         ))}
       </div>
-    </section>
+    </>
   );
 }
