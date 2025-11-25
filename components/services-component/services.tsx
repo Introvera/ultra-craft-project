@@ -319,7 +319,7 @@ export default function Services() {
                   w-[20px] h-[8px]
                 "
                 style={{
-                  backgroundColor: "var(--uc-dot-color)",
+                  backgroundColor: "var(--uc-dot-active-bg)",
                 }}
               />
             ) : (
