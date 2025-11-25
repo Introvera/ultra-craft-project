@@ -5,6 +5,7 @@ import { Products } from '@/components/products'
 import Services from "@/components/services-component/services";
 import Uniqueness from "@/components/what-makes-us-different";
 import ParallaxHero from '@/components/hero_section'
+import Projects from "@/components/projects";
 
 const page = () => {
   return (
@@ -14,6 +15,7 @@ const page = () => {
       <Uniqueness />
       <Products />
       <Services />
+      <Projects />
       <ContactUs />
     </>
   );

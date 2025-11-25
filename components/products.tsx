@@ -287,7 +287,7 @@ export function Products() {
               </div>
 
               {/* DOTS (mobile only) */}
-              <div className="flex md:hidden items-center gap-2">
+              <div className="mt-2 flex md:hidden items-center gap-2">
                 {products.map((_, index) => (
                   <button
                     key={index}
