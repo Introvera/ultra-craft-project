@@ -121,7 +121,7 @@ const ContactUs = () => {
   return (
     <div
       ref={ref}
-      className="mx-auto px-6 sm:px-8 md:px-10 lg:px-16 mt-36"
+      className="mx-auto px-6 sm:px-8 md:px-10 lg:px-16 mt-24 sm:mt-36"
       id="contact"
     >
       {inView ? (
