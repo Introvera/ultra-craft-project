@@ -18,7 +18,6 @@ export default function Services() {
   const [currentTranslate, setCurrentTranslate] = useState(0);
   const [prevTranslate, setPrevTranslate] = useState(0);
 
-  // 1) Properly type the refs
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const sliderRef = useRef<HTMLDivElement | null>(null);
 
@@ -64,15 +63,18 @@ export default function Services() {
     },
   ];
 
-  // Get items per view based on screen size
+  // Decide how many cards to show based on width
   const getItemsPerView = () => {
     if (typeof window === "undefined") return 1;
-    if (window.innerWidth >= 1280) return 4; // xl
-    if (window.innerWidth >= 768) return 2; // md
-    return 1; // mobile
+    const width = window.innerWidth;
+
+    if (width >= 1536) return 4; // very large desktop
+    if (width >= 1024) return 3; // laptop / large tablet landscape
+    if (width >= 768) return 2;  // tablet
+    return 1;                    // mobile
   };
 
-  // 2) Fix hydration mismatch: start with a constant value (same on server & client)
+  // Start with 1 to match server render (avoid hydration issues)
   const [itemsPerView, setItemsPerView] = useState(1);
 
   useEffect(() => {
@@ -80,7 +82,7 @@ export default function Services() {
       setItemsPerView(getItemsPerView());
     };
 
-    // set correct value immediately after mount
+    // Correct value right after mount
     handleResize();
 
     window.addEventListener("resize", handleResize);
@@ -107,7 +109,6 @@ export default function Services() {
     };
   }, [maxIndex]);
 
-  // Reset auto-play after drag
   const resetAutoPlay = () => {
     if (autoPlayRef.current) {
       clearInterval(autoPlayRef.current);
@@ -122,13 +123,12 @@ export default function Services() {
     }, 3000);
   };
 
-  // 3) Explicit type for index to avoid implicit any
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
     resetAutoPlay();
   };
 
-  // Touch/Drag handlers
+  // Touch/Drag helpers
   const getPositionX = (event: DragEvent) => {
     return "touches" in event ? event.touches[0].clientX : event.pageX;
   };
@@ -148,7 +148,6 @@ export default function Services() {
     setCurrentTranslate(prevTranslate + diff);
   };
 
-  // Make event optional so we can call handleDragEnd() without args
   const handleDragEnd = (_event?: DragEvent) => {
     if (!isDragging) return;
     setIsDragging(false);
@@ -169,7 +168,10 @@ export default function Services() {
   };
 
   return (
-    <section className="w-full max-w-[1440px] mx-auto flex flex-col items-start px-[20px] md:px-[56px] pt-4 pb-8">
+    <section
+      id="services"
+      className="w-full max-w-[1440px] mx-auto flex flex-col items-start px-[20px] md:px-[56px] pt-4 pb-8"
+    >
       {/* Section Title */}
       <h2 className="text-[#604D37] font-poppins font-[700] text-[32px] mb-8">
         Our Interior Solutions
@@ -177,7 +179,6 @@ export default function Services() {
 
       {/* Carousel Container */}
       <div className="relative w-full">
-        {/* Carousel Wrapper */}
         <div
           ref={sliderRef}
           className="overflow-hidden cursor-grab active:cursor-grabbing"
@@ -219,7 +220,7 @@ export default function Services() {
                   </h3>
 
                   {/* Content */}
-                  <p className="text-black font-poppins font-[500] text-[16px] mt-[12px] mb-[24px]">
+                  <p className="text-black font-poppins font-[500] text-[16px] mt-[12px] mb-[24px] max-w-[380px]">
                     {service.description}
                   </p>
 
