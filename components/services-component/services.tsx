@@ -293,23 +293,49 @@ export default function Services() {
 
       {/* Dots Indicator */}
       <motion.div
-        className="flex justify-center gap-2 mt-8 w-full"
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.2, duration: 0.4 }}
-      >
-        {Array.from({ length: maxIndex + 1 }).map((_, index) => (
+      className="flex justify-center items-center gap-2 mt-8 w-full"
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.2, duration: 0.4 }}
+    >
+      {Array.from({ length: maxIndex + 1 }).map((_, index) => {
+        const isActive = index === currentIndex;
+
+        return (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              index === currentIndex ? "w-8 bg-[#604D37]" : "w-2 bg-gray-300 hover:bg-gray-400"
-            }`}
             aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </motion.div>
+            className="transition-all duration-300"
+          >
+            {isActive ? (
+              <div
+                className="
+                  rounded-full
+                  transition-all duration-300
+                  sm:w-[24px] sm:h-[10px]
+                  w-[20px] h-[8px]
+                "
+                style={{
+                  backgroundColor: "var(--uc-dot-color)",
+                }}
+              />
+            ) : (
+              <svg width="10" height="10" viewBox="0 0 10 10">
+                <circle
+                  cx="5"
+                  cy="5"
+                  r="5"
+                  fill="var(--uc-dot-color)"
+                  fillOpacity={index === currentIndex - 1 ? "0.40" : "0.20"}
+                />
+              </svg>
+            )}
+          </button>
+        );
+      })}
+    </motion.div>
     </motion.section>
   );
 }
