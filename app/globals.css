@@ -104,6 +104,9 @@
   --icon: #4F4F4F;
 
   --card-background: #F5E3D8;
+
+  --uc-dot-active-bg: #92806A;
+  --uc-dot-color: #92806A;
 }
 
 .dark {
