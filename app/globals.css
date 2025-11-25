@@ -43,15 +43,15 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   /* NEW: custom colors as Tailwind tokens */
-  --color-page: var(--page-bg);          /* bg-page */
-  --color-gradient-1: var(--gradient-1); 
+  --color-page: var(--page-bg); /* bg-page */
+  --color-gradient-1: var(--gradient-1);
   --color-gradient-2: var(--gradient-2);
   --color-gradient-3: var(--gradient-3);
   --color-gradient-4: var(--gradient-4);
-  --color-text-main: var(--text-main);   /* text-text-main */
-  --color-topic: var(--topic);           /* text-topic */
-  --color-line: var(--line);             /* border-line */
-  --color-icon: var(--icon);             /* text-icon */
+  --color-text-main: var(--text-main); /* text-text-main */
+  --color-topic: var(--topic); /* text-topic */
+  --color-line: var(--line); /* border-line */
+  --color-icon: var(--icon); /* text-icon */
   --color-card-background: var(--card-background); /* bg-card-background */
 }
 
@@ -89,19 +89,19 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   /* NEW: your custom palette */
-  --page-bg: #E6E8EC;
+  --page-bg: #e6e8ec;
 
   /* gradient colors */
-  --gradient-1: #92806A;
-  --gradient-2: #A89380;
-  --gradient-3: #BAB9B9;
-  --gradient-4: #D6D6D6;
+  --gradient-1: #92806a;
+  --gradient-2: #a89380;
+  --gradient-3: #bab9b9;
+  --gradient-4: #d6d6d6;
 
   /* text / topics / lines / icons */
-  --text-main: #FAFAFA;
-  --topic: #604D37;
-  --line: #A4A2A2;
-  --icon: #4F4F4F;
+  --text-main: #fafafa;
+  --topic: #604d37;
+  --line: #a4a2a2;
+  --icon: #4f4f4f;
 
   --card-background: #F5E3D8;
 
