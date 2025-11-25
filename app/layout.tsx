@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import { Poppins } from "next/font/google";
@@ -10,6 +10,12 @@ const poppins = Poppins({
   subsets: ["latin"],
   variable: "--font-poppins",
 });
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,13 +37,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning="true" data-qb-installed="true">
       <body
-        className={`${poppins.variable} ${geistMono.variable} antialiased bg-[var(--page-bg)]`}
+        className={`${inter.variable} ${geistMono.variable} antialiased bg-[var(--page-bg)]`}
       >
         <Navbar />
         {children}
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );

@@ -22,21 +22,27 @@ const NavLink = ({
   return (
     <a
       href={href}
-      className={`px-3 py-1 rounded-full transition-all font-semibold relative
-        ${
-          isActive
-            ? "bg-[#cdb495] text-slate-900 shadow-sm"
-            : "hover:bg-[#cdb49559] text-inherit"
-        }`}
+      className={`
+        group px-3 py-1 font-semibold relative transition-all
+        ${isActive ? "text-slate-900" : "text-inherit"}
+      `}
     >
-      <span className="inline-block transition-transform duration-300 hover:scale-101">
+      <span className="inline-block transition-transform duration-300 group-hover:scale-105">
         {children}
       </span>
 
-      {/* Optional: subtle underline indicator for active (extra polish) */}
-      {/* {isActive && (
-        <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-[#a67c52] rounded-full" />
-      )} */}
+      {/* Animated indicator */}
+      <span
+        className={`
+          absolute -bottom-1 left-1/2 -translate-x-1/2 h-[2px] bg-[#a67c52] rounded-full
+          transition-all duration-300 origin-center
+          ${
+            isActive
+              ? "w-10 scale-x-100 opacity-100"
+              : "w-10 scale-x-0 opacity-0 group-hover:scale-x-100 group-hover:opacity-100"
+          }
+        `}
+      />
     </a>
   );
 };
@@ -63,11 +69,11 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-[#cdb49529] backdrop-blur-lg py-4 text-slate-900"
-          : "bg-transparent py-6 text-white"
+          ? "bg-white/90 py-2 text-slate-900"
+          : "bg-transparent lg:py-2 md:py-2 py-4 text-slate-900"
       }`}
     >
-      <div className="container mx-auto px-6 flex justify-between items-center">
+      <div className="container mx-auto px-8 flex justify-between items-center">
         {/* Logo */}
         <div className="shrink-0">
           <Link href="/">
@@ -81,9 +87,9 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-6 text-sm font-inter font-medium tracking-wide bg-white/10 backdrop-blur-md px-4 py-1 rounded-full border border-white/20">
+        <div className="hidden md:flex ml-28 sm:ml-12 items-center space-x-8 text-sm font-medium tracking-wide">
           <NavLink href="/home">Home</NavLink>
-          <NavLink href="/about">About Us</NavLink>
+          <NavLink href="/about">About</NavLink>
           <NavLink href="/products">Products</NavLink>
           <NavLink href="/projects">Projects</NavLink>
         </div>
@@ -95,7 +101,7 @@ export default function Navbar() {
           </Button>
 
           <button
-            className="md:hidden text-white"
+            className={`md:hidden ${isScrolled ? "text-slate-900" : "text-white"}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >

@@ -1,3 +1,5 @@
+"use client";
+
 import { motion, Transition, Easing } from 'motion/react';
 import { useEffect, useRef, useState, useMemo } from 'react';
 
@@ -21,7 +23,6 @@ const buildKeyframes = (
   steps: Array<Record<string, string | number>>
 ): Record<string, Array<string | number>> => {
   const keys = new Set<string>([...Object.keys(from), ...steps.flatMap(s => Object.keys(s))]);
-
   const keyframes: Record<string, Array<string | number>> = {};
   keys.forEach(k => {
     keyframes[k] = [from[k], ...steps.map(s => s[k])];
@@ -43,9 +44,14 @@ const BlurText: React.FC<BlurTextProps> = ({
   onAnimationComplete,
   stepDuration = 0.35
 }) => {
-  const elements = animateBy === 'words' ? text.split(' ') : text.split('');
   const [inView, setInView] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Always run hooks in the same order
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -62,19 +68,19 @@ const BlurText: React.FC<BlurTextProps> = ({
     return () => observer.disconnect();
   }, [threshold, rootMargin]);
 
+  const elements = animateBy === 'words' ? text.split(' ') : text.split('');
+
   const defaultFrom = useMemo(
     () =>
-      direction === 'top' ? { filter: 'blur(10px)', opacity: 0, y: -50 } : { filter: 'blur(10px)', opacity: 0, y: 50 },
+      direction === 'top'
+        ? { filter: 'blur(10px)', opacity: 0, y: -50 }
+        : { filter: 'blur(10px)', opacity: 0, y: 50 },
     [direction]
   );
 
   const defaultTo = useMemo(
     () => [
-      {
-        filter: 'blur(5px)',
-        opacity: 0.5,
-        y: direction === 'top' ? 5 : -5
-      },
+      { filter: 'blur(5px)', opacity: 0.5, y: direction === 'top' ? 5 : -5 },
       { filter: 'blur(0px)', opacity: 1, y: 0 }
     ],
     [direction]
@@ -89,33 +95,31 @@ const BlurText: React.FC<BlurTextProps> = ({
 
   return (
     <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
-      {elements.map((segment, index) => {
-        const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
+      {mounted &&
+        elements.map((segment, index) => {
+          const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
 
-        const spanTransition: Transition = {
-          duration: totalDuration,
-          times,
-          delay: (index * delay) / 1000,
-          ease: easing
-        };
+          const spanTransition: Transition = {
+            duration: totalDuration,
+            times,
+            delay: (index * delay) / 1000,
+            ease: easing
+          };
 
-        return (
-          <motion.span
-            key={index}
-            initial={fromSnapshot}
-            animate={inView ? animateKeyframes : fromSnapshot}
-            transition={spanTransition}
-            onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
-            style={{
-              display: 'inline-block',
-              willChange: 'transform, filter, opacity'
-            }}
-          >
-            {segment === ' ' ? '\u00A0' : segment}
-            {animateBy === 'words' && index < elements.length - 1 && '\u00A0'}
-          </motion.span>
-        );
-      })}
+          return (
+            <motion.span
+              key={index}
+              initial={fromSnapshot}
+              animate={inView ? animateKeyframes : fromSnapshot}
+              transition={spanTransition}
+              onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
+              style={{ display: 'inline-block', willChange: 'transform, filter, opacity' }}
+            >
+              {segment === ' ' ? '\u00A0' : segment}
+              {animateBy === 'words' && index < elements.length - 1 && '\u00A0'}
+            </motion.span>
+          );
+        })}
     </p>
   );
 };
