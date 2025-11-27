@@ -18,37 +18,37 @@ const projects: Project[] = [
     id: "1",
     title: "Havelock City Apartments",
     location: "Colombo 6",
-    image: "/projects/projects1.jpg",
+    image: "/projects/uc01.png",
   },
   {
     id: "2",
     title: "Havelock City Apartments",
     location: "Colombo 6",
-    image: "/projects/projects1.jpg",
+    image: "/projects/uc02.png",
   },
   {
     id: "3",
     title: "Havelock City Apartments",
     location: "Colombo 6",
-    image: "/projects/projects1.jpg",
+    image: "/projects/uc03.png",
   },
   {
     id: "4",
     title: "Havelock City Apartments",
     location: "Colombo 6",
-    image: "/projects/projects1.jpg",
+    image: "/projects/uc04.png",
   },
   {
     id: "5",
     title: "Havelock City Apartments",
     location: "Colombo 6",
-    image: "/projects/projects1.jpg",
+    image: "/projects/uc05.png",
   },
   {
     id: "6",
     title: "Havelock City Apartments",
     location: "Colombo 6",
-    image: "/projects/projects1.jpg",
+    image: "/projects/uc06.png",
   },
 ]
 
@@ -283,7 +283,7 @@ function ProjectCard({ project }: { project: Project }) {
         />
 
         {/* Location badge */}
-        <div className="absolute top-4 left-4 bg-black/55 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs sm:text-sm flex items-center gap-1">
+        <div className="absolute top-4 right-4 bg-black/55 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs sm:text-sm flex items-center gap-1">
           <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
           <span>{project.location}</span>
         </div>
