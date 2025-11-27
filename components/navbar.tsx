@@ -205,8 +205,8 @@ export default function Navbar() {
             <Image
               src="/logo.png"
               alt="UltraCraft Logo"
-              width={64}
-              height={64}
+              width={100}
+              height={100}
             />
           </Link>
         </div>
@@ -236,7 +236,7 @@ export default function Navbar() {
 
           {/* Hamburger visible on mobile + tablet */}
           <button
-            className="lg:hidden text-white"
+            className="lg:hidden text-black"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
