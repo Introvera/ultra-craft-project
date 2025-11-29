@@ -129,14 +129,13 @@
 //   );
 // }
 
-
 "use client";
 
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import Image from "next/image";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
 // Reusable NavLink Component
@@ -215,13 +214,11 @@ export default function Navbar() {
         <div
           className={`hidden lg:flex items-center space-x-6 text-sm font-medium tracking-wide backdrop-blur-md px-4 py-1 rounded-full border
           ${
-            isScrolled
-              ? "bg-white/10 border-white/20"
-              : "bg-transparent border-transparent"
+            isScrolled ? "" : "bg-transparent border-transparent"
           } absolute left-1/2 -translate-x-1/2`}
         >
           <NavLink href="/">Home</NavLink>
-          <NavLink href="/about">About Us</NavLink>
+          <NavLink href="/aboutus">About Us</NavLink>
           <NavLink href="/products">Products</NavLink>
           <NavLink href="/projects">Projects</NavLink>
         </div>
@@ -250,7 +247,7 @@ export default function Navbar() {
         <div className="absolute top-full left-0 w-full bg-white text-slate-900 shadow-2xl border-t border-slate-200 lg:hidden animate-in slide-in-from-top-2">
           <div className="container mx-auto px-6 py-8 flex flex-col space-y-6 text-lg font-medium">
             <NavLink href="/">Home</NavLink>
-            <NavLink href="/about">About Us</NavLink>
+            <NavLink href="/aboutus">About Us</NavLink>
             <NavLink href="/products">Products</NavLink>
             <NavLink href="/projects">Projects</NavLink>
 
