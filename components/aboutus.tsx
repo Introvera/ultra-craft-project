@@ -1,9 +1,9 @@
 "use client";
 
+import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
-import { ArrowUpRight } from "lucide-react";
 
 type Stat = {
   label: string;
@@ -73,11 +73,7 @@ export function AboutUs() {
       className={`
         mt-12 sm:border-t sm:border-line pt-8
         transition-all duration-700
-        ${
-          inView
-            ? "opacity-100 -translate-x-0"
-            : "opacity-0 -translate-x-4"
-        }
+        ${inView ? "opacity-100 -translate-x-0" : "opacity-0 -translate-x-4"}
       `}
     >
       <div className="flex flex-row items-stretch justify-between">
@@ -134,7 +130,7 @@ export function AboutUs() {
       className="relative overflow-hidden pt-12 pb-12 px-4 sm:px-6 md:px-10 my-24"
     >
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 lg:flex-row lg:items-center lg:gap-16">
-          {/* LEFT: text + buttons (+ stats from md and up) */}
+        {/* LEFT: text + buttons (+ stats from md and up) */}
         <div className="w-full md:basis-[55%]">
           {/* Heading */}
           <h1
@@ -173,6 +169,10 @@ export function AboutUs() {
                     : "opacity-0 translate-y-3"
                 }
               `}
+              onClick={() => {
+                const contactSection = document.getElementById("contact");
+                contactSection?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               Request Consultation
               <ArrowUpRight className="ml-2 size-5" />
@@ -295,9 +295,7 @@ export function AboutUs() {
 
             <div
               className={`absolute right-4 bottom-6 h-1/2 w-3/6 overflow-hidden rounded-[28px] lg:rounded-[30px] md:border-4 md:border-[var(--page-bg)] bg-card shadow-md transition-all duration-[1500ms] delay-300 ${
-                inView
-                  ? "translate-y-6 opacity-100"
-                  : "translate-y-3 opacity-0"
+                inView ? "translate-y-6 opacity-100" : "translate-y-3 opacity-0"
               }`}
             >
               <Image

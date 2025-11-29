@@ -17,7 +17,7 @@ const page = () => {
       <Products />
       <Services />
       <Projects />
-      <TestimonialCarousel />
+      {/* <TestimonialCarousel /> */}
       <ContactUs />
     </>
   );

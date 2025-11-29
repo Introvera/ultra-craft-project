@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
-import { Button } from "./ui/button"
-import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "./ui/button";
 
 type Product = {
-  id: number
-  name: string
-  price: string
-  description: string
-  badge?: string
-  image: string
-}
+  id: number;
+  name: string;
+  price: string;
+  description: string;
+  badge?: string;
+  image: string;
+};
 
 const products: Product[] = [
   {
@@ -57,7 +57,7 @@ const products: Product[] = [
       "Scandinavian-inspired design with warm wood tones and textured fabric.",
     image: "/products/ch1.png",
   },
-]
+];
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -72,51 +72,51 @@ const slideVariants = {
     x: direction === 1 ? -40 : 40,
     opacity: 0,
   }),
-}
+};
 
 export function Products() {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [direction, setDirection] = useState<1 | -1>(1)
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
 
-  const bigIndex = activeIndex
-  const smallIndex = (activeIndex + 1) % products.length
+  const bigIndex = activeIndex;
+  const smallIndex = (activeIndex + 1) % products.length;
 
-  const bigCard = products[bigIndex]
-  const smallCard = products[smallIndex]
+  const bigCard = products[bigIndex];
+  const smallCard = products[smallIndex];
 
   const handleNext = () => {
-    setDirection(1)
-    setActiveIndex((prev) => (prev + 1) % products.length)
-  }
+    setDirection(1);
+    setActiveIndex((prev) => (prev + 1) % products.length);
+  };
 
   const handlePrev = () => {
-    setDirection(-1)
-    setActiveIndex((prev) => (prev === 0 ? products.length - 1 : prev - 1))
-  }
+    setDirection(-1);
+    setActiveIndex((prev) => (prev === 0 ? products.length - 1 : prev - 1));
+  };
 
   // scroll / appear animation
-  const sectionRef = useRef<HTMLElement | null>(null)
-  const [inView, setInView] = useState(false)
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    if (!sectionRef.current) return
+    if (!sectionRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setInView(true)
-            observer.disconnect()
+            setInView(true);
+            observer.disconnect();
           }
-        })
+        });
       },
-      { threshold: 0.25 },
-    )
+      { threshold: 0.25 }
+    );
 
-    observer.observe(sectionRef.current)
+    observer.observe(sectionRef.current);
 
-    return () => observer.disconnect()
-  }, [])
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
@@ -140,7 +140,14 @@ export function Products() {
           </p>
 
           <div className="mt-4 sm:mt-6 flex flex-wrap gap-3 sm:gap-4">
-            <Button variant="primary" size="pill">
+            <Button
+              variant="primary"
+              size="pill"
+              onClick={() => {
+                const contactSection = document.getElementById("contact");
+                contactSection?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               Request Consultation
               <ArrowUpRight className="ml-2 size-4 sm:size-5" />
             </Button>
@@ -170,6 +177,10 @@ export function Products() {
                 text-black shadow-sm
                 bg-linear-to-r from-[var(--gradient-3)] to-[var(--gradient-4)]
               "
+              onClick={() => {
+                const contactSection = document.getElementById("contact");
+                contactSection?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               Request Consultation
               <ArrowUpRight className="ml-2 size-5" />
@@ -195,7 +206,11 @@ export function Products() {
               w-full lg:basis-[55%]
               mt-10 sm:mt-8 md:mt-12 lg:mt-0
               transition-all duration-700
-              ${inView ? "opacity-100 -translate-x-0" : "opacity-0 -translate-x-6"}
+              ${
+                inView
+                  ? "opacity-100 -translate-x-0"
+                  : "opacity-0 -translate-x-6"
+              }
             `}
           >
             <AnimatePresence mode="wait" custom={direction}>
@@ -292,15 +307,17 @@ export function Products() {
                   <button
                     key={index}
                     onClick={() => {
-                      if (index === activeIndex) return
-                      setDirection(index > activeIndex ? 1 : -1)
-                      setActiveIndex(index)
+                      if (index === activeIndex) return;
+                      setDirection(index > activeIndex ? 1 : -1);
+                      setActiveIndex(index);
                     }}
                     className={`
                       h-2 rounded-full transition-all duration-300
-                      ${index === activeIndex
-                        ? "w-4 bg-[#C9A071]"
-                        : "w-2 bg-black opacity-20 hover:opacity-60"}
+                      ${
+                        index === activeIndex
+                          ? "w-4 bg-[#C9A071]"
+                          : "w-2 bg-black opacity-20 hover:opacity-60"
+                      }
                     `}
                   />
                 ))}
@@ -313,7 +330,9 @@ export function Products() {
             className={`
               w-full lg:basis-[45%] flex flex-col gap-6 sm:gap-8 lg:mt-[-100px]
               transition-all duration-700 delay-150
-              ${inView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-6"}
+              ${
+                inView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-6"
+              }
             `}
           >
             {/* Desktop heading (lg and up) */}
@@ -334,6 +353,10 @@ export function Products() {
                     text-black shadow-sm
                     bg-linear-to-r from-[var(--gradient-3)] to-[var(--gradient-4)]
                   "
+                  onClick={() => {
+                    const contactSection = document.getElementById("contact");
+                    contactSection?.scrollIntoView({ behavior: "smooth" });
+                  }}
                 >
                   Request Consultation
                   <ArrowUpRight className="ml-2 size-4 md:size-5" />
@@ -409,5 +432,5 @@ export function Products() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -59,8 +59,6 @@
 //   );
 // }
 
-
-
 // "use client";
 // import { ArrowUpRight, ChevronDown } from "lucide-react";
 // import { useScrollPosition } from "@/hooks/useScrollPosition";
@@ -71,19 +69,19 @@
 
 //   return (
 //     // Page background (like your screenshot)
-//     <section className="w-full bg-[var(--color-page)] px-0  
+//     <section className="w-full bg-[var(--color-page)] px-0
 //           xl:px-5 ">
 //       {/* Card-like hero container */}
 //       <div
 //         className="
-//           relative 
-//           h-screen 
+//           relative
+//           h-screen
 //           w-full
-          
+
 //           mt-0 md:mt-21.5
-//           overflow-hidden 
+//           overflow-hidden
 //           flex
-//           rounded-none 
+//           rounded-none
 //           md:rounded-[36px]
 //         "
 //       >
@@ -146,12 +144,11 @@
 //   );
 // }
 
-
 "use client";
 
-import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { useScrollPosition } from "@/hooks/useScrollPosition";
 import { motion } from "framer-motion";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 
 export default function ParallaxHero() {
   const scrollY = useScrollPosition();
@@ -200,12 +197,12 @@ export default function ParallaxHero() {
             animate="show"
             transition={{ staggerChildren: 0.26 }}
           >
-            <motion.h2
+            {/* <motion.h2
               variants={fadeUp}
               className="text-sm md:text-base uppercase tracking-[0.3em] mb-4 opacity-90"
             >
               Est. 2024
-            </motion.h2>
+            </motion.h2> */}
 
             <motion.h1
               variants={fadeUp}
@@ -231,6 +228,10 @@ export default function ParallaxHero() {
                 text-black shadow-sm
                 bg-linear-to-r from-[var(--gradient-3)] to-[var(--gradient-4)]
               "
+              onClick={() => {
+                const contactSection = document.getElementById("contact");
+                contactSection?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               Request Consultation
               <ArrowUpRight className="ml-2 size-4 md:size-5" />
