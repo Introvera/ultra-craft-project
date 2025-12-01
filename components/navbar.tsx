@@ -212,10 +212,10 @@ export default function Navbar() {
 
         {/* Desktop Navigation (only from lg upward) */}
         <div
-          className={`hidden lg:flex items-center space-x-6 text-sm font-medium tracking-wide backdrop-blur-md px-4 py-1 rounded-full border
-          ${
-            isScrolled ? "" : "bg-transparent border-transparent"
-          } absolute left-1/2 -translate-x-1/2`}
+          className={`hidden lg:flex items-center space-x-6 text-sm font-medium tracking-wide backdrop-blur-md px-4 py-1 rounded-full 
+            border border-transparent
+            ${isScrolled ? "" : "bg-transparent"}
+            absolute left-1/2 -translate-x-1/2`}
         >
           <NavLink href="/">Home</NavLink>
           <NavLink href="/aboutus">About Us</NavLink>
