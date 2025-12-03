@@ -163,10 +163,10 @@ const NavLink = ({
       <span className="inline-block transition-transform duration-300 hover:scale-105">
         {children}
       </span>
-
+{/* 
       {isActive && (
         <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-[#a67c52] rounded-full" />
-      )}
+      )} */}
     </a>
   );
 };
@@ -217,7 +217,7 @@ export default function Navbar() {
             ${isScrolled ? "" : "bg-transparent"}
             absolute left-1/2 -translate-x-1/2`}
         >
-          <NavLink href="/">Home</NavLink>
+          <NavLink href="/home">Home</NavLink>
           <NavLink href="/aboutus">About Us</NavLink>
           <NavLink href="/products">Products</NavLink>
           <NavLink href="/projects">Projects</NavLink>
