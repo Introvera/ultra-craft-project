@@ -4,6 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
+import { Link } from "@heroui/react";
 
 type Stat = {
   label: string;
@@ -177,10 +178,11 @@ export function AboutUs() {
               Request Consultation
               <ArrowUpRight className="ml-2 size-5" />
             </Button>
-
+            
+            <Link href="/products">
             <Button
               size="pill"
-              className={` bg-gradient-to-r from-[var(--gradient-1)] to-[var(--gradient-2)] text-white
+              className={` bg-gradient-to-r from-[var(--gradient-1)] to-[var(--gradient-2)] text-white cursor-pointer
                 transition-all duration-700 delay-300
                 ${
                   inView
@@ -192,6 +194,7 @@ export function AboutUs() {
               Explore Products
               <ArrowUpRight className="ml-2 size-5" />
             </Button>
+            </Link>
           </div>
 
           {/* Stats on tablet + desktop */}

@@ -226,10 +226,12 @@ export default function Navbar() {
         {/* CTA + Hamburger (Mobile & Tablet = only hamburger) */}
         <div className="flex items-center space-x-6">
           {/* CTA visible only on desktop (lg+) */}
-          <Button variant="coffee" size="pill" className="hidden lg:flex">
+          <Link href="/products">
+          <Button variant="coffee" size="pill" className="hidden lg:flex cursor-pointer">
             Explore Products
             <ArrowUpRight className="ml-2 size-5" />
           </Button>
+          </Link>
 
           {/* Hamburger visible on mobile + tablet */}
           <button
