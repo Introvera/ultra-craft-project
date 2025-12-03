@@ -313,11 +313,17 @@ export function Products() {
                     }}
                     className={`
                       h-2 rounded-full transition-all duration-300
+<<<<<<< HEAD
+                      ${index === activeIndex
+                        ? "w-4 bg-[var(--uc-dot-active-bg)]"
+                        : "w-2 bg-black opacity-20 hover:opacity-60"}
+=======
                       ${
                         index === activeIndex
                           ? "w-4 bg-[#C9A071]"
                           : "w-2 bg-black opacity-20 hover:opacity-60"
                       }
+>>>>>>> main.v2
                     `}
                   />
                 ))}
