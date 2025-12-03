@@ -178,7 +178,7 @@
   --color-gradient-2: var(--gradient-2);
   --color-gradient-3: var(--gradient-3);
   --color-gradient-4: var(--gradient-4);
-  --color-text-main: var(--text-main); /* text-text-main */
+  --color-text-main: var(--text-main);
   --color-topic: var(--topic); /* text-topic */
   --color-line: var(--line); /* border-line */
   --color-icon: var(--icon); /* text-icon */
