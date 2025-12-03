@@ -1,16 +1,15 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ArrowUpRight, MapPin } from "lucide-react"
-import { AnimatePresence, motion } from "framer-motion"
+import { Card, CardContent } from "@/components/ui/card";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, MapPin } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface Project {
-  id: string
-  title: string
-  location: string
-  image: string
+  id: string;
+  title: string;
+  location: string;
+  image: string;
 }
 
 const projects: Project[] = [
@@ -50,7 +49,7 @@ const projects: Project[] = [
     location: "Colombo 6",
     image: "/projects/uc06.png",
   },
-]
+];
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -65,35 +64,35 @@ const slideVariants = {
     x: direction === 1 ? -40 : 40,
     opacity: 0,
   }),
-}
+};
 
 export default function Projects() {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [direction, setDirection] = useState<1 | -1>(1)
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
 
   // appear-on-scroll
-  const sectionRef = useRef<HTMLElement | null>(null)
-  const [inView, setInView] = useState(false)
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    if (!sectionRef.current) return
+    if (!sectionRef.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setInView(true)
-            observer.disconnect()
+            setInView(true);
+            observer.disconnect();
           }
-        })
+        });
       },
       { threshold: 0.25 }
-    )
+    );
 
-    observer.observe(sectionRef.current)
+    observer.observe(sectionRef.current);
 
-    return () => observer.disconnect()
-  }, [])
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
@@ -125,6 +124,10 @@ export default function Projects() {
                 text-black shadow-sm
                 bg-linear-to-r from-[var(--gradient-3)] to-[var(--gradient-4)]
               "
+              onClick={() => {
+                const contactSection = document.getElementById("contact");
+                contactSection?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               Request Consultation
               <ArrowUpRight className="ml-2 size-5" />
@@ -203,28 +206,32 @@ export default function Projects() {
         </div>
 
         {/* Mobile buttons under card */}
-          <div className="mt-4 flex w-full max-w-sm flex-wrap gap-3 mb-10 md:hidden">
-            <button
-              className="
+        <div className="mt-4 flex w-full max-w-sm flex-wrap gap-3 mb-10 md:hidden">
+          <button
+            className="
                 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
                 text-black shadow-sm
                 bg-linear-to-r from-[var(--gradient-3)] to-[var(--gradient-4)]
               "
-            >
-              Request Consultation
-              <ArrowUpRight className="ml-2 size-5" />
-            </button>
-            <button
-              className="
+            onClick={() => {
+              const contactSection = document.getElementById("contact");
+              contactSection?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            Request Consultation
+            <ArrowUpRight className="ml-2 size-5" />
+          </button>
+          <button
+            className="
                 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
                 text-white shadow-sm
                 bg-black
               "
-            >
-              Explore Products
-              <ArrowUpRight className="ml-2 size-5" />
-            </button>
-          </div>
+          >
+            Explore Products
+            <ArrowUpRight className="ml-2 size-5" />
+          </button>
+        </div>
         {/* MOBILE CAROUSEL */}
         <div className="md:hidden flex flex-col items-center gap-4">
           {/* Animated card */}
@@ -250,9 +257,9 @@ export default function Projects() {
               <button
                 key={index}
                 onClick={() => {
-                  if (index === activeIndex) return
-                  setDirection(index > activeIndex ? 1 : -1)
-                  setActiveIndex(index)
+                  if (index === activeIndex) return;
+                  setDirection(index > activeIndex ? 1 : -1);
+                  setActiveIndex(index);
                 }}
                 className={`
                   h-2 rounded-full transition-all duration-300
@@ -268,7 +275,7 @@ export default function Projects() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 function ProjectCard({ project }: { project: Project }) {
@@ -302,5 +309,5 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

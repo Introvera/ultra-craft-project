@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
+import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
 
 type Service = {
   number: number;
@@ -11,7 +11,9 @@ type Service = {
   image: string;
 };
 
-type DragEvent = React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>;
+type DragEvent =
+  | React.MouseEvent<HTMLDivElement>
+  | React.TouchEvent<HTMLDivElement>;
 
 // Animation variants
 const sectionVariants: Variants = {
@@ -86,20 +88,6 @@ export default function Services() {
         "End-to-end coordination, scheduling, vendor management, and smooth project execution.",
       image: "/services/image 67.png",
     },
-    {
-      number: 5,
-      title: "Project Management",
-      description:
-        "End-to-end coordination, scheduling, vendor management, and smooth project execution.",
-      image: "/services/image 67.png",
-    },
-    {
-      number: 6,
-      title: "Project Management",
-      description:
-        "End-to-end coordination, scheduling, vendor management, and smooth project execution.",
-      image: "/services/image 67.png",
-    },
   ];
 
   // Decide how many cards to show based on width
@@ -109,8 +97,8 @@ export default function Services() {
 
     if (width >= 1536) return 4; // very large desktop
     if (width >= 1024) return 3; // laptop / large tablet landscape
-    if (width >= 768) return 2;  // tablet
-    return 1;                    // mobile
+    if (width >= 768) return 2; // tablet
+    return 1; // mobile
   };
 
   // Start with 1 to match server render (avoid hydration issues)
@@ -245,7 +233,9 @@ export default function Services() {
           <div
             className="flex transition-transform ease-in-out"
             style={{
-              transform: `translateX(calc(-${currentIndex * (100 / itemsPerView)}% + ${currentTranslate}px))`,
+              transform: `translateX(calc(-${
+                currentIndex * (100 / itemsPerView)
+              }% + ${currentTranslate}px))`,
               transitionDuration: isDragging ? "0ms" : "500ms",
             }}
           >
@@ -294,25 +284,25 @@ export default function Services() {
 
       {/* Dots Indicator */}
       <motion.div
-      className="flex justify-center items-center gap-2 mt-8 w-full"
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: 0.2, duration: 0.4 }}
-    >
-      {Array.from({ length: maxIndex + 1 }).map((_, index) => {
-        const isActive = index === currentIndex;
+        className="flex justify-center items-center gap-2 mt-8 w-full"
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.2, duration: 0.4 }}
+      >
+        {Array.from({ length: maxIndex + 1 }).map((_, index) => {
+          const isActive = index === currentIndex;
 
-        return (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            aria-label={`Go to slide ${index + 1}`}
-            className="transition-all duration-300"
-          >
-            {isActive ? (
-              <div
-                className="
+          return (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              aria-label={`Go to slide ${index + 1}`}
+              className="transition-all duration-300"
+            >
+              {isActive ? (
+                <div
+                  className="
                   rounded-full
                   transition-all duration-300
                   sm:w-[24px] sm:h-[10px]
@@ -331,12 +321,13 @@ export default function Services() {
                   fill="var(--uc-dot-color)"
                   fillOpacity={index === currentIndex - 1 ? "0.40" : "0.20"}
                 />
-              </svg>
-            )}
-          </button>
-        );
-      })}
-    </motion.div>
+              ) : (
+                </svg>
+              )}
+            </button>
+          );
+        })}
+      </motion.div>
     </motion.section>
   );
 }
