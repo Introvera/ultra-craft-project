@@ -4,6 +4,7 @@ import ParallaxHero from "@/components/hero_section";
 import { AboutUs } from "@/components/aboutus";
 import VisionMission from "@/components/aboutus-page/vision-mission";
 import Philosophy from "@/components/aboutus-page/philosophy";
+import HowWeWork from "@/components/aboutus-page/howWeWork";
 
   const aboutParagraph =
   "Ultracraft is a multidisciplinary interior and furniture studio dedicated to designing spaces that feel refined, comfortable, and deeply personal. Our work blends thoughtful design, craftsmanship, and careful attention to detail to create environments that elevate everyday living. We believe interiors should not only look beautiful, but feel meaningful to the people who use them.";
@@ -35,6 +36,7 @@ import Philosophy from "@/components/aboutus-page/philosophy";
       
       <VisionMission />
       <Philosophy />
+      <HowWeWork />
       <ContactUs />
     </>
   );
