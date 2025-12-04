@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { Link } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -132,6 +133,8 @@ export default function Projects() {
               Request Consultation
               <ArrowUpRight className="ml-2 size-5" />
             </button>
+
+            <Link href="/projects">
             <button
               className="
                 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
@@ -139,9 +142,10 @@ export default function Projects() {
                 bg-black
               "
             >
-              Explore Products
+              More Projects
               <ArrowUpRight className="ml-2 size-5" />
             </button>
+            </Link>
           </div>
         </div>
 
@@ -265,7 +269,7 @@ export default function Projects() {
                   h-2 rounded-full transition-all duration-300
                   ${
                     index === activeIndex
-                      ? "w-4 bg-[#C9A071]"
+                      ? "w-4 bg-[var(--uc-dot-active-bg)]"
                       : "w-2 bg-black opacity-20 hover:opacity-60"
                   }
                 `}

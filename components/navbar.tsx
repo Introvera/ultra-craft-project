@@ -163,10 +163,10 @@ const NavLink = ({
       <span className="inline-block transition-transform duration-300 hover:scale-105">
         {children}
       </span>
-
+{/* 
       {isActive && (
         <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-[#a67c52] rounded-full" />
-      )}
+      )} */}
     </a>
   );
 };
@@ -191,7 +191,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 h-[76px] transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-50 h-[76px]  transition-all duration-500 ${
         isScrolled
           ? "bg-[#cdb49529] backdrop-blur-md shadow-sm text-slate-900"
           : "bg-transparent text-black"
@@ -217,7 +217,7 @@ export default function Navbar() {
             ${isScrolled ? "" : "bg-transparent"}
             absolute left-1/2 -translate-x-1/2`}
         >
-          <NavLink href="/">Home</NavLink>
+          <NavLink href="/home">Home</NavLink>
           <NavLink href="/aboutus">About Us</NavLink>
           <NavLink href="/products">Products</NavLink>
           <NavLink href="/projects">Projects</NavLink>
@@ -226,10 +226,12 @@ export default function Navbar() {
         {/* CTA + Hamburger (Mobile & Tablet = only hamburger) */}
         <div className="flex items-center space-x-6">
           {/* CTA visible only on desktop (lg+) */}
-          <Button variant="coffee" size="pill" className="hidden lg:flex">
+          <Link href="/products">
+          <Button variant="coffee" size="pill" className="hidden lg:flex cursor-pointer">
             Explore Products
             <ArrowUpRight className="ml-2 size-5" />
           </Button>
+          </Link>
 
           {/* Hamburger visible on mobile + tablet */}
           <button

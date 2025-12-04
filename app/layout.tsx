@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import { Poppins } from "next/font/google";
 import Footer from "@/components/footer-component/footer";
+import { Providers } from "./providers";
+import LayoutShell from "./layoutshell";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
@@ -31,13 +33,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
+    <html lang="en" className="bg-[var(--page-bg)]">
+      <body suppressHydrationWarning
         className={`${poppins.variable} ${geistMono.variable} antialiased bg-[var(--page-bg)]`}
       >
-        <Navbar />
-        {children}
-        <Footer/>
+        <Providers>
+          <LayoutShell>{children}</LayoutShell>
+          </Providers>
       </body>
     </html>
   );

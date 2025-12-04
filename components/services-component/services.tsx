@@ -308,19 +308,20 @@ export default function Services() {
                   sm:w-[24px] sm:h-[10px]
                   w-[20px] h-[8px]
                 "
-                  style={{
-                    backgroundColor: "var(--uc-dot-active-bg)",
-                  }}
+                style={{
+                  backgroundColor: "var(--uc-dot-active-bg)",
+                }}
+              />
+            ) : (
+              <svg width="10" height="10" viewBox="0 0 10 10">
+                <circle
+                  cx="5"
+                  cy="5"
+                  r="5"
+                  fill="var(--uc-dot-color)"
+                  fillOpacity={index === currentIndex - 1 ? "0.40" : "0.20"}
                 />
               ) : (
-                <svg width="10" height="10" viewBox="0 0 10 10">
-                  <circle
-                    cx="5"
-                    cy="5"
-                    r="5"
-                    fill="var(--uc-dot-color)"
-                    fillOpacity={index === currentIndex - 1 ? "0.40" : "0.20"}
-                  />
                 </svg>
               )}
             </button>
