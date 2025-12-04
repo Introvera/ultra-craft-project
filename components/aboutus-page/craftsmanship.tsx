@@ -15,9 +15,9 @@ export default function Craftsmanship() {
       {/* DESKTOP GRID */}
       <div className="hidden md:grid grid-cols-3 gap-2 lg:gap-2 items-start max-w-7xl mx-auto">
         {/* LEFT COLUMN */}
-        <div className="flex flex-col gap-1 lg:gap-7">
+        <div className="flex flex-col h-full ">
           <motion.h2
-            className="text-[#604D37] text-3xl md:text-4xl font-bold"
+            className="text-[#604D37] text-2xl md:text-3xl font-bold px-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -27,7 +27,7 @@ export default function Craftsmanship() {
           </motion.h2>
 
           <motion.p
-            className="text-[#363636] text-[15px] leading-relaxed max-w-[420px]"
+            className="text-[#363636] text-[15px] md:py-5 sm:pt-5 px-2 leading-relaxed max-w-[420px]"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -41,12 +41,11 @@ export default function Craftsmanship() {
           </motion.p>
 
           <motion.div
-            className="relative w-full rounded-[32px] overflow-hidden mt-auto"
+            className="relative w-full h-2/3 rounded-[32px] overflow-hidden mt-auto"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            style={{ height: "419px" }}
           >
             <Image
               src="/aboutus-page/left.png"
@@ -58,7 +57,7 @@ export default function Craftsmanship() {
         </div>
 
         {/* MIDDLE COLUMN */}
-        <div className="flex flex-col gap-2 lg:gap-2">
+        <div className="flex flex-col gap-2 lg:gap-2 ">
           <motion.div
             className="relative w-full h-[344px] rounded-[32px] overflow-hidden"
             initial={{ opacity: 0 }}
