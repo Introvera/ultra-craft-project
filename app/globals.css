@@ -73,6 +73,8 @@
   --uc-dot-active-bg: #92806A;
   --uc-dot-inactive-strong: rgba(146, 128, 106, 0.40);
   --uc-dot-inactive-weak: rgba(146, 128, 106, 0.20);
+
+  --card-black-background: #242424;
 }
 
 /* Dark mode palette – this is what you'll actually use */
