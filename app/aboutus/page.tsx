@@ -1,14 +1,14 @@
-import ContactUs from "@/components/contact";
-import { Button } from "@/components/ui/button";
-import ParallaxHero from "@/components/hero_section";
 import { AboutUs } from "@/components/aboutus";
-import VisionMission from "@/components/aboutus-page/vision-mission";
+import Craftsmanship from "@/components/aboutus-page/craftsmanship";
 import Philosophy from "@/components/aboutus-page/philosophy";
+import VisionMission from "@/components/aboutus-page/vision-mission";
+import ContactUs from "@/components/contact";
+import ParallaxHero from "@/components/hero_section";
 
-  const aboutParagraph =
+const aboutParagraph =
   "Ultracraft is a multidisciplinary interior and furniture studio dedicated to designing spaces that feel refined, comfortable, and deeply personal. Our work blends thoughtful design, craftsmanship, and careful attention to detail to create environments that elevate everyday living. We believe interiors should not only look beautiful, but feel meaningful to the people who use them.";
 
-  const page = () => {
+const page = () => {
   return (
     <>
       <ParallaxHero
@@ -18,7 +18,7 @@ import Philosophy from "@/components/aboutus-page/philosophy";
             Shaping Spaces <br /> With Purpose
           </>
         }
-        description="" 
+        description=""
         showCta={false}
         showChevron={true}
         alignTopLeft={true}
@@ -32,9 +32,10 @@ import Philosophy from "@/components/aboutus-page/philosophy";
         layout="single"
         singleImageSrc="/aboutus-page/abtuspage.png"
       />
-      
+
       <VisionMission />
       <Philosophy />
+      <Craftsmanship />
       <ContactUs />
     </>
   );
