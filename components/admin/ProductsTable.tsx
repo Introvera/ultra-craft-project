@@ -23,7 +23,7 @@
 //   Textarea,
 //   useDisclosure,
 // } from "@heroui/react";
-// import type { SortDescriptor } from "@heroui/react";
+// import type { SortDescriptor, Selection } from "@heroui/react";
 // import {
 //   PlusIcon,
 //   SearchIcon,
@@ -38,27 +38,86 @@
 //   short_description: string;
 //   long_description: string;
 //   created_at: string;
+//   categories: string[]; // now treated as array
+//   filters: string[];    // now treated as array
 // };
 
 // type ProductsTableProps = {
-//   initialProducts: Product[];
+//   initialProducts: (Product & {
+//     // tolerate older data shape from API
+//     categories?: string[] | null;
+//     filters?: string[] | null;
+//   })[];
 // };
 
 // const columns = [
 //   { name: "ID", uid: "id", sortable: true },
 //   { name: "NAME", uid: "name", sortable: true },
+//   { name: "CATEGORIES", uid: "categories", sortable: false },
+//   { name: "FILTERS", uid: "filters", sortable: false },
 //   { name: "SHORT DESCRIPTION", uid: "short_description", sortable: false },
 //   { name: "ACTIONS", uid: "actions" },
 // ];
 
-// const INITIAL_VISIBLE_COLUMNS = ["name", "short_description", "actions"];
+// const INITIAL_VISIBLE_COLUMNS = [
+//   "name",
+//   "categories",
+//   "filters",
+//   "short_description",
+//   "actions",
+// ];
+
+// // You can customize these lists to match your project
+// const CATEGORY_OPTIONS = [
+//   { key: "seating", label: "Seating" },
+//   { key: "sofas", label: "Sofas" },
+//   { key: "chairs", label: "Chairs" },
+//   { key: "tables", label: "Tables" },
+//   { key: "storage", label: "Storage" },
+//   { key: "beds", label: "Beds" },
+//   { key: "lighting", label: "Lighting" },
+// ];
+
+// const FILTER_OPTIONS = [
+//   { key: "wood", label: "Wood" },
+//   { key: "metal", label: "Metal" },
+//   { key: "fabric", label: "Fabric" },
+//   { key: "leather", label: "Leather" },
+//   { key: "premium", label: "Premium" },
+//   { key: "compact", label: "Compact" },
+//   { key: "outdoor", label: "Outdoor" },
+// ];
+
+// const categoryLabelMap = new Map(
+//   CATEGORY_OPTIONS.map((c) => [c.key, c.label]),
+// );
+// const filterLabelMap = new Map(FILTER_OPTIONS.map((f) => [f.key, f.label]));
+
+// /**
+//  * Converts HeroUI Selection to string[].
+//  */
+// function selectionToArray(selection: Selection, allKeys: string[]): string[] {
+//   if (selection === "all") return allKeys;
+//   return Array.from(selection).map((k) => String(k));
+// }
+
+// /**
+//  * Normalize product from API so categories/filters are always arrays.
+//  */
+// function normalizeProduct(p: any): Product {
+//   return {
+//     ...p,
+//     categories: Array.isArray(p.categories) ? p.categories : [],
+//     filters: Array.isArray(p.filters) ? p.filters : [],
+//   };
+// }
 
 // export default function ProductsTable({ initialProducts }: ProductsTableProps) {
-//   const [products, setProducts] = React.useState<Product[]>(initialProducts);
+//   const [products, setProducts] = React.useState<Product[]>(() =>
+//     initialProducts.map((p) => normalizeProduct(p)),
+//   );
 
-//   // table state
 //   const [filterValue, setFilterValue] = React.useState("");
-//   const [selectedKeys, setSelectedKeys] = React.useState<any>(new Set([]));
 //   const [visibleColumns, setVisibleColumns] = React.useState<any>(
 //     new Set(INITIAL_VISIBLE_COLUMNS),
 //   );
@@ -69,27 +128,32 @@
 //   });
 //   const [page, setPage] = React.useState(1);
 
-//   // modal state
 //   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
 //   const [editingProduct, setEditingProduct] = React.useState<Product | null>(
 //     null,
 //   );
 
 //   const [formValues, setFormValues] = React.useState({
 //     name: "",
-//     image: "",
 //     short_description: "",
 //     long_description: "",
 //   });
 
-//   // new: file state for Cloudinary upload
 //   const [imageFile, setImageFile] = React.useState<File | null>(null);
+//   const [existingImage, setExistingImage] = React.useState<string | null>(null);
+
+//   const [selectedCategories, setSelectedCategories] = React.useState<Selection>(
+//     new Set(),
+//   );
+//   const [selectedFilters, setSelectedFilters] = React.useState<Selection>(
+//     new Set(),
+//   );
 
 //   const [saving, setSaving] = React.useState(false);
 
 //   const hasSearchFilter = Boolean(filterValue);
 
-//   // header cols
 //   const headerColumns = React.useMemo(() => {
 //     if (visibleColumns === "all") return columns;
 //     return columns.filter((column) =>
@@ -97,16 +161,13 @@
 //     );
 //   }, [visibleColumns]);
 
-//   // filter by search
 //   const filteredItems = React.useMemo(() => {
 //     let items = [...products];
-
 //     if (hasSearchFilter) {
 //       items = items.filter((product) =>
 //         product.name.toLowerCase().includes(filterValue.toLowerCase()),
 //       );
 //     }
-
 //     return items;
 //   }, [products, filterValue, hasSearchFilter]);
 
@@ -127,16 +188,17 @@
 //     });
 //   }, [sortDescriptor, items]);
 
-//   // open modals
 //   function openAddModal() {
 //     setEditingProduct(null);
 //     setFormValues({
 //       name: "",
-//       image: "",
 //       short_description: "",
 //       long_description: "",
 //     });
-//     setImageFile(null); // reset file
+//     setExistingImage(null);
+//     setImageFile(null);
+//     setSelectedCategories(new Set());
+//     setSelectedFilters(new Set());
 //     onOpen();
 //   }
 
@@ -144,48 +206,66 @@
 //     setEditingProduct(product);
 //     setFormValues({
 //       name: product.name,
-//       image: product.image,
 //       short_description: product.short_description,
 //       long_description: product.long_description,
 //     });
-//     setImageFile(null); // no new file yet
+//     setExistingImage(product.image);
+//     setImageFile(null);
+//     setSelectedCategories(new Set(product.categories ?? []));
+//     setSelectedFilters(new Set(product.filters ?? []));
 //     onOpen();
 //   }
 
-//   // save (create / update)
 //   async function handleSave(close: () => void) {
 //     setSaving(true);
 //     try {
-//       // 1) decide final image URL
-//       let imageUrl = formValues.image;
+//       let finalImageUrl =
+//         editingProduct && !imageFile ? editingProduct.image : "";
+
+//       if (!editingProduct && !imageFile) {
+//         console.error("Image is required for new product");
+//         setSaving(false);
+//         return;
+//       }
 
 //       if (imageFile) {
-//         const uploadData = new FormData();
-//         uploadData.append("file", imageFile);
+//         const fd = new FormData();
+//         fd.append("file", imageFile);
 
 //         const uploadRes = await fetch("/api/upload", {
 //           method: "POST",
-//           body: uploadData,
+//           body: fd,
 //         });
 
 //         if (!uploadRes.ok) {
-//           console.error("Failed to upload image");
+//           console.error("Image upload failed");
+//           setSaving(false);
 //           return;
 //         }
 
-//         const { url } = (await uploadRes.json()) as { url: string };
-//         imageUrl = url;
+//         const data = await uploadRes.json();
+//         finalImageUrl = data.url;
 //       }
+
+//       const categoriesArray = selectionToArray(
+//         selectedCategories,
+//         CATEGORY_OPTIONS.map((c) => c.key),
+//       );
+//       const filtersArray = selectionToArray(
+//         selectedFilters,
+//         FILTER_OPTIONS.map((f) => f.key),
+//       );
 
 //       const payload = {
 //         name: formValues.name,
-//         image: imageUrl,
+//         image: finalImageUrl,
 //         short_description: formValues.short_description,
 //         long_description: formValues.long_description,
+//         categories: categoriesArray,
+//         filters: filtersArray,
 //       };
 
 //       if (editingProduct) {
-//         // update
 //         const res = await fetch(`/api/products/${editingProduct.id}`, {
 //           method: "PATCH",
 //           headers: { "Content-Type": "application/json" },
@@ -193,16 +273,18 @@
 //         });
 
 //         if (!res.ok) {
-//           console.error("Failed to update product");
+//           console.error("Failed to update");
+//           setSaving(false);
 //           return;
 //         }
 
-//         const updated = (await res.json()) as Product;
+//         const updatedFromApi = await res.json();
+//         const updated = normalizeProduct(updatedFromApi);
+
 //         setProducts((prev) =>
 //           prev.map((p) => (p.id === updated.id ? updated : p)),
 //         );
 //       } else {
-//         // create
 //         const res = await fetch("/api/products", {
 //           method: "POST",
 //           headers: { "Content-Type": "application/json" },
@@ -210,35 +292,37 @@
 //         });
 
 //         if (!res.ok) {
-//           console.error("Failed to create product");
+//           console.error("Failed to create");
+//           setSaving(false);
 //           return;
 //         }
 
-//         const created = (await res.json()) as Product;
+//         const createdFromApi = await res.json();
+//         const created = normalizeProduct(createdFromApi);
+
 //         setProducts((prev) => [created, ...prev]);
 //       }
 
 //       close();
 //       setImageFile(null);
+//       setExistingImage(null);
 //     } finally {
 //       setSaving(false);
 //     }
 //   }
 
-//   // delete
 //   async function handleDelete(id: number) {
 //     const res = await fetch(`/api/products/${id}`, { method: "DELETE" });
 //     if (!res.ok) {
-//       console.error("Failed to delete product");
+//       console.error("Delete failed");
 //       return;
 //     }
 //     setProducts((prev) => prev.filter((p) => p.id !== id));
 //   }
 
-//   // cell renderer
 //   const renderCell = React.useCallback(
 //     (product: Product, columnKey: React.Key) => {
-//       const key = String(columnKey) as keyof Product | "actions";
+//       const key = columnKey as keyof Product | "actions";
 
 //       switch (key) {
 //         case "name":
@@ -246,66 +330,102 @@
 //             <div className="flex items-center gap-3">
 //               <img
 //                 src={product.image}
-//                 alt={product.name}
 //                 className="w-8 h-8 rounded object-cover"
+//                 alt={product.name}
 //               />
 //               <div className="flex flex-col">
 //                 <span className="text-sm font-medium">{product.name}</span>
-//                 <span className="text-xs text-default-400">#{product.id}</span>
+//                 <span className="text-xs text-default-400">
+//                   #{product.id}
+//                 </span>
 //               </div>
 //             </div>
 //           );
+
 //         case "short_description":
 //           return (
-//             <p className="text-sm text-default-400 line-clamp-2">
+//             <p className="text-sm line-clamp-2">
 //               {product.short_description}
 //             </p>
 //           );
-//         case "actions":
+
+//         case "categories": {
+//           const cats = product.categories ?? [];
+//           if (!cats.length) {
+//             return (
+//               <span className="text-xs text-default-400">
+//                 —
+//               </span>
+//             );
+//           }
+
 //           return (
-//             <div className="relative flex justify-end items-center gap-2">
-//               <Dropdown>
-//                 <DropdownTrigger>
-//                   <Button isIconOnly size="sm" variant="light">
-//                     <VerticalDotsIcon className="text-default-300" />
-//                   </Button>
-//                 </DropdownTrigger>
-//                 <DropdownMenu
-//                   onAction={(key) => {
-//                     if (key === "edit") {
-//                       openEditModal(product);
-//                     } else if (key === "delete") {
-//                       handleDelete(product.id);
-//                     }
-//                   }}
+//             <div className="flex flex-wrap gap-1">
+//               {cats.map((key) => (
+//                 <span
+//                   key={key}
+//                   className="px-2 py-0.5 rounded-full border text-[11px] leading-tight"
 //                 >
-//                   <DropdownItem key="edit">Edit</DropdownItem>
-//                   <DropdownItem
-//                     key="delete"
-//                     className="text-danger"
-//                     color="danger"
-//                   >
-//                     Delete
-//                   </DropdownItem>
-//                 </DropdownMenu>
-//               </Dropdown>
+//                   {categoryLabelMap.get(key) ?? key}
+//                 </span>
+//               ))}
 //             </div>
 //           );
+//         }
+
+//         case "filters": {
+//           const fltrs = product.filters ?? [];
+//           if (!fltrs.length) {
+//             return (
+//               <span className="text-xs text-default-400">
+//                 —
+//               </span>
+//             );
+//           }
+
+//           return (
+//             <div className="flex flex-wrap gap-1">
+//               {fltrs.map((key) => (
+//                 <span
+//                   key={key}
+//                   className="px-2 py-0.5 rounded-full border text-[11px] leading-tight"
+//                 >
+//                   {filterLabelMap.get(key) ?? key}
+//                 </span>
+//               ))}
+//             </div>
+//           );
+//         }
+
+//         case "actions":
+//           return (
+//             <Dropdown>
+//               <DropdownTrigger>
+//                 <Button isIconOnly size="sm" variant="light">
+//                   <VerticalDotsIcon />
+//                 </Button>
+//               </DropdownTrigger>
+//               <DropdownMenu
+//                 onAction={(key) => {
+//                   if (key === "edit") openEditModal(product);
+//                   if (key === "delete") handleDelete(product.id);
+//                 }}
+//               >
+//                 <DropdownItem key="edit">Edit</DropdownItem>
+//                 <DropdownItem key="delete" color="danger">
+//                   Delete
+//                 </DropdownItem>
+//               </DropdownMenu>
+//             </Dropdown>
+//           );
+
 //         default:
-//           return (product as any)[key];
+//           // covers id, created_at, etc.
+//           return product[key as keyof Product] as any;
 //       }
 //     },
 //     [],
 //   );
-
-//   // handlers
-//   const onNextPage = React.useCallback(() => {
-//     if (page < pages) setPage(page + 1);
-//   }, [page, pages]);
-
-//   const onPreviousPage = React.useCallback(() => {
-//     if (page > 1) setPage(page - 1);
-//   }, [page]);
 
 //   const onRowsPerPageChange = React.useCallback(
 //     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -315,19 +435,21 @@
 //     [],
 //   );
 
-//   const onSearchChange = React.useCallback((value: string) => {
-//     if (value) {
-//       setFilterValue(value);
-//       setPage(1);
-//     } else {
-//       setFilterValue("");
-//     }
-//   }, []);
+//   const selectedCategoryLabels = React.useMemo(() => {
+//     const keys = selectionToArray(
+//       selectedCategories,
+//       CATEGORY_OPTIONS.map((c) => c.key),
+//     );
+//     return keys.map((k) => categoryLabelMap.get(k) ?? k);
+//   }, [selectedCategories]);
 
-//   const onClear = React.useCallback(() => {
-//     setFilterValue("");
-//     setPage(1);
-//   }, []);
+//   const selectedFilterLabels = React.useMemo(() => {
+//     const keys = selectionToArray(
+//       selectedFilters,
+//       FILTER_OPTIONS.map((f) => f.key),
+//     );
+//     return keys.map((k) => filterLabelMap.get(k) ?? k);
+//   }, [selectedFilters]);
 
 //   const topContent = React.useMemo(() => {
 //     return (
@@ -339,13 +461,15 @@
 //             placeholder="Search by name..."
 //             startContent={<SearchIcon />}
 //             value={filterValue}
-//             onClear={onClear}
-//             onValueChange={onSearchChange}
+//             onClear={() => setFilterValue("")}
+//             onValueChange={setFilterValue}
 //           />
+
 //           <div className="flex gap-3">
 //             <Dropdown>
 //               <DropdownTrigger className="hidden sm:flex">
 //                 <Button
+//                   color="primary"
 //                   endContent={<ChevronDownIcon className="text-small" />}
 //                   variant="flat"
 //                 >
@@ -354,21 +478,20 @@
 //               </DropdownTrigger>
 //               <DropdownMenu
 //                 disallowEmptySelection
-//                 aria-label="Table Columns"
 //                 closeOnSelect={false}
 //                 selectedKeys={visibleColumns}
 //                 selectionMode="multiple"
 //                 onSelectionChange={setVisibleColumns}
 //               >
-//                 {columns.map((column) => (
-//                   <DropdownItem key={column.uid} className="capitalize">
-//                     {column.name}
-//                   </DropdownItem>
+//                 {columns.map((col) => (
+//                   <DropdownItem key={col.uid}>{col.name}</DropdownItem>
 //                 ))}
 //               </DropdownMenu>
 //             </Dropdown>
+
 //             <Button
 //               color="primary"
+//               variant="flat"
 //               endContent={<PlusIcon />}
 //               onPress={openAddModal}
 //             >
@@ -376,14 +499,16 @@
 //             </Button>
 //           </div>
 //         </div>
+
 //         <div className="flex justify-between items-center">
-//           <span className="text-default-400 text-small">
+//           <span className="text-small">
 //             Total {filteredItems.length} products
 //           </span>
-//           <label className="flex items-center text-default-400 text-small">
+
+//           <label className="flex items-center text-small">
 //             Rows per page:
 //             <select
-//               className="bg-transparent outline-none text-default-400 text-small ml-1"
+//               className="bg-transparent outline-none text-small ml-1"
 //               onChange={onRowsPerPageChange}
 //             >
 //               <option value="5">5</option>
@@ -394,65 +519,43 @@
 //         </div>
 //       </div>
 //     );
-//   }, [
-//     filterValue,
-//     visibleColumns,
-//     filteredItems.length,
-//     onRowsPerPageChange,
-//     onSearchChange,
-//     onClear,
-//   ]);
+//   }, [filterValue, visibleColumns, filteredItems.length, onRowsPerPageChange]);
 
 //   const bottomContent = React.useMemo(() => {
-//     const selectedCount =
-//       selectedKeys === "all"
-//         ? filteredItems.length
-//         : (selectedKeys as Set<unknown>).size;
-
 //     return (
 //       <div className="py-2 px-2 flex justify-between items-center">
-//         <span className="w-[30%] text-small text-default-400">
-//           {selectedKeys === "all"
-//             ? "All items selected"
-//             : `${selectedCount} of ${filteredItems.length} selected`}
-//         </span>
 //         <Pagination
 //           isCompact
 //           showControls
 //           showShadow
-//           color="primary"
+//           color="default"
 //           page={page}
 //           total={pages}
 //           onChange={setPage}
 //         />
+
 //         <div className="hidden sm:flex w-[30%] justify-end gap-2">
 //           <Button
 //             isDisabled={pages === 1}
 //             size="sm"
-//             variant="flat"
-//             onPress={onPreviousPage}
+//             variant="solid"
+//             onPress={() => page > 1 && setPage(page - 1)}
 //           >
 //             Previous
 //           </Button>
 //           <Button
 //             isDisabled={pages === 1}
 //             size="sm"
-//             variant="flat"
-//             onPress={onNextPage}
+//             color="primary"
+//             variant="solid"
+//             onPress={() => page < pages && setPage(page + 1)}
 //           >
 //             Next
 //           </Button>
 //         </div>
 //       </div>
 //     );
-//   }, [
-//     selectedKeys,
-//     filteredItems.length,
-//     page,
-//     pages,
-//     onPreviousPage,
-//     onNextPage,
-//   ]);
+//   }, [page, pages]);
 
 //   return (
 //     <>
@@ -462,12 +565,9 @@
 //         bottomContent={bottomContent}
 //         bottomContentPlacement="outside"
 //         classNames={{ wrapper: "max-h-[382px]" }}
-//         selectedKeys={selectedKeys}
-//         selectionMode="multiple"
 //         sortDescriptor={sortDescriptor}
 //         topContent={topContent}
 //         topContentPlacement="outside"
-//         onSelectionChange={setSelectedKeys}
 //         onSortChange={setSortDescriptor}
 //       >
 //         <TableHeader columns={headerColumns}>
@@ -481,7 +581,8 @@
 //             </TableColumn>
 //           )}
 //         </TableHeader>
-//         <TableBody emptyContent={"No products found"} items={sortedItems}>
+
+//         <TableBody emptyContent="No products found" items={sortedItems}>
 //           {(item) => (
 //             <TableRow key={item.id}>
 //               {(columnKey) => (
@@ -492,74 +593,146 @@
 //         </TableBody>
 //       </Table>
 
-//       {/* Add/Edit modal */}
 //       <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
 //         <ModalContent>
 //           {(onClose) => (
 //             <>
-//               <ModalHeader className="flex flex-col gap-1">
+//               <ModalHeader>
 //                 {editingProduct ? "Edit Product" : "Add Product"}
 //               </ModalHeader>
+
 //               <ModalBody>
 //                 <Input
+//                   required
 //                   label="Name"
 //                   variant="bordered"
 //                   value={formValues.name}
 //                   onValueChange={(v) =>
-//                     setFormValues((prev) => ({ ...prev, name: v }))
+//                     setFormValues((p) => ({ ...p, name: v }))
 //                   }
 //                 />
-//                 <Input
-//                   label="Image URL (optional)"
-//                   variant="bordered"
-//                   value={formValues.image}
-//                   onValueChange={(v) =>
-//                     setFormValues((prev) => ({ ...prev, image: v }))
-//                   }
-//                 />
+
+//                 {existingImage && !imageFile && (
+//                   <div className="flex flex-col gap-2">
+//                     <img
+//                       src={existingImage}
+//                       className="w-24 h-24 rounded object-cover"
+//                       alt="Current product"
+//                     />
+//                     <Button
+//                       size="sm"
+//                       color="danger"
+//                       variant="flat"
+//                       onPress={() => setExistingImage(null)}
+//                     >
+//                       Remove Image
+//                     </Button>
+//                   </div>
+//                 )}
+
 //                 <Input
 //                   type="file"
 //                   label="Upload Image"
 //                   variant="bordered"
 //                   accept="image/*"
-//                   onChange={(e) => {
-//                     const file = e.target.files?.[0] ?? null;
-//                     setImageFile(file);
-//                   }}
+//                   onChange={(e) =>
+//                     setImageFile(e.target.files?.[0] ?? null)
+//                   }
 //                 />
+
 //                 <Input
 //                   label="Short Description"
 //                   variant="bordered"
 //                   value={formValues.short_description}
 //                   onValueChange={(v) =>
-//                     setFormValues((prev) => ({
-//                       ...prev,
+//                     setFormValues((p) => ({
+//                       ...p,
 //                       short_description: v,
 //                     }))
 //                   }
 //                 />
+
 //                 <Textarea
+//                   required
 //                   label="Long Description"
 //                   variant="bordered"
 //                   value={formValues.long_description}
 //                   onValueChange={(v) =>
-//                     setFormValues((prev) => ({
-//                       ...prev,
+//                     setFormValues((p) => ({
+//                       ...p,
 //                       long_description: v,
 //                     }))
 //                   }
 //                 />
+
+//                 <div className="flex flex-col gap-3">
+//                   <div>
+//                     <span className="block text-sm mb-1">Categories</span>
+//                     <Dropdown>
+//                       <DropdownTrigger>
+//                         <Button
+//                           variant="bordered"
+//                           className="w-full justify-between"
+//                         >
+//                           {selectedCategoryLabels.length > 0
+//                             ? selectedCategoryLabels.join(", ")
+//                             : "Select categories"}
+//                         </Button>
+//                       </DropdownTrigger>
+//                       <DropdownMenu
+//                         aria-label="Select categories"
+//                         closeOnSelect={false}
+//                         selectionMode="multiple"
+//                         selectedKeys={selectedCategories}
+//                         onSelectionChange={setSelectedCategories}
+//                       >
+//                         {CATEGORY_OPTIONS.map((c) => (
+//                           <DropdownItem key={c.key}>{c.label}</DropdownItem>
+//                         ))}
+//                       </DropdownMenu>
+//                     </Dropdown>
+//                   </div>
+
+//                   <div>
+//                     <span className="block text-sm mb-1">Filters</span>
+//                     <Dropdown>
+//                       <DropdownTrigger>
+//                         <Button
+//                           variant="bordered"
+//                           className="w-full justify-between"
+//                         >
+//                           {selectedFilterLabels.length > 0
+//                             ? selectedFilterLabels.join(", ")
+//                             : "Select filters"}
+//                         </Button>
+//                       </DropdownTrigger>
+//                       <DropdownMenu
+//                         aria-label="Select filters"
+//                         closeOnSelect={false}
+//                         selectionMode="multiple"
+//                         selectedKeys={selectedFilters}
+//                         onSelectionChange={setSelectedFilters}
+//                       >
+//                         {FILTER_OPTIONS.map((f) => (
+//                           <DropdownItem key={f.key}>{f.label}</DropdownItem>
+//                         ))}
+//                       </DropdownMenu>
+//                     </Dropdown>
+//                   </div>
+//                 </div>
 //               </ModalBody>
+
 //               <ModalFooter>
 //                 <Button variant="flat" onPress={onClose}>
 //                   Cancel
 //                 </Button>
 //                 <Button
 //                   color="primary"
+//                   variant="flat"
 //                   isLoading={saving}
 //                   onPress={() => handleSave(onClose)}
 //                 >
-//                   {editingProduct ? "Save changes" : "Create"}
+//                   {editingProduct ? "Save Changes" : "Create"}
 //                 </Button>
 //               </ModalFooter>
 //             </>
@@ -569,7 +742,6 @@
 //     </>
 //   );
 // }
-
 
 
 "use client";
@@ -597,7 +769,7 @@ import {
   Textarea,
   useDisclosure,
 } from "@heroui/react";
-import type { SortDescriptor } from "@heroui/react";
+import type { SortDescriptor, Selection } from "@heroui/react";
 import {
   PlusIcon,
   SearchIcon,
@@ -612,23 +784,88 @@ type Product = {
   short_description: string;
   long_description: string;
   created_at: string;
+  categories: string[]; // now treated as array
+  filters: string[]; // now treated as array
 };
 
 type ProductsTableProps = {
-  initialProducts: Product[];
+  initialProducts: (Product & {
+    // tolerate older data shape from API
+    categories?: string[] | null;
+    filters?: string[] | null;
+  })[];
 };
 
 const columns = [
   { name: "ID", uid: "id", sortable: true },
   { name: "NAME", uid: "name", sortable: true },
+  { name: "CATEGORIES", uid: "categories", sortable: false },
+  { name: "FILTERS", uid: "filters", sortable: false },
   { name: "SHORT DESCRIPTION", uid: "short_description", sortable: false },
   { name: "ACTIONS", uid: "actions" },
 ];
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "short_description", "actions"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "name",
+  "categories",
+  "filters",
+  "short_description",
+  "actions",
+];
+
+// You can customize these lists to match your project
+const CATEGORY_OPTIONS = [
+  { key: "seating", label: "Seating" },
+  { key: "sofas", label: "Sofas" },
+  { key: "chairs", label: "Chairs" },
+  { key: "tables", label: "Tables" },
+  { key: "storage", label: "Storage" },
+  { key: "beds", label: "Beds" },
+  { key: "lighting", label: "Lighting" },
+];
+
+const FILTER_OPTIONS = [
+  { key: "wood", label: "Wood" },
+  { key: "metal", label: "Metal" },
+  { key: "fabric", label: "Fabric" },
+  { key: "leather", label: "Leather" },
+  { key: "premium", label: "Premium" },
+  { key: "compact", label: "Compact" },
+  { key: "outdoor", label: "Outdoor" },
+];
+
+const categoryLabelMap = new Map(CATEGORY_OPTIONS.map((c) => [c.key, c.label]));
+const filterLabelMap = new Map(FILTER_OPTIONS.map((f) => [f.key, f.label]));
+
+/**
+ * Converts HeroUI Selection to string[].
+ */
+function selectionToArray(selection: Selection, allKeys: string[]): string[] {
+  if (selection === "all") return allKeys;
+  return Array.from(selection).map((k) => String(k));
+}
+
+/**
+ * Normalize product from API so categories/filters are always arrays.
+ */
+function normalizeProduct(p: any): Product {
+  return {
+    ...p,
+    categories: Array.isArray(p.categories) ? p.categories : [],
+    filters: Array.isArray(p.filters) ? p.filters : [],
+  };
+}
+
+type FormErrors = {
+  name?: string;
+  short_description?: string;
+  long_description?: string;
+};
 
 export default function ProductsTable({ initialProducts }: ProductsTableProps) {
-  const [products, setProducts] = React.useState<Product[]>(initialProducts);
+  const [products, setProducts] = React.useState<Product[]>(() =>
+    initialProducts.map((p) => normalizeProduct(p)),
+  );
 
   const [filterValue, setFilterValue] = React.useState("");
   const [visibleColumns, setVisibleColumns] = React.useState<any>(
@@ -653,8 +890,17 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     long_description: "",
   });
 
+  const [formErrors, setFormErrors] = React.useState<FormErrors>({});
+
   const [imageFile, setImageFile] = React.useState<File | null>(null);
   const [existingImage, setExistingImage] = React.useState<string | null>(null);
+
+  const [selectedCategories, setSelectedCategories] = React.useState<Selection>(
+    new Set(),
+  );
+  const [selectedFilters, setSelectedFilters] = React.useState<Selection>(
+    new Set(),
+  );
 
   const [saving, setSaving] = React.useState(false);
 
@@ -694,15 +940,22 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     });
   }, [sortDescriptor, items]);
 
-  function openAddModal() {
-    setEditingProduct(null);
+  function resetForm() {
     setFormValues({
       name: "",
       short_description: "",
       long_description: "",
     });
+    setFormErrors({});
     setExistingImage(null);
     setImageFile(null);
+    setSelectedCategories(new Set());
+    setSelectedFilters(new Set());
+  }
+
+  function openAddModal() {
+    setEditingProduct(null);
+    resetForm();
     onOpen();
   }
 
@@ -713,12 +966,50 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
       short_description: product.short_description,
       long_description: product.long_description,
     });
+    setFormErrors({});
     setExistingImage(product.image);
     setImageFile(null);
+    setSelectedCategories(new Set(product.categories ?? []));
+    setSelectedFilters(new Set(product.filters ?? []));
     onOpen();
   }
 
+  function validateForm(): boolean {
+    const errors: FormErrors = {};
+
+    const name = formValues.name.trim();
+    const shortDesc = formValues.short_description.trim();
+    const longDesc = formValues.long_description.trim();
+
+    if (!name) {
+      errors.name = "Name is required.";
+    } else if (name.length > 40) {
+      errors.name = "Name must be 40 characters or less.";
+    }
+
+    if (!shortDesc) {
+      errors.short_description = "Short description is required.";
+    } else if (shortDesc.length > 80) {
+      errors.short_description = "Short description must be 80 characters or less.";
+    }
+
+    if (!longDesc) {
+      errors.long_description = "Long description is required.";
+    } else if (longDesc.length > 300) {
+      errors.long_description = "Long description must be 300 characters or less.";
+    }
+
+    setFormErrors(errors);
+
+    return Object.keys(errors).length === 0;
+  }
+
   async function handleSave(close: () => void) {
+    // validate before doing anything
+    if (!validateForm()) {
+      return;
+    }
+
     setSaving(true);
     try {
       let finalImageUrl =
@@ -726,6 +1017,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
       if (!editingProduct && !imageFile) {
         console.error("Image is required for new product");
+        setSaving(false);
         return;
       }
 
@@ -740,6 +1032,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
         if (!uploadRes.ok) {
           console.error("Image upload failed");
+          setSaving(false);
           return;
         }
 
@@ -747,11 +1040,22 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         finalImageUrl = data.url;
       }
 
+      const categoriesArray = selectionToArray(
+        selectedCategories,
+        CATEGORY_OPTIONS.map((c) => c.key),
+      );
+      const filtersArray = selectionToArray(
+        selectedFilters,
+        FILTER_OPTIONS.map((f) => f.key),
+      );
+
       const payload = {
-        name: formValues.name,
+        name: formValues.name.trim(),
         image: finalImageUrl,
-        short_description: formValues.short_description,
-        long_description: formValues.long_description,
+        short_description: formValues.short_description.trim(),
+        long_description: formValues.long_description.trim(),
+        categories: categoriesArray,
+        filters: filtersArray,
       };
 
       if (editingProduct) {
@@ -763,10 +1067,13 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
         if (!res.ok) {
           console.error("Failed to update");
+          setSaving(false);
           return;
         }
 
-        const updated = await res.json();
+        const updatedFromApi = await res.json();
+        const updated = normalizeProduct(updatedFromApi);
+
         setProducts((prev) =>
           prev.map((p) => (p.id === updated.id ? updated : p)),
         );
@@ -779,16 +1086,18 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
         if (!res.ok) {
           console.error("Failed to create");
+          setSaving(false);
           return;
         }
 
-        const created = await res.json();
+        const createdFromApi = await res.json();
+        const created = normalizeProduct(createdFromApi);
+
         setProducts((prev) => [created, ...prev]);
       }
 
       close();
-      setImageFile(null);
-      setExistingImage(null);
+      resetForm();
     } finally {
       setSaving(false);
     }
@@ -814,6 +1123,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
               <img
                 src={product.image}
                 className="w-8 h-8 rounded object-cover"
+                alt={product.name}
               />
               <div className="flex flex-col">
                 <span className="text-sm font-medium">{product.name}</span>
@@ -821,12 +1131,62 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
               </div>
             </div>
           );
+
         case "short_description":
           return (
             <p className="text-sm line-clamp-2">
               {product.short_description}
             </p>
           );
+
+        case "categories": {
+          const cats = product.categories ?? [];
+          if (!cats.length) {
+            return (
+              <span className="text-xs text-default-400">
+                —
+              </span>
+            );
+          }
+
+          return (
+            <div className="flex flex-wrap gap-1">
+              {cats.map((key) => (
+                <span
+                  key={key}
+                  className="px-2 py-0.5 rounded-full border text-[11px] leading-tight"
+                >
+                  {categoryLabelMap.get(key) ?? key}
+                </span>
+              ))}
+            </div>
+          );
+        }
+
+        case "filters": {
+          const fltrs = product.filters ?? [];
+          if (!fltrs.length) {
+            return (
+              <span className="text-xs text-default-400">
+                —
+              </span>
+            );
+          }
+
+          return (
+            <div className="flex flex-wrap gap-1">
+              {fltrs.map((key) => (
+                <span
+                  key={key}
+                  className="px-2 py-0.5 rounded-full border text-[11px] leading-tight"
+                >
+                  {filterLabelMap.get(key) ?? key}
+                </span>
+              ))}
+            </div>
+          );
+        }
+
         case "actions":
           return (
             <Dropdown>
@@ -848,8 +1208,10 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
               </DropdownMenu>
             </Dropdown>
           );
+
         default:
-          return product[key];
+          // covers id, created_at, etc.
+          return product[key as keyof Product] as any;
       }
     },
     [],
@@ -862,6 +1224,22 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     },
     [],
   );
+
+  const selectedCategoryLabels = React.useMemo(() => {
+    const keys = selectionToArray(
+      selectedCategories,
+      CATEGORY_OPTIONS.map((c) => c.key),
+    );
+    return keys.map((k) => categoryLabelMap.get(k) ?? k);
+  }, [selectedCategories]);
+
+  const selectedFilterLabels = React.useMemo(() => {
+    const keys = selectionToArray(
+      selectedFilters,
+      FILTER_OPTIONS.map((f) => f.key),
+    );
+    return keys.map((k) => filterLabelMap.get(k) ?? k);
+  }, [selectedFilters]);
 
   const topContent = React.useMemo(() => {
     return (
@@ -881,7 +1259,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
-                color="primary"
+                  color="primary"
                   endContent={<ChevronDownIcon className="text-small" />}
                   variant="flat"
                 >
@@ -901,7 +1279,12 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
               </DropdownMenu>
             </Dropdown>
 
-            <Button color="primary" variant="flat" endContent={<PlusIcon />} onPress={openAddModal}>
+            <Button
+              color="primary"
+              variant="flat"
+              endContent={<PlusIcon />}
+              onPress={openAddModal}
+            >
               Add New
             </Button>
           </div>
@@ -926,7 +1309,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         </div>
       </div>
     );
-  }, [filterValue, visibleColumns, filteredItems.length]);
+  }, [filterValue, visibleColumns, filteredItems.length, onRowsPerPageChange]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -1010,13 +1393,31 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
               <ModalBody>
                 <Input
-                required
+                  isRequired
                   label="Name"
                   variant="bordered"
                   value={formValues.name}
-                  onValueChange={(v) =>
-                    setFormValues((p) => ({ ...p, name: v }))
+                  maxLength={40}
+                  isInvalid={!!formErrors.name}
+                  errorMessage={
+                    formErrors.name ||
+                    `${formValues.name.trim().length}/15 characters`
                   }
+                  onValueChange={(v) => {
+                    setFormValues((p) => ({ ...p, name: v }));
+                    const trimmed = v.trim();
+                    setFormErrors((prev) => {
+                      const next = { ...prev };
+                      if (!trimmed) {
+                        next.name = "Name is required.";
+                      } else if (trimmed.length > 40) {
+                        next.name = "Name must be 40 characters or less.";
+                      } else {
+                        next.name = undefined;
+                      }
+                      return next;
+                    });
+                  }}
                 />
 
                 {existingImage && !imageFile && (
@@ -1024,6 +1425,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                     <img
                       src={existingImage}
                       className="w-24 h-24 rounded object-cover"
+                      alt="Current product"
                     />
                     <Button
                       size="sm"
@@ -1047,27 +1449,136 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                 />
 
                 <Input
+                  isRequired
                   label="Short Description"
                   variant="bordered"
                   value={formValues.short_description}
-                  onValueChange={(v) =>
-                    setFormValues((p) => ({ ...p, short_description: v }))
+                  maxLength={80}
+                  isInvalid={!!formErrors.short_description}
+                  errorMessage={
+                    formErrors.short_description ||
+                    `${formValues.short_description.trim().length}/20 characters`
                   }
+                  onValueChange={(v) => {
+                    setFormValues((p) => ({
+                      ...p,
+                      short_description: v,
+                    }));
+                    const trimmed = v.trim();
+                    setFormErrors((prev) => {
+                      const next = { ...prev };
+                      if (!trimmed) {
+                        next.short_description =
+                          "Short description is required.";
+                      } else if (trimmed.length > 80) {
+                        next.short_description =
+                          "Short description must be 20 characters or less.";
+                      } else {
+                        next.short_description = undefined;
+                      }
+                      return next;
+                    });
+                  }}
                 />
 
                 <Textarea
-                required
+                  isRequired
                   label="Long Description"
                   variant="bordered"
                   value={formValues.long_description}
-                  onValueChange={(v) =>
-                    setFormValues((p) => ({ ...p, long_description: v }))
+                  maxLength={300}
+                  isInvalid={!!formErrors.long_description}
+                  errorMessage={
+                    formErrors.long_description ||
+                    `${formValues.long_description.trim().length}/300 characters`
                   }
+                  onValueChange={(v) => {
+                    setFormValues((p) => ({
+                      ...p,
+                      long_description: v,
+                    }));
+                    const trimmed = v.trim();
+                    setFormErrors((prev) => {
+                      const next = { ...prev };
+                      if (!trimmed) {
+                        next.long_description =
+                          "Long description is required.";
+                      } else if (trimmed.length > 300) {
+                        next.long_description =
+                          "Long description must be 300 characters or less.";
+                      } else {
+                        next.long_description = undefined;
+                      }
+                      return next;
+                    });
+                  }}
                 />
+
+                <div className="flex flex-col gap-3">
+                  <div>
+                    <span className="block text-sm mb-1">Categories</span>
+                    <Dropdown>
+                      <DropdownTrigger>
+                        <Button
+                          variant="bordered"
+                          className="w-full justify-between"
+                        >
+                          {selectedCategoryLabels.length > 0
+                            ? selectedCategoryLabels.join(", ")
+                            : "Select categories"}
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownMenu
+                        aria-label="Select categories"
+                        closeOnSelect={false}
+                        selectionMode="multiple"
+                        selectedKeys={selectedCategories}
+                        onSelectionChange={setSelectedCategories}
+                      >
+                        {CATEGORY_OPTIONS.map((c) => (
+                          <DropdownItem key={c.key}>{c.label}</DropdownItem>
+                        ))}
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
+
+                  <div>
+                    <span className="block text-sm mb-1">Filters</span>
+                    <Dropdown>
+                      <DropdownTrigger>
+                        <Button
+                          variant="bordered"
+                          className="w-full justify-between"
+                        >
+                          {selectedFilterLabels.length > 0
+                            ? selectedFilterLabels.join(", ")
+                            : "Select filters"}
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownMenu
+                        aria-label="Select filters"
+                        closeOnSelect={false}
+                        selectionMode="multiple"
+                        selectedKeys={selectedFilters}
+                        onSelectionChange={setSelectedFilters}
+                      >
+                        {FILTER_OPTIONS.map((f) => (
+                          <DropdownItem key={f.key}>{f.label}</DropdownItem>
+                        ))}
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                </div>
               </ModalBody>
 
               <ModalFooter>
-                <Button variant="flat" onPress={onClose}>
+                <Button
+                  variant="flat"
+                  onPress={() => {
+                    resetForm();
+                    onClose();
+                  }}
+                >
                   Cancel
                 </Button>
                 <Button

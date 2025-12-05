@@ -8,17 +8,33 @@ type ProductRow = {
   short_description: string;
   long_description: string;
   created_at: Date;
+  categories: string[] | null;
+  filters: string[] | null;
 };
 
 export default async function AdminProductsPage() {
   const result = await query<ProductRow>(
-    "SELECT id, name, image, short_description, long_description, created_at FROM products ORDER BY created_at DESC",
+    `
+    SELECT
+      id,
+      name,
+      image,
+      short_description,
+      long_description,
+      created_at,
+      categories,
+      filters
+    FROM products
+    ORDER BY created_at DESC
+    `,
   );
 
-  // We just pass rows directly (snake_case) to the client component
   const products = result.rows.map((p) => ({
     ...p,
     created_at: p.created_at.toISOString(),
+    // ensure arrays, never null
+    categories: (p.categories ?? []) as string[],
+    filters: (p.filters ?? []) as string[],
   }));
 
   return (
