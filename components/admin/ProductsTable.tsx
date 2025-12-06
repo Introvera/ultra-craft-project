@@ -39,7 +39,7 @@
 //   long_description: string;
 //   created_at: string;
 //   categories: string[]; // now treated as array
-//   filters: string[];    // now treated as array
+//   filters: string[]; // now treated as array
 // };
 
 // type ProductsTableProps = {
@@ -88,9 +88,7 @@
 //   { key: "outdoor", label: "Outdoor" },
 // ];
 
-// const categoryLabelMap = new Map(
-//   CATEGORY_OPTIONS.map((c) => [c.key, c.label]),
-// );
+// const categoryLabelMap = new Map(CATEGORY_OPTIONS.map((c) => [c.key, c.label]));
 // const filterLabelMap = new Map(FILTER_OPTIONS.map((f) => [f.key, f.label]));
 
 // /**
@@ -111,6 +109,12 @@
 //     filters: Array.isArray(p.filters) ? p.filters : [],
 //   };
 // }
+
+// type FormErrors = {
+//   name?: string;
+//   short_description?: string;
+//   long_description?: string;
+// };
 
 // export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 //   const [products, setProducts] = React.useState<Product[]>(() =>
@@ -139,6 +143,8 @@
 //     short_description: "",
 //     long_description: "",
 //   });
+
+//   const [formErrors, setFormErrors] = React.useState<FormErrors>({});
 
 //   const [imageFile, setImageFile] = React.useState<File | null>(null);
 //   const [existingImage, setExistingImage] = React.useState<string | null>(null);
@@ -188,17 +194,22 @@
 //     });
 //   }, [sortDescriptor, items]);
 
-//   function openAddModal() {
-//     setEditingProduct(null);
+//   function resetForm() {
 //     setFormValues({
 //       name: "",
 //       short_description: "",
 //       long_description: "",
 //     });
+//     setFormErrors({});
 //     setExistingImage(null);
 //     setImageFile(null);
 //     setSelectedCategories(new Set());
 //     setSelectedFilters(new Set());
+//   }
+
+//   function openAddModal() {
+//     setEditingProduct(null);
+//     resetForm();
 //     onOpen();
 //   }
 
@@ -209,6 +220,7 @@
 //       short_description: product.short_description,
 //       long_description: product.long_description,
 //     });
+//     setFormErrors({});
 //     setExistingImage(product.image);
 //     setImageFile(null);
 //     setSelectedCategories(new Set(product.categories ?? []));
@@ -216,7 +228,42 @@
 //     onOpen();
 //   }
 
+//   function validateForm(): boolean {
+//     const errors: FormErrors = {};
+
+//     const name = formValues.name.trim();
+//     const shortDesc = formValues.short_description.trim();
+//     const longDesc = formValues.long_description.trim();
+
+//     if (!name) {
+//       errors.name = "Name is required.";
+//     } else if (name.length > 40) {
+//       errors.name = "Name must be 40 characters or less.";
+//     }
+
+//     if (!shortDesc) {
+//       errors.short_description = "Short description is required.";
+//     } else if (shortDesc.length > 80) {
+//       errors.short_description = "Short description must be 80 characters or less.";
+//     }
+
+//     if (!longDesc) {
+//       errors.long_description = "Long description is required.";
+//     } else if (longDesc.length > 300) {
+//       errors.long_description = "Long description must be 300 characters or less.";
+//     }
+
+//     setFormErrors(errors);
+
+//     return Object.keys(errors).length === 0;
+//   }
+
 //   async function handleSave(close: () => void) {
+//     // validate before doing anything
+//     if (!validateForm()) {
+//       return;
+//     }
+
 //     setSaving(true);
 //     try {
 //       let finalImageUrl =
@@ -257,10 +304,10 @@
 //       );
 
 //       const payload = {
-//         name: formValues.name,
+//         name: formValues.name.trim(),
 //         image: finalImageUrl,
-//         short_description: formValues.short_description,
-//         long_description: formValues.long_description,
+//         short_description: formValues.short_description.trim(),
+//         long_description: formValues.long_description.trim(),
 //         categories: categoriesArray,
 //         filters: filtersArray,
 //       };
@@ -304,8 +351,7 @@
 //       }
 
 //       close();
-//       setImageFile(null);
-//       setExistingImage(null);
+//       resetForm();
 //     } finally {
 //       setSaving(false);
 //     }
@@ -335,9 +381,7 @@
 //               />
 //               <div className="flex flex-col">
 //                 <span className="text-sm font-medium">{product.name}</span>
-//                 <span className="text-xs text-default-400">
-//                   #{product.id}
-//                 </span>
+//                 <span className="text-xs text-default-400">#{product.id}</span>
 //               </div>
 //             </div>
 //           );
@@ -603,13 +647,31 @@
 
 //               <ModalBody>
 //                 <Input
-//                   required
+//                   isRequired
 //                   label="Name"
 //                   variant="bordered"
 //                   value={formValues.name}
-//                   onValueChange={(v) =>
-//                     setFormValues((p) => ({ ...p, name: v }))
+//                   maxLength={40}
+//                   isInvalid={!!formErrors.name}
+//                   errorMessage={
+//                     formErrors.name ||
+//                     `${formValues.name.trim().length}/15 characters`
 //                   }
+//                   onValueChange={(v) => {
+//                     setFormValues((p) => ({ ...p, name: v }));
+//                     const trimmed = v.trim();
+//                     setFormErrors((prev) => {
+//                       const next = { ...prev };
+//                       if (!trimmed) {
+//                         next.name = "Name is required.";
+//                       } else if (trimmed.length > 40) {
+//                         next.name = "Name must be 40 characters or less.";
+//                       } else {
+//                         next.name = undefined;
+//                       }
+//                       return next;
+//                     });
+//                   }}
 //                 />
 
 //                 {existingImage && !imageFile && (
@@ -641,28 +703,69 @@
 //                 />
 
 //                 <Input
+//                   isRequired
 //                   label="Short Description"
 //                   variant="bordered"
 //                   value={formValues.short_description}
-//                   onValueChange={(v) =>
+//                   maxLength={80}
+//                   isInvalid={!!formErrors.short_description}
+//                   errorMessage={
+//                     formErrors.short_description ||
+//                     `${formValues.short_description.trim().length}/20 characters`
+//                   }
+//                   onValueChange={(v) => {
 //                     setFormValues((p) => ({
 //                       ...p,
 //                       short_description: v,
-//                     }))
-//                   }
+//                     }));
+//                     const trimmed = v.trim();
+//                     setFormErrors((prev) => {
+//                       const next = { ...prev };
+//                       if (!trimmed) {
+//                         next.short_description =
+//                           "Short description is required.";
+//                       } else if (trimmed.length > 80) {
+//                         next.short_description =
+//                           "Short description must be 20 characters or less.";
+//                       } else {
+//                         next.short_description = undefined;
+//                       }
+//                       return next;
+//                     });
+//                   }}
 //                 />
 
 //                 <Textarea
-//                   required
+//                   isRequired
 //                   label="Long Description"
 //                   variant="bordered"
 //                   value={formValues.long_description}
-//                   onValueChange={(v) =>
+//                   maxLength={300}
+//                   isInvalid={!!formErrors.long_description}
+//                   errorMessage={
+//                     formErrors.long_description ||
+//                     `${formValues.long_description.trim().length}/300 characters`
+//                   }
+//                   onValueChange={(v) => {
 //                     setFormValues((p) => ({
 //                       ...p,
 //                       long_description: v,
-//                     }))
-//                   }
+//                     }));
+//                     const trimmed = v.trim();
+//                     setFormErrors((prev) => {
+//                       const next = { ...prev };
+//                       if (!trimmed) {
+//                         next.long_description =
+//                           "Long description is required.";
+//                       } else if (trimmed.length > 300) {
+//                         next.long_description =
+//                           "Long description must be 300 characters or less.";
+//                       } else {
+//                         next.long_description = undefined;
+//                       }
+//                       return next;
+//                     });
+//                   }}
 //                 />
 
 //                 <div className="flex flex-col gap-3">
@@ -723,7 +826,13 @@
 //               </ModalBody>
 
 //               <ModalFooter>
-//                 <Button variant="flat" onPress={onClose}>
+//                 <Button
+//                   variant="flat"
+//                   onPress={() => {
+//                     resetForm();
+//                     onClose();
+//                   }}
+//                 >
 //                   Cancel
 //                 </Button>
 //                 <Button
@@ -780,17 +889,17 @@ import {
 type Product = {
   id: number;
   name: string;
-  image: string;
+  image: string[]; // array of image URLs
   short_description: string;
   long_description: string;
   created_at: string;
-  categories: string[]; // now treated as array
-  filters: string[]; // now treated as array
+  categories: string[];
+  filters: string[];
 };
 
 type ProductsTableProps = {
   initialProducts: (Product & {
-    // tolerate older data shape from API
+    image?: string[] | string | null;
     categories?: string[] | null;
     filters?: string[] | null;
   })[];
@@ -813,7 +922,6 @@ const INITIAL_VISIBLE_COLUMNS = [
   "actions",
 ];
 
-// You can customize these lists to match your project
 const CATEGORY_OPTIONS = [
   { key: "seating", label: "Seating" },
   { key: "sofas", label: "Sofas" },
@@ -837,20 +945,23 @@ const FILTER_OPTIONS = [
 const categoryLabelMap = new Map(CATEGORY_OPTIONS.map((c) => [c.key, c.label]));
 const filterLabelMap = new Map(FILTER_OPTIONS.map((f) => [f.key, f.label]));
 
-/**
- * Converts HeroUI Selection to string[].
- */
 function selectionToArray(selection: Selection, allKeys: string[]): string[] {
   if (selection === "all") return allKeys;
   return Array.from(selection).map((k) => String(k));
 }
 
-/**
- * Normalize product from API so categories/filters are always arrays.
- */
 function normalizeProduct(p: any): Product {
+  let images: string[] = [];
+
+  if (Array.isArray(p.image)) {
+    images = p.image;
+  } else if (typeof p.image === "string" && p.image.trim().length > 0) {
+    images = [p.image];
+  }
+
   return {
     ...p,
+    image: images,
     categories: Array.isArray(p.categories) ? p.categories : [],
     filters: Array.isArray(p.filters) ? p.filters : [],
   };
@@ -878,7 +989,12 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   });
   const [page, setPage] = React.useState(1);
 
+  // create/edit modal
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  // view modal
+  const [viewOpen, setViewOpen] = React.useState(false);
+  const [viewProduct, setViewProduct] = React.useState<Product | null>(null);
 
   const [editingProduct, setEditingProduct] = React.useState<Product | null>(
     null,
@@ -892,8 +1008,11 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
   const [formErrors, setFormErrors] = React.useState<FormErrors>({});
 
-  const [imageFile, setImageFile] = React.useState<File | null>(null);
-  const [existingImage, setExistingImage] = React.useState<string | null>(null);
+  // already uploaded image URLs for this form (existing product or after save)
+  const [imageUrls, setImageUrls] = React.useState<string[]>([]);
+
+  // newly selected files that have not been uploaded yet
+  const [imageFiles, setImageFiles] = React.useState<File[]>([]);
 
   const [selectedCategories, setSelectedCategories] = React.useState<Selection>(
     new Set(),
@@ -947,8 +1066,8 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
       long_description: "",
     });
     setFormErrors({});
-    setExistingImage(null);
-    setImageFile(null);
+    setImageUrls([]);
+    setImageFiles([]);
     setSelectedCategories(new Set());
     setSelectedFilters(new Set());
   }
@@ -967,8 +1086,8 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
       long_description: product.long_description,
     });
     setFormErrors({});
-    setExistingImage(product.image);
-    setImageFile(null);
+    setImageUrls(product.image ?? []);
+    setImageFiles([]);
     setSelectedCategories(new Set(product.categories ?? []));
     setSelectedFilters(new Set(product.filters ?? []));
     onOpen();
@@ -990,7 +1109,8 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     if (!shortDesc) {
       errors.short_description = "Short description is required.";
     } else if (shortDesc.length > 80) {
-      errors.short_description = "Short description must be 80 characters or less.";
+      errors.short_description =
+        "Short description must be 80 characters or less.";
     }
 
     if (!longDesc) {
@@ -1005,39 +1125,41 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   }
 
   async function handleSave(close: () => void) {
-    // validate before doing anything
     if (!validateForm()) {
       return;
     }
 
     setSaving(true);
     try {
-      let finalImageUrl =
-        editingProduct && !imageFile ? editingProduct.image : "";
+      // start from current image list (including any removals)
+      const finalImages = [...imageUrls];
 
-      if (!editingProduct && !imageFile) {
-        console.error("Image is required for new product");
-        setSaving(false);
-        return;
+      // upload all newly selected files and append their URLs
+      if (imageFiles.length > 0) {
+        for (const file of imageFiles) {
+          const fd = new FormData();
+          fd.append("file", file);
+
+          const uploadRes = await fetch("/api/upload", {
+            method: "POST",
+            body: fd,
+          });
+
+          if (!uploadRes.ok) {
+            console.error("Image upload failed");
+            setSaving(false);
+            return;
+          }
+
+          const data = await uploadRes.json();
+          finalImages.push(data.url);
+        }
       }
 
-      if (imageFile) {
-        const fd = new FormData();
-        fd.append("file", imageFile);
-
-        const uploadRes = await fetch("/api/upload", {
-          method: "POST",
-          body: fd,
-        });
-
-        if (!uploadRes.ok) {
-          console.error("Image upload failed");
-          setSaving(false);
-          return;
-        }
-
-        const data = await uploadRes.json();
-        finalImageUrl = data.url;
+      if (!finalImages.length) {
+        console.error("At least one image is required");
+        setSaving(false);
+        return;
       }
 
       const categoriesArray = selectionToArray(
@@ -1051,7 +1173,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
       const payload = {
         name: formValues.name.trim(),
-        image: finalImageUrl,
+        image: finalImages,
         short_description: formValues.short_description.trim(),
         long_description: formValues.long_description.trim(),
         categories: categoriesArray,
@@ -1117,20 +1239,26 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
       const key = columnKey as keyof Product | "actions";
 
       switch (key) {
-        case "name":
+        case "name": {
+          const firstImage = product.image[0];
           return (
             <div className="flex items-center gap-3">
-              <img
-                src={product.image}
-                className="w-8 h-8 rounded object-cover"
-                alt={product.name}
-              />
+              {firstImage ? (
+                <img
+                  src={firstImage}
+                  className="w-8 h-8 rounded object-cover"
+                  alt={product.name}
+                />
+              ) : (
+                <div className="w-8 h-8 rounded bg-default-200" />
+              )}
               <div className="flex flex-col">
                 <span className="text-sm font-medium">{product.name}</span>
                 <span className="text-xs text-default-400">#{product.id}</span>
               </div>
             </div>
           );
+        }
 
         case "short_description":
           return (
@@ -1197,10 +1325,15 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
               </DropdownTrigger>
               <DropdownMenu
                 onAction={(key) => {
+                  if (key === "view") {
+                    setViewProduct(product);
+                    setViewOpen(true);
+                  }
                   if (key === "edit") openEditModal(product);
                   if (key === "delete") handleDelete(product.id);
                 }}
               >
+                <DropdownItem key="view">View</DropdownItem>
                 <DropdownItem key="edit">Edit</DropdownItem>
                 <DropdownItem key="delete" color="danger">
                   Delete
@@ -1210,7 +1343,6 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
           );
 
         default:
-          // covers id, created_at, etc.
           return product[key as keyof Product] as any;
       }
     },
@@ -1383,6 +1515,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         </TableBody>
       </Table>
 
+      {/* Create / Edit modal */}
       <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -1420,32 +1553,46 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                   }}
                 />
 
-                {existingImage && !imageFile && (
+                {/* existing images with per-image removal */}
+                {imageUrls.length > 0 && (
                   <div className="flex flex-col gap-2">
-                    <img
-                      src={existingImage}
-                      className="w-24 h-24 rounded object-cover"
-                      alt="Current product"
-                    />
-                    <Button
-                      size="sm"
-                      color="danger"
-                      variant="flat"
-                      onPress={() => setExistingImage(null)}
-                    >
-                      Remove Image
-                    </Button>
+                    <span className="text-sm font-medium">Images</span>
+                    <div className="flex flex-wrap gap-2">
+                      {imageUrls.map((url, idx) => (
+                        <div key={url} className="relative">
+                          <img
+                            src={url}
+                            className="w-20 h-20 rounded object-cover"
+                            alt={`Product image ${idx + 1}`}
+                          />
+                          <button
+                            type="button"
+                            className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-xs text-white"
+                            onClick={() =>
+                              setImageUrls((prev) =>
+                                prev.filter((_, i) => i !== idx),
+                              )
+                            }
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
                 <Input
                   type="file"
-                  label="Upload Image"
+                  label="Upload Images"
                   variant="bordered"
                   accept="image/*"
-                  onChange={(e) =>
-                    setImageFile(e.target.files?.[0] ?? null)
-                  }
+                  multiple
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files ?? []);
+                    if (!files.length) return;
+                    setImageFiles((prev) => [...prev, ...files]);
+                  }}
                 />
 
                 <Input
@@ -1592,6 +1739,88 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
               </ModalFooter>
             </>
           )}
+        </ModalContent>
+      </Modal>
+
+      {/* View details modal */}
+      <Modal
+        isOpen={viewOpen}
+        placement="top-center"
+        onOpenChange={setViewOpen}
+      >
+        <ModalContent>
+          {() =>
+            viewProduct && (
+              <>
+                <ModalHeader>{viewProduct.name}</ModalHeader>
+                <ModalBody>
+                  {viewProduct.image.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {viewProduct.image.map((url, idx) => (
+                        <img
+                          key={url}
+                          src={url}
+                          className="w-24 h-24 rounded object-cover"
+                          alt={`Product image ${idx + 1}`}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  <p className="text-sm font-medium">Short description:</p>
+                  <p className="text-sm mb-2">
+                    {viewProduct.short_description}
+                  </p>
+
+                  <p className="text-sm font-medium">Long description:</p>
+                  <p className="text-sm whitespace-pre-line mb-3">
+                    {viewProduct.long_description}
+                  </p>
+
+                  <div className="mb-2">
+                    <p className="text-sm font-medium mb-1">Categories</p>
+                    {viewProduct.categories.length ? (
+                      <div className="flex flex-wrap gap-1">
+                        {viewProduct.categories.map((key) => (
+                          <span
+                            key={key}
+                            className="px-2 py-0.5 rounded-full border text-[11px]"
+                          >
+                            {categoryLabelMap.get(key) ?? key}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-xs text-default-400">None</span>
+                    )}
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium mb-1">Filters</p>
+                    {viewProduct.filters.length ? (
+                      <div className="flex flex-wrap gap-1">
+                        {viewProduct.filters.map((key) => (
+                          <span
+                            key={key}
+                            className="px-2 py-0.5 rounded-full border text-[11px]"
+                          >
+                            {filterLabelMap.get(key) ?? key}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-xs text-default-400">None</span>
+                    )}
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button variant="flat" onPress={() => setViewOpen(false)}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </>
+            )
+          }
         </ModalContent>
       </Modal>
     </>

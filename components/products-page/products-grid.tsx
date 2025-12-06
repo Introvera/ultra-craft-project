@@ -34,7 +34,7 @@ function cn(...classes: Array<string | false | null | undefined>) {
 type Product = {
   id: number;
   name: string;
-  image: string;
+  image: string[]; 
   short_description: string;
   long_description: string;
   created_at: string;
@@ -81,31 +81,67 @@ export default function ProductsGridClient() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // fetch from /api/products
-  React.useEffect(() => {
-    const load = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetch("/api/products");
-        if (!res.ok) throw new Error("Failed to fetch products");
-        const data = (await res.json()) as Product[];
+  // React.useEffect(() => {
+  //   const load = async () => {
+  //     try {
+  //       setLoading(true);
+  //       setError(null);
+  //       const res = await fetch("/api/products");
+  //       if (!res.ok) throw new Error("Failed to fetch products");
+  //       const data = (await res.json()) as Product[];
 
-        const normalized = data.map((p) => ({
+  //       const normalized = data.map((p) => ({
+  //         ...p,
+  //         categories: Array.isArray(p.categories) ? p.categories : [],
+  //         filters: Array.isArray(p.filters) ? p.filters : [],
+  //       }));
+
+  //       setProducts(normalized);
+  //     } catch (err: any) {
+  //       setError(err.message ?? "Something went wrong");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   load();
+  // }, []);
+
+  React.useEffect(() => {
+  const load = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch("/api/products");
+      if (!res.ok) throw new Error("Failed to fetch products");
+      const data = await res.json();
+
+      const normalized: Product[] = (data as any[]).map((p) => {
+        let images: string[] = [];
+        if (Array.isArray(p.image)) {
+          images = p.image;
+        } else if (typeof p.image === "string" && p.image.trim().length > 0) {
+          images = [p.image];
+        }
+
+        return {
           ...p,
+          image: images,
           categories: Array.isArray(p.categories) ? p.categories : [],
           filters: Array.isArray(p.filters) ? p.filters : [],
-        }));
+        };
+      });
 
-        setProducts(normalized);
-      } catch (err: any) {
-        setError(err.message ?? "Something went wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
+      setProducts(normalized);
+    } catch (err: any) {
+      setError(err.message ?? "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    load();
-  }, []);
+  load();
+}, []);
 
   const toggleFilter = (key: string) => {
     setPage(1);
@@ -333,13 +369,25 @@ export default function ProductsGridClient() {
                 shadow="sm"
                 className="overflow-hidden rounded-3xl border border-black/5 bg-[#F5F6F8]"
               >
-                <div className="relative">
+                {/* <div className="relative">
                   <Image
                     removeWrapper
                     alt={product.name}
                     src={product.image}
                     className="h-40 w-full object-cover md:h-60 sm:h-80 p-2 rounded-3xl"
                   />
+                </div> */}
+                <div className="relative">
+                  {product.image[0] ? (
+                    <Image
+                      removeWrapper
+                      alt={product.name}
+                      src={product.image[0]}          // only first image
+                      className="h-40 w-full object-cover md:h-60 sm:h-80 p-2 rounded-3xl"
+                    />
+                  ) : (
+                    <div className="h-40 w-full md:h-60 sm:h-80 p-2 rounded-3xl bg-default-200" />
+                  )}
                 </div>
 
                 <CardBody className="flex flex-col gap-1 px-5 pb-4 pt-4">
