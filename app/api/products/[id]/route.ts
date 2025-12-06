@@ -2,7 +2,6 @@
 // import { query } from "@/lib/db";
 
 // type RouteContext = {
-//   // 👇 params is now a Promise
 //   params: Promise<{ id: string }>;
 // };
 
@@ -13,12 +12,13 @@
 //   short_description: string;
 //   long_description: string;
 //   created_at: string;
+//   categories: string[] | null;
+//   filters: string[] | null;
 // };
 
-// // PATCH /api/products/:id  → update
+// // PATCH /api/products/:id
 // export async function PATCH(req: Request, { params }: RouteContext) {
 //   try {
-//     // 👇 unwrap the Promise
 //     const { id: idStr } = await params;
 //     const id = Number(idStr);
 
@@ -27,7 +27,25 @@
 //     }
 
 //     const body = await req.json();
-//     const { name, image, short_description, long_description } = body;
+//     const {
+//       name,
+//       image,
+//       short_description,
+//       long_description,
+//       categories,
+//       filters,
+//     } = body;
+
+//     const categoriesArray: string[] = Array.isArray(categories)
+//       ? (categories as string[])
+//       : [];
+
+//     const filtersArray: string[] = Array.isArray(filters)
+//       ? (filters as string[])
+//       : [];
+
+//     const categoriesJson = JSON.stringify(categoriesArray);
+//     const filtersJson = JSON.stringify(filtersArray);
 
 //     const result = await query<ProductRow>(
 //       `
@@ -35,11 +53,21 @@
 //       SET name = $1,
 //           image = $2,
 //           short_description = $3,
-//           long_description = $4
-//       WHERE id = $5
+//           long_description = $4,
+//           categories = $5::jsonb,
+//           filters = $6::jsonb
+//       WHERE id = $7
 //       RETURNING *
 //       `,
-//       [name, image, short_description, long_description, id],
+//       [
+//         name,
+//         image,
+//         short_description,
+//         long_description,
+//         categoriesJson,
+//         filtersJson,
+//         id,
+//       ],
 //     );
 
 //     if (result.rows.length === 0) {
@@ -49,7 +77,15 @@
 //       );
 //     }
 
-//     return NextResponse.json(result.rows[0]);
+//     const row = result.rows[0];
+
+//     const normalized: ProductRow = {
+//       ...row,
+//       categories: (row.categories ?? []) as string[],
+//       filters: (row.filters ?? []) as string[],
+//     };
+
+//     return NextResponse.json(normalized);
 //   } catch (error) {
 //     console.error("Error updating product:", error);
 //     return NextResponse.json(
@@ -59,10 +95,9 @@
 //   }
 // }
 
-// // DELETE /api/products/:id  → delete
+// // DELETE unchanged
 // export async function DELETE(_req: Request, { params }: RouteContext) {
 //   try {
-//     // 👇 unwrap the Promise
 //     const { id: idStr } = await params;
 //     const id = Number(idStr);
 
@@ -92,7 +127,7 @@ type RouteContext = {
 type ProductRow = {
   id: number;
   name: string;
-  image: string;
+  image: string[];                 // ⬅️ array now
   short_description: string;
   long_description: string;
   created_at: string;
@@ -118,14 +153,27 @@ export async function PATCH(req: Request, { params }: RouteContext) {
       long_description,
       categories,
       filters,
-    } = body;
+    } = body as {
+      name: string;
+      image: string | string[];
+      short_description: string;
+      long_description: string;
+      categories?: string[] | null;
+      filters?: string[] | null;
+    };
+
+    const imageArray: string[] = Array.isArray(image)
+      ? image
+      : image
+      ? [image]
+      : [];
 
     const categoriesArray: string[] = Array.isArray(categories)
-      ? (categories as string[])
+      ? categories
       : [];
 
     const filtersArray: string[] = Array.isArray(filters)
-      ? (filters as string[])
+      ? filters
       : [];
 
     const categoriesJson = JSON.stringify(categoriesArray);
@@ -135,7 +183,7 @@ export async function PATCH(req: Request, { params }: RouteContext) {
       `
       UPDATE products
       SET name = $1,
-          image = $2,
+          image = $2::text[],
           short_description = $3,
           long_description = $4,
           categories = $5::jsonb,
@@ -145,7 +193,7 @@ export async function PATCH(req: Request, { params }: RouteContext) {
       `,
       [
         name,
-        image,
+        imageArray,
         short_description,
         long_description,
         categoriesJson,

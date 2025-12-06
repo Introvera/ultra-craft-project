@@ -4,7 +4,7 @@ import ProductsTableClient from "./ProductsTableClient";
 type ProductRow = {
   id: number;
   name: string;
-  image: string;
+  image: string [] | null;
   short_description: string;
   long_description: string;
   created_at: Date;
@@ -35,6 +35,7 @@ export default async function AdminProductsPage() {
     // ensure arrays, never null
     categories: (p.categories ?? []) as string[],
     filters: (p.filters ?? []) as string[],
+    image: (p.image ?? []) as string[],
   }));
 
   return (
