@@ -1,5 +1,6 @@
 "use client";
 
+import { Link } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
@@ -13,50 +14,70 @@ type Product = {
   description: string;
   badge?: string;
   image: string;
+  imageSizesBig: {
+    mobile: number;
+    tablet: number;
+    desktop: number;
+  };
+  imageSizesSmall: {
+    mobile: number;
+    tablet: number;
+    desktop: number;
+  };
 };
 
 const products: Product[] = [
   {
     id: 1,
     name: "Boucle Dining Armchair",
-    price: "LKR 10,000",
+    price: "",
     description:
-      "A boucle upholstered accent chair with natural wooden legs and a modern silhouette.",
-    image: "/products/ch1.png",
+      "Soft boucle upholstery and slim oak legs for a refined, cozy dining look.",
+
+    image: "/products/pro3.png",
+    imageSizesBig: { mobile: 180, tablet: 240, desktop: 420 },
+    imageSizesSmall: { mobile: 40, tablet: 140, desktop: 290 },
   },
   {
     id: 2,
-    name: "Boucle Dining Armchair",
-    price: "LKR 8,500",
+    name: "Oak Lounge Chair",
+    price: "",
     description:
-      "Soft boucle upholstery and slim oak legs for a refined, cozy dining look.",
-    badge: "25% Off",
-    image: "/products/ch2.png",
+      "Gently curved frame with generous cushioning, perfect for reading corners.",
+    image: "/products/pro4.png",
+    imageSizesBig: { mobile: 180, tablet: 384, desktop: 420 },
+    imageSizesSmall: { mobile: 110, tablet: 130, desktop: 290 },
   },
   {
     id: 3,
-    name: "Oak Lounge Chair",
-    price: "LKR 12,900",
+    name: "Boucle Dining Armchair",
+    price: "",
     description:
-      "Gently curved frame with generous cushioning, perfect for reading corners.",
-    image: "/products/ch1.png",
+      "A boucle upholstered accent chair with natural wooden legs and a modern silhouette.",
+    image: "/products/pro2.png",
+    imageSizesBig: { mobile: 220, tablet: 400, desktop: 420 },
+    imageSizesSmall: { mobile: 110, tablet: 140, desktop: 290 },
   },
   {
     id: 4,
     name: "Minimalist Armchair",
-    price: "LKR 9,700",
+    price: "",
     description:
       "Clean lines and soft padding for modern living rooms and studios.",
-    image: "/products/ch2.png",
+    image: "/products/pro5.png",
+    imageSizesBig: { mobile: 180, tablet: 280, desktop: 420 },
+    imageSizesSmall: { mobile: 110, tablet: 220, desktop: 290 },
   },
-  {
-    id: 5,
-    name: "Scandi Wood Chair",
-    price: "LKR 11,200",
-    description:
-      "Scandinavian-inspired design with warm wood tones and textured fabric.",
-    image: "/products/ch1.png",
-  },
+  // {
+  //   id: 5,
+  //   name: "Scandi Wood Chair",
+  //   price: "LKR 11,200",
+  //   description:
+  //     "Scandinavian-inspired design with warm wood tones and textured fabric.",
+  //   image: "/products/ch1.png",
+  //   imageSizesBig: { mobile: 150, tablet: 200, desktop: 350 },
+  //   imageSizesSmall: { mobile: 110, tablet: 140, desktop: 250 },
+  // },
 ];
 
 const slideVariants = {
@@ -152,10 +173,12 @@ export function Products() {
               <ArrowUpRight className="ml-2 size-4 sm:size-5" />
             </Button>
 
-            <Button variant="coffee" size="pill">
-              Explore Products
-              <ArrowUpRight className="ml-2 size-4 sm:size-5" />
-            </Button>
+            <Link href="/products">
+              <Button variant="coffee" size="pill" className="cursor-pointer">
+                Explore Products
+                <ArrowUpRight className="ml-2 size-4 sm:size-5" />
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -225,13 +248,18 @@ export function Products() {
                 className="relative w-full rounded-2xl sm:rounded-3xl lg:rounded-[40px] bg-[#E9EDF2] shadow-[0_28px_80px_rgba(0,0,0,0.18)] px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-15 sm:mt-10 pb-4 sm:pb-6 lg:pb-8 overflow-visible"
               >
                 {/* chair image */}
-                <div className="absolute left-2 sm:left-4 md:left-6 -top-16 sm:-top-20 md:-top-24 lg:-top-28">
+                <div className="absolute left-2 sm:left-4 md:left-6 -top-19 sm:-top-20 md:-top-24 lg:-top-28">
                   <Image
-                    src={bigCard.image || "/placeholder.svg"}
+                    src={bigCard.image}
                     alt={bigCard.name}
                     width={800}
                     height={800}
-                    className="w-[150px] sm:w-[200px] md:w-[280px] lg:w-[350px] h-auto object-contain"
+                    className={`
+    w-[${bigCard.imageSizesBig.mobile}px]
+    sm:w-[320px]
+    lg:w-[${bigCard.imageSizesBig.desktop}px]
+    h-auto object-contain
+  `}
                   />
                 </div>
 
@@ -315,7 +343,7 @@ export function Products() {
                       h-2 rounded-full transition-all duration-300
                       ${
                         index === activeIndex
-                          ? "w-4 bg-[#C9A071]"
+                          ? "w-4 bg-[var(--uc-dot-active-bg)]"
                           : "w-2 bg-black opacity-20 hover:opacity-60"
                       }
                     `}
@@ -362,16 +390,18 @@ export function Products() {
                   <ArrowUpRight className="ml-2 size-4 md:size-5" />
                 </button>
 
-                <button
-                  className="
+                <Link href="/products">
+                  <button
+                    className="
                     inline-flex items-center rounded-full px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm font-medium cursor-pointer
                     text-white shadow-sm
                     bg-linear-to-r from-[var(--gradient-1)] to-[var(--gradient-2)]
                   "
-                >
-                  Explore Products
-                  <ArrowUpRight className="ml-2 size-4 md:size-5" />
-                </button>
+                  >
+                    Explore Products
+                    <ArrowUpRight className="ml-2 size-4 md:size-5" />
+                  </button>
+                </Link>
               </div>
             </div>
 
@@ -388,13 +418,18 @@ export function Products() {
                   transition={{ duration: 0.35, ease: "easeOut" }}
                   className="transition-all duration-700 delay-300 relative w-full rounded-2xl sm:rounded-3xl lg:rounded-[40px] bg-[var(--color-card-background)] shadow-[0_24px_70px_rgba(0,0,0,0.18)] px-4 sm:px-6 md:px-8 lg:px-12 pt-6 sm:pt-8 mt-10 pb-4 sm:pb-6 lg:pb-8 overflow-visible"
                 >
-                  <div className="absolute left-2 sm:left-4 md:left-6 lg:left-10 -top-10 sm:-top-14 md:-top-22 lg:-top-24">
+                  <div className="absolute left-2 sm:left-4 md:left-6 lg:left-10 -top-10 sm:-top-14 md:-top-22 lg:-top-27">
                     <Image
-                      src={smallCard.image || "/placeholder.svg"}
+                      src={smallCard.image}
                       alt={smallCard.name}
                       width={600}
                       height={600}
-                      className="w-[110px] sm:w-[140px] md:w-[180px] lg:w-[250px] h-auto object-contain"
+                      className={`
+    w-[${smallCard.imageSizesSmall.mobile}px]
+    sm:w-[210px]
+    lg:w-[290px]
+    h-auto object-contain
+  `}
                     />
                   </div>
 

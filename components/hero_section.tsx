@@ -178,7 +178,7 @@ export default function ParallaxHero() {
           className="absolute inset-0 z-0 flex items-center justify-center"
           style={{
             transform: `translateY(${scrollY * 0.5}px)`,
-            backgroundImage: "url('/home/Backgroundimage.jpg')",
+            backgroundImage: "url('/home/Backgroundimage1.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             height: "120%",
