@@ -54,7 +54,7 @@ const products: Product[] = [
     description:
       "A boucle upholstered accent chair with natural wooden legs and a modern silhouette.",
     image: "/products/pro2.png",
-    imageSizesBig: { mobile: 220, tablet: 400, desktop: 420 },
+    imageSizesBig: { mobile: 180, tablet: 400, desktop: 420 },
     imageSizesSmall: { mobile: 110, tablet: 140, desktop: 290 },
   },
   {
@@ -172,10 +172,10 @@ export function Products() {
               <ArrowUpRight className="ml-2 size-4 sm:size-5" />
             </Button>
 
-              <Button variant="coffee" size="pill" className="cursor-pointer">
-                Explore Products
-                <ArrowUpRight className="ml-2 size-4 sm:size-5" />
-              </Button>
+            <Button variant="coffee" size="pill" className="cursor-pointer">
+              Explore Products
+              <ArrowUpRight className="ml-2 size-4 sm:size-5" />
+            </Button>
           </div>
         </div>
 
@@ -387,16 +387,16 @@ export function Products() {
                   <ArrowUpRight className="ml-2 size-4 md:size-5" />
                 </button>
 
-                  <button
-                    className="
+                <button
+                  className="
                     inline-flex items-center rounded-full px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm font-medium cursor-pointer
                     text-white shadow-sm
                     bg-linear-to-r from-[var(--gradient-1)] to-[var(--gradient-2)]
                   "
-                  >
-                    Explore Products
-                    <ArrowUpRight className="ml-2 size-4 md:size-5" />
-                  </button>
+                >
+                  Explore Products
+                  <ArrowUpRight className="ml-2 size-4 md:size-5" />
+                </button>
               </div>
             </div>
 
