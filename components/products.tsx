@@ -1,6 +1,5 @@
 "use client";
 
-import { Link } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
@@ -173,12 +172,10 @@ export function Products() {
               <ArrowUpRight className="ml-2 size-4 sm:size-5" />
             </Button>
 
-            <Link href="/products">
               <Button variant="coffee" size="pill" className="cursor-pointer">
                 Explore Products
                 <ArrowUpRight className="ml-2 size-4 sm:size-5" />
               </Button>
-            </Link>
           </div>
         </div>
 
@@ -390,7 +387,6 @@ export function Products() {
                   <ArrowUpRight className="ml-2 size-4 md:size-5" />
                 </button>
 
-                <Link href="/products">
                   <button
                     className="
                     inline-flex items-center rounded-full px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm font-medium cursor-pointer
@@ -401,7 +397,6 @@ export function Products() {
                     Explore Products
                     <ArrowUpRight className="ml-2 size-4 md:size-5" />
                   </button>
-                </Link>
               </div>
             </div>
 
