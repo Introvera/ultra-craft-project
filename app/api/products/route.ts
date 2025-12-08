@@ -124,7 +124,7 @@ export async function GET() {
       "SELECT * FROM products ORDER BY created_at DESC",
     );
 
-    const rows = result.rows.map((r) => ({
+    const rows = result.rows.map((r: { categories: any; filters: any; }) => ({
       ...r,
       // image is already string[] from PG
       categories: (r.categories ?? []) as string[],
