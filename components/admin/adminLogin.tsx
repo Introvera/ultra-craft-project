@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -47,12 +47,12 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
+      className="min-h-screen flex items-center justify-center bg-cover bg-center bg-black/40 bg-blend-overlay p-4"
       style={{
-        backgroundImage: `url('/aboutus-page/abtuspage.png')`,
+        backgroundImage: `url('/backgrounds/adminbackground.jpg')`,
       }}
     >
-      <div className="backdrop-blur-xl bg-white/10 border border-white/20 p-8 rounded-2xl w-full max-w-md shadow-2xl">
+      <div className="backdrop-blur-xl bg-white/30 border border-white/20 p-8 rounded-2xl w-full max-w-md shadow-2xl">
         <h2 className="text-3xl font-semibold text-white text-center mb-6">
           Admin Login
         </h2>
@@ -88,7 +88,7 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-white/20 text-white font-semibold backdrop-blur-md hover:bg-white/30 transition"
+            className="w-full py-3 rounded-lg bg-gray text-white font-semibold backdrop-blur-md hover:bg-black/90 transition"
           >
             Login
           </button>
