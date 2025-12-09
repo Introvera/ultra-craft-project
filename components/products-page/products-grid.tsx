@@ -383,7 +383,7 @@ export default function ProductsGridClient() {
                       removeWrapper
                       alt={product.name}
                       src={product.image[0]}          // only first image
-                      className="h-40 w-full object-cover md:h-60 sm:h-80 p-2 rounded-3xl"
+                      className="h-40 w-full object-cover md:h-72 sm:h-80 p-1 rounded-3xl"
                     />
                   ) : (
                     <div className="h-40 w-full md:h-60 sm:h-80 p-2 rounded-3xl bg-default-200" />
