@@ -35,7 +35,6 @@ export async function POST(req: Request) {
     );
 
     if (result.rowCount === 0) {
-      // Do not reveal which field is wrong
       return NextResponse.json(
         { error: "Invalid username or password" },
         { status: 401 },
@@ -54,16 +53,27 @@ export async function POST(req: Request) {
       );
     }
 
-    // 3) Successful login – for now just return some basic info.
-    // Later you can set an HttpOnly cookie / JWT here.
-    return NextResponse.json(
+    // 3) Successful login – set a simple HttpOnly cookie
+    const res = NextResponse.json(
       {
         id: admin.id,
         username: admin.username,
-        // created_at: admin.created_at, // include if needed
       },
       { status: 200 },
     );
+
+    // For learning purposes: value = admin.id.
+    // In a real app, you’d use a signed token or session id.
+    res.cookies.set({
+      name: "admin_session",
+      value: String(admin.id),
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 30, // 30 min
+    });
+
+    return res;
   } catch (error) {
     console.error("Error in admin login:", error);
     return NextResponse.json(
