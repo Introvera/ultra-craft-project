@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ParallaxHero from "@/components/hero_section";
+import ContactUs from "@/components/contact";
 
 import ProductsGrid from "@/components/products-page/products-grid";
 
@@ -21,6 +22,7 @@ const page = () => {
             bottomRightText={""}
           />
       <ProductsGrid/>
+      <ContactUs />
     </>
   );
 };
