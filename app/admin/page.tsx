@@ -6,7 +6,7 @@ export default async function AdminLoginPage() {
       <a className="text-2xl font-semibold text-red-800" href="admin/products">
         Admin Products Page
       </a>
-      <a className="text-2xl font-semibold text-green-800" href="admin/products">
+      <a className="text-2xl font-semibold text-green-800" href="admin/projects">
         Admin Projects Page
       </a>
     </div>

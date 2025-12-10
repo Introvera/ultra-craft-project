@@ -1,19 +1,33 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import ParallaxHero from "@/components/hero_section";
+import ContactUs from "@/components/contact";
+import AutoProducts from "@/components/projects-page/AutoProducts";
+import ProjectsGrid from "@/components/projects-page/projects-grid";
+
+const aboutParagraph =
+"Explore the homes, apartments, and commercial interiors we’ve brought to life through thoughtful design, careful planning, and refined craftsmanship. Each project reflects our commitment to creating meaningful, functional, and beautifully balanced spaces shaped around the people who use them."
 
 const page = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen text-gray-800 p-4">
-      <h1 className="text-5xl font-bold mb-4">Under Construction</h1>
-      <p className="text-lg mb-6 text-center">
-        Sorry, this page is still being built. Check back soon!
-      </p>
-      <Link href="/">
-        <Button variant="coffee" size="pill" className="hidden lg:flex">
-          Go Back Home
-        </Button>
-      </Link>
-    </div>
+    <>
+      <ParallaxHero
+              imageUrl="/projects-page/projectshero.png"
+              heading={
+                <>
+                  Shaping Spaces <br /> With Purpose
+                </>
+              }
+              description=""
+              showCta={false}
+              showChevron={true}
+              alignTopLeft={true}
+              bottomRightText={aboutParagraph}
+            />
+      <AutoProducts/>
+      <ProjectsGrid />
+      <ContactUs />
+    </>
   );
 };
 
