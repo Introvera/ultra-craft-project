@@ -22,7 +22,7 @@ export default async function AdminProjectsPage() {
       created_at
     FROM projects
     ORDER BY created_at DESC
-    `,
+    `
   );
 
   const projects = result.rows.map((p) => ({
@@ -33,9 +33,6 @@ export default async function AdminProjectsPage() {
 
   return (
     <div className="h-screen p-8">
-      <h1 className="mb-4 text-2xl font-semibold text-default-foreground">
-        Projects
-      </h1>
       <ProjectsTableClient initialProjects={projects} />
     </div>
   );

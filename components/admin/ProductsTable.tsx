@@ -1,33 +1,35 @@
 "use client";
 
-import React from "react";
+import type { Selection, SortDescriptor } from "@heroui/react";
+import { useRouter } from "next/navigation";
+
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Input,
   Button,
-  DropdownTrigger,
   Dropdown,
-  DropdownMenu,
   DropdownItem,
-  Pagination,
+  DropdownMenu,
+  DropdownTrigger,
+  Input,
   Modal,
-  ModalContent,
-  ModalHeader,
   ModalBody,
+  ModalContent,
   ModalFooter,
+  ModalHeader,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
   Textarea,
   useDisclosure,
 } from "@heroui/react";
-import type { SortDescriptor, Selection } from "@heroui/react";
+import React from "react";
 import {
+  ChevronDownIcon,
   PlusIcon,
   SearchIcon,
-  ChevronDownIcon,
   VerticalDotsIcon,
 } from "../icons";
 
@@ -120,13 +122,15 @@ type FormErrors = {
 };
 
 export default function ProductsTable({ initialProducts }: ProductsTableProps) {
+  const router = useRouter();
+
   const [products, setProducts] = React.useState<Product[]>(() =>
-    initialProducts.map((p) => normalizeProduct(p)),
+    initialProducts.map((p) => normalizeProduct(p))
   );
 
   const [filterValue, setFilterValue] = React.useState("");
   const [visibleColumns, setVisibleColumns] = React.useState<any>(
-    new Set(INITIAL_VISIBLE_COLUMNS),
+    new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
@@ -143,7 +147,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   const [viewProduct, setViewProduct] = React.useState<Product | null>(null);
 
   const [editingProduct, setEditingProduct] = React.useState<Product | null>(
-    null,
+    null
   );
 
   const [formValues, setFormValues] = React.useState({
@@ -161,10 +165,10 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   const [imageFiles, setImageFiles] = React.useState<File[]>([]);
 
   const [selectedCategories, setSelectedCategories] = React.useState<Selection>(
-    new Set(),
+    new Set()
   );
   const [selectedFilters, setSelectedFilters] = React.useState<Selection>(
-    new Set(),
+    new Set()
   );
 
   const [saving, setSaving] = React.useState(false);
@@ -174,7 +178,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
+      Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
 
@@ -182,7 +186,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     let items = [...products];
     if (hasSearchFilter) {
       items = items.filter((product) =>
-        product.name.toLowerCase().includes(filterValue.toLowerCase()),
+        product.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     return items;
@@ -262,7 +266,8 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     if (!longDesc) {
       errors.long_description = "Long description is required.";
     } else if (longDesc.length > 300) {
-      errors.long_description = "Long description must be 300 characters or less.";
+      errors.long_description =
+        "Long description must be 300 characters or less.";
     }
 
     setFormErrors((prev) => ({
@@ -321,11 +326,11 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
       const categoriesArray = selectionToArray(
         selectedCategories,
-        CATEGORY_OPTIONS.map((c) => c.key),
+        CATEGORY_OPTIONS.map((c) => c.key)
       );
       const filtersArray = selectionToArray(
         selectedFilters,
-        FILTER_OPTIONS.map((f) => f.key),
+        FILTER_OPTIONS.map((f) => f.key)
       );
 
       const payload = {
@@ -354,7 +359,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         const updated = normalizeProduct(updatedFromApi);
 
         setProducts((prev) =>
-          prev.map((p) => (p.id === updated.id ? updated : p)),
+          prev.map((p) => (p.id === updated.id ? updated : p))
         );
       } else {
         const res = await fetch("/api/products", {
@@ -419,9 +424,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
         case "short_description":
           return (
-            <p className="text-sm line-clamp-2">
-              {product.short_description}
-            </p>
+            <p className="text-sm line-clamp-2">{product.short_description}</p>
           );
 
         case "categories": {
@@ -495,7 +498,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
           return product[key as keyof Product] as any;
       }
     },
-    [],
+    []
   );
 
   const onRowsPerPageChange = React.useCallback(
@@ -503,13 +506,13 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
       setRowsPerPage(Number(e.target.value));
       setPage(1);
     },
-    [],
+    []
   );
 
   const selectedCategoryLabels = React.useMemo(() => {
     const keys = selectionToArray(
       selectedCategories,
-      CATEGORY_OPTIONS.map((c) => c.key),
+      CATEGORY_OPTIONS.map((c) => c.key)
     );
     return keys.map((k) => categoryLabelMap.get(k) ?? k);
   }, [selectedCategories]);
@@ -517,7 +520,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   const selectedFilterLabels = React.useMemo(() => {
     const keys = selectionToArray(
       selectedFilters,
-      FILTER_OPTIONS.map((f) => f.key),
+      FILTER_OPTIONS.map((f) => f.key)
     );
     return keys.map((k) => filterLabelMap.get(k) ?? k);
   }, [selectedFilters]);
@@ -525,7 +528,18 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
+        <Button
+          variant="flat"
+          color="default"
+          className="w-30"
+          onPress={() => router.push("/admin")}
+        >
+          ← Back to Home
+        </Button>
         <div className="flex justify-between gap-3 items-end">
+          <h1 className="text-2xl font-semibold mb-4 text-default-foreground">
+            Products
+          </h1>
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
@@ -540,7 +554,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
-                  color="primary"
+                  className="bg-black text-white hover:bg-black-600"
                   endContent={<ChevronDownIcon className="text-small" />}
                   variant="flat"
                 >
@@ -561,7 +575,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
             </Dropdown>
 
             <Button
-              color="primary"
+              className="bg-blue-700 text-white hover:bg-blue-600"
               variant="flat"
               endContent={<PlusIcon />}
               onPress={openAddModal}
@@ -719,7 +733,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                             className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-xs text-white"
                             onClick={() =>
                               setImageUrls((prev) =>
-                                prev.filter((_, i) => i !== idx),
+                                prev.filter((_, i) => i !== idx)
                               )
                             }
                           >
@@ -759,7 +773,9 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                   isInvalid={!!formErrors.short_description}
                   errorMessage={
                     formErrors.short_description ||
-                    `${formValues.short_description.trim().length}/80 characters`
+                    `${
+                      formValues.short_description.trim().length
+                    }/80 characters`
                   }
                   onValueChange={(v) => {
                     setFormValues((p) => ({
@@ -792,7 +808,9 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                   isInvalid={!!formErrors.long_description}
                   errorMessage={
                     formErrors.long_description ||
-                    `${formValues.long_description.trim().length}/300 characters`
+                    `${
+                      formValues.long_description.trim().length
+                    }/300 characters`
                   }
                   onValueChange={(v) => {
                     setFormValues((p) => ({
@@ -803,8 +821,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                     setFormErrors((prev) => {
                       const next = { ...prev };
                       if (!trimmed) {
-                        next.long_description =
-                          "Long description is required.";
+                        next.long_description = "Long description is required.";
                       } else if (trimmed.length > 300) {
                         next.long_description =
                           "Long description must be 300 characters or less.";
@@ -884,7 +901,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                   Cancel
                 </Button>
                 <Button
-                  color="primary"
+                  className="bg-blue-700 text-white"
                   variant="flat"
                   isLoading={saving}
                   onPress={() => handleSave(onClose)}

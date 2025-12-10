@@ -144,15 +144,6 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
 // "use client";
 
 // import { useScrollPosition } from "@/hooks/useScrollPosition";
@@ -172,13 +163,13 @@
 //     <section className="w-full bg-[var(--color-page)] px-0 xl:px-5">
 //       <div
 //         className="
-//           relative 
-//           h-screen 
+//           relative
+//           h-screen
 //           w-full
 //           mt-0 lg:mt-21.5
-//           overflow-hidden 
+//           overflow-hidden
 //           flex
-//           rounded-none 
+//           rounded-none
 //           lg:rounded-[36px]
 //         "
 //       >
@@ -263,12 +254,6 @@
 //   );
 // }
 
-
-
-
-
-
-
 "use client";
 
 import { useScrollPosition } from "@/hooks/useScrollPosition";
@@ -289,7 +274,7 @@ type ParallaxHeroProps = {
 };
 
 export default function ParallaxHero({
-  imageUrl = "/home/Backgroundimage.jpg",
+  imageUrl = "/home/Backgroundimage.png",
   heading,
   description = "Experience unparalleled craftsmanship and timeless design with Ultra Craft, where every creation tells a story of legacy and infinite living.",
   showCta = true,
@@ -301,13 +286,12 @@ export default function ParallaxHero({
 }: ParallaxHeroProps) {
   const scrollY = useScrollPosition();
 
-  const headingContent =
-    heading ?? (
-      <>
-        Legacy of <br />
-        <span className="font-medium">Infinite Living.</span>
-      </>
-    );
+  const headingContent = heading ?? (
+    <>
+      Legacy of <br />
+      <span className="font-medium">Infinite Living.</span>
+    </>
+  );
 
   const fadeUp = {
     hidden: { opacity: 0, y: 30 },
@@ -321,7 +305,6 @@ export default function ParallaxHero({
   return (
     <section className="w-full bg-[var(--color-page)] px-0 xl:px-5">
       <div className="relative h-screen w-full mt-0 lg:mt-21.5 overflow-hidden flex rounded-none lg:rounded-[36px]">
-
         {/* Background */}
         <div
           className="absolute inset-0 z-0 flex items-center justify-center"
@@ -337,7 +320,9 @@ export default function ParallaxHero({
         <div className="absolute inset-0 bg-black/30 z-10" />
 
         {/* Content */}
-        <div className={`relative min-h-screen flex flex-col w-full ${containerAlignment}`}>
+        <div
+          className={`relative min-h-screen flex flex-col w-full ${containerAlignment}`}
+        >
           <motion.div
             className="relative z-20 text-white max-w-max px-6 md:px-12 lg:px-20"
             style={{ transform: `translateY(${scrollY * 0.2}px)` }}
@@ -384,7 +369,11 @@ export default function ParallaxHero({
               transition={{ delay: 0.4 }}
               className="absolute z-20 bottom-6 right-4 md:bottom-10 md:right-10 max-w-xs md:max-w-md text-[11px] md:text-sm leading-relaxed text-white/90"
             >
-              {typeof bottomRightText === "string" ? <p>{bottomRightText}</p> : bottomRightText}
+              {typeof bottomRightText === "string" ? (
+                <p>{bottomRightText}</p>
+              ) : (
+                bottomRightText
+              )}
             </motion.div>
           )}
 

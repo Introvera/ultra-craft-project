@@ -40,9 +40,7 @@ export default async function AdminProductsPage() {
 
   return (
     <div className="h-screen p-8">
-      <h1 className="text-2xl font-semibold mb-4 text-default-foreground">
-        Products
-      </h1>
+      
       <ProductsTableClient initialProducts={products} />
     </div>
   );

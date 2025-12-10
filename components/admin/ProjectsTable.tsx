@@ -1,33 +1,34 @@
 "use client";
 
-import React from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Input,
-  Button,
-  Pagination,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Textarea,
-  useDisclosure,
-  Dropdown,
-  DropdownMenu,
-  DropdownTrigger,
-  DropdownItem,
-} from "@heroui/react";
 import type { SortDescriptor } from "@heroui/react";
 import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Textarea,
+  useDisclosure,
+} from "@heroui/react";
+import { useRouter } from "next/navigation";
+import React from "react";
+import {
+  ChevronDownIcon,
   PlusIcon,
   SearchIcon,
-  ChevronDownIcon,
   VerticalDotsIcon,
 } from "../icons";
 
@@ -79,13 +80,14 @@ type FormErrors = {
 };
 
 export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
+  const router = useRouter();
   const [projects, setProjects] = React.useState<Project[]>(() =>
-    initialProjects.map((p) => normalizeProject(p)),
+    initialProjects.map((p) => normalizeProject(p))
   );
 
   const [filterValue, setFilterValue] = React.useState("");
   const [visibleColumns, setVisibleColumns] = React.useState<any>(
-    new Set(INITIAL_VISIBLE_COLUMNS),
+    new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
@@ -100,7 +102,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
   const [viewProject, setViewProject] = React.useState<Project | null>(null);
 
   const [editingProject, setEditingProject] = React.useState<Project | null>(
-    null,
+    null
   );
 
   const [formValues, setFormValues] = React.useState({
@@ -121,7 +123,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
+      Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
 
@@ -132,7 +134,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
       items = items.filter(
         (project) =>
           project.name.toLowerCase().includes(q) ||
-          project.location.toLowerCase().includes(q),
+          project.location.toLowerCase().includes(q)
       );
     }
     return items;
@@ -285,7 +287,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
         const updated = normalizeProject(updatedFromApi);
 
         setProjects((prev) =>
-          prev.map((p) => (p.id === updated.id ? updated : p)),
+          prev.map((p) => (p.id === updated.id ? updated : p))
         );
       } else {
         const res = await fetch("/api/projects", {
@@ -350,11 +352,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
           return <span className="text-sm">{project.location}</span>;
 
         case "description":
-          return (
-            <p className="text-sm line-clamp-2">
-              {project.description}
-            </p>
-          );
+          return <p className="text-sm line-clamp-2">{project.description}</p>;
 
         case "actions":
           return (
@@ -387,7 +385,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
           return project[key as keyof Project] as any;
       }
     },
-    [],
+    []
   );
 
   const onRowsPerPageChange = React.useCallback(
@@ -395,13 +393,24 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
       setRowsPerPage(Number(e.target.value));
       setPage(1);
     },
-    [],
+    []
   );
 
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
+        <Button
+          variant="flat"
+          color="default"
+          className="w-30"
+          onPress={() => router.push("/admin")}
+        >
+          ← Back to Home
+        </Button>
         <div className="flex justify-between gap-3 items-end">
+          <h1 className="text-2xl font-semibold mb-4 text-default-foreground">
+            Projects
+          </h1>
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
@@ -416,7 +425,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
-                  color="primary"
+                  className="bg-black text-white hover:bg-black-600"
                   endContent={<ChevronDownIcon className="text-small" />}
                   variant="flat"
                 >
@@ -437,7 +446,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
             </Dropdown>
 
             <Button
-              color="primary"
+              className="bg-blue-700 text-white hover:bg-blue-600"
               variant="flat"
               endContent={<PlusIcon />}
               onPress={openAddModal}
@@ -623,7 +632,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                             className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-xs text-white"
                             onClick={() =>
                               setImageUrls((prev) =>
-                                prev.filter((_, i) => i !== idx),
+                                prev.filter((_, i) => i !== idx)
                               )
                             }
                           >
@@ -651,7 +660,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                     // Clear image error if user selected files
                     setFormErrors((prev) => {
                       const next = { ...prev };
-                      if ((imageUrls.length + files.length) > 0) {
+                      if (imageUrls.length + files.length > 0) {
                         next.images = undefined;
                       }
                       return next;
@@ -700,7 +709,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                   Cancel
                 </Button>
                 <Button
-                  color="primary"
+                  className="bg-blue-700 text-white"
                   variant="flat"
                   isLoading={saving}
                   onPress={() => handleSave(onClose)}
