@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-
-const CARDS_PER_PAGE = 4;
+import React, { useState, useEffect } from "react";
 
 type Step = {
   number: number;
@@ -31,7 +29,6 @@ const steps: Step[] = [
     title: "Material\nSelection",
     text: "Finalizing furniture layouts, spatial planning, and detailing.",
   },
-  // sample extra cards (duplicate last two)
   {
     number: 5,
     title: "Design\nDevelopment",
@@ -53,9 +50,32 @@ function chunkSteps(arr: Step[], size: number): Step[][] {
 }
 
 export default function HowWeWork() {
-  const pages = chunkSteps(steps, CARDS_PER_PAGE);
-  const pageCount = pages.length;
   const [currentPage, setCurrentPage] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [viewportWidth, setViewportWidth] = useState<number>(1440);
+
+  useEffect(() => {
+    const update = () => {
+      if (typeof window === "undefined") return;
+      const width = window.innerWidth;
+      setViewportWidth(width);
+      setIsMobile(width <= 768);
+    };
+
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const cardsPerPage =
+    viewportWidth >= 1400 ? 4 : viewportWidth >= 1100 ? 3 : 2;
+
+  const pages = chunkSteps(steps, cardsPerPage);
+  const pageCount = pages.length;
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [cardsPerPage]);
 
   const handlePrev = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 0));
@@ -65,6 +85,142 @@ export default function HowWeWork() {
     setCurrentPage((prev) => Math.min(prev + 1, pageCount - 1));
   };
 
+  if (isMobile) {
+    return (
+      <section
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "32px 16px 48px 16px",
+          background: "rgba(212, 184, 150, 0.13)",
+        }}
+      >
+        <div style={{ width: "100%", maxWidth: "480px" }}>
+          <h2
+            style={{
+              color: "#604D37",
+              fontFamily: "Poppins",
+              fontSize: "22px",
+              fontWeight: 700,
+              marginBottom: "8px",
+            }}
+          >
+            How We Work
+          </h2>
+
+          <p
+            style={{
+              color: "#0A0A0A",
+              fontFamily: "Poppins",
+              fontSize: "13px",
+              fontWeight: 500,
+              lineHeight: "20px",
+              marginBottom: "32px",
+            }}
+          >
+            Every project follows a clear, collaborative process designed to
+            keep you informed, involved, and confident from the first
+            conversation to the final installation.
+          </p>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              position: "relative",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                left: "20px",
+                top: "0",
+                bottom: "0",
+                width: "2px",
+                background: "#000000",
+                opacity: 0.75,
+              }}
+            />
+
+            {steps.map((step, index) => (
+              <div
+                key={step.number}
+                style={{
+                  display: "flex",
+                  marginBottom: index === steps.length - 1 ? 0 : 24,
+                }}
+              >
+                <div
+                  style={{
+                    zIndex: 1,
+                    marginRight: "12px",
+                    marginTop: "4px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "999px",
+                      backgroundColor: "#000000",
+                      color: "#FAFAFA",
+                      fontFamily: "Inter",
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    {step.number}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    flex: 1,
+                    background: "#FFFFFF",
+                    borderRadius: "16px",
+                    padding: "20px",
+                    boxShadow: "0 18px 45px rgba(0,0,0,0.06)",
+                    marginLeft: "8px",
+                  }}
+                >
+                  <h3
+                    style={{
+                      whiteSpace: "pre-line",
+                      fontFamily: "Poppins",
+                      fontSize: "18px",
+                      fontWeight: 600,
+                      marginBottom: "8px",
+                      color: "#000000",
+                    }}
+                  >
+                    {step.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      fontFamily: "Poppins",
+                      fontSize: "13px",
+                      fontWeight: 500,
+                      lineHeight: "20px",
+                      color: "#000000",
+                    }}
+                  >
+                    {step.text}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       style={{
@@ -72,18 +228,18 @@ export default function HowWeWork() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: "36px 68px 68px 68px",
+        padding: "clamp(24px, 4vw, 36px) clamp(24px, 5vw, 68px) clamp(48px, 6vw, 68px)",
         background: "rgba(212, 184, 150, 0.13)",
       }}
     >
-      <div style={{ maxWidth: "1440px", width: "100%" }}>
-        {/* Header */}
+      <div style={{ maxWidth: "1440px", width: "100%", overflow: "hidden" }}>
         <h2
           style={{
-            width: "442px",
+            maxWidth: "442px",
+            width: "100%",
             color: "#604D37",
             fontFamily: "Poppins",
-            fontSize: "32px",
+            fontSize: "clamp(24px, 3vw, 32px)",
             fontWeight: 700,
             marginBottom: "16px",
           }}
@@ -93,10 +249,11 @@ export default function HowWeWork() {
 
         <p
           style={{
-            width: "422px",
+            maxWidth: "422px",
+            width: "100%",
             color: "#0A0A0A",
             fontFamily: "Poppins",
-            fontSize: "16px",
+            fontSize: "clamp(14px, 1.5vw, 16px)",
             fontWeight: 500,
             lineHeight: "24px",
           }}
@@ -106,23 +263,27 @@ export default function HowWeWork() {
           the final installation.
         </p>
 
-        {/* Carousel */}
-        <div style={{ marginTop: "72px", overflow: "hidden" }}>
+        <div style={{ marginTop: "clamp(48px, 6vw, 72px)", overflow: "hidden" }}>
           <div
             style={{
               display: "flex",
               width: `${pageCount * 100}%`,
-              transform: `translateX(-${currentPage * 100}%)`,
+              transform: `translateX(-${(currentPage * 100) / pageCount}%)`,
               transition: "transform 0.4s ease",
             }}
           >
             {pages.map((page: Step[], pageIndex) => (
-              <div key={pageIndex} style={{ flex: "0 0 100%" }}>
-                {/* Number row */}
+              <div 
+                key={pageIndex} 
+                style={{ 
+                  flex: `0 0 ${100 / pageCount}%`,
+                  width: `${100 / pageCount}%`
+                }}
+              >
                 <div
                   style={{
                     display: "flex",
-                    gap: "40px",
+                    gap: "clamp(20px, 3vw, 40px)",
                     marginBottom: "24px",
                   }}
                 >
@@ -132,14 +293,15 @@ export default function HowWeWork() {
                       style={{
                         display: "flex",
                         alignItems: "center",
-                        width: "302px",
+                        flex: 1,
+                        minWidth: 0,
                       }}
                     >
-                      {/* Badge */}
                       <div
                         style={{
                           width: "40px",
                           height: "40px",
+                          minWidth: "40px",
                           borderRadius: "999px",
                           backgroundColor: "#000000",
                           color: "#FAFAFA",
@@ -155,10 +317,9 @@ export default function HowWeWork() {
                         {step.number}
                       </div>
 
-                      {/* Line */}
                       <div
                         style={{
-                          width: "254px",
+                          flex: 1,
                           height: "2px",
                           background: "#B3B3B3",
                         }}
@@ -167,17 +328,17 @@ export default function HowWeWork() {
                   ))}
                 </div>
 
-                {/* Card row */}
-                <div style={{ display: "flex", gap: "40px" }}>
+                <div style={{ display: "flex", gap: "clamp(20px, 3vw, 40px)" }}>
                   {page.map((step: Step) => (
                     <div
                       key={`card-${step.number}`}
                       style={{
-                        width: "302px",
+                        flex: 1,
+                        minWidth: 0,
                         minHeight: "192px",
                         background: "#FFFFFF",
                         borderRadius: "24px",
-                        padding: "24px",
+                        padding: "clamp(16px, 2vw, 24px)",
                         boxShadow: "0 18px 45px rgba(0,0,0,0.06)",
                       }}
                     >
@@ -185,7 +346,7 @@ export default function HowWeWork() {
                         style={{
                           whiteSpace: "pre-line",
                           fontFamily: "Poppins",
-                          fontSize: "24px",
+                          fontSize: "clamp(18px, 2vw, 24px)",
                           fontWeight: 600,
                           marginBottom: "16px",
                           color: "#000000",
@@ -197,9 +358,10 @@ export default function HowWeWork() {
                       <p
                         style={{
                           fontFamily: "Poppins",
-                          fontSize: "16px",
+                          fontSize: "clamp(14px, 1.5vw, 16px)",
                           fontWeight: 500,
                           color: "#000000",
+                          lineHeight: "1.5",
                         }}
                       >
                         {step.text}
@@ -211,7 +373,6 @@ export default function HowWeWork() {
             ))}
           </div>
 
-          {/* Dots */}
           <div
             style={{
               marginTop: "32px",
@@ -245,7 +406,6 @@ export default function HowWeWork() {
             )}
           </div>
 
-          {/* Arrows */}
           <div
             style={{
               marginTop: "16px",
@@ -254,7 +414,6 @@ export default function HowWeWork() {
               gap: "12px",
             }}
           >
-            {/* Prev button */}
             <button
               onClick={handlePrev}
               disabled={currentPage === 0}
@@ -288,7 +447,6 @@ export default function HowWeWork() {
               </svg>
             </button>
 
-            {/* Next button */}
             <button
               onClick={handleNext}
               disabled={currentPage === pageCount - 1}
