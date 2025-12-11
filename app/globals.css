@@ -68,11 +68,11 @@
   --line: #a4a2a2;
   --icon: #4f4f4f;
 
-  --card-background: #F5E3D8;
+  --card-background: #f5e3d8;
 
-  --uc-dot-active-bg: #92806A;
-  --uc-dot-inactive-strong: rgba(146, 128, 106, 0.40);
-  --uc-dot-inactive-weak: rgba(146, 128, 106, 0.20);
+  --uc-dot-active-bg: #92806a;
+  --uc-dot-inactive-strong: rgba(146, 128, 106, 0.4);
+  --uc-dot-inactive-weak: rgba(146, 128, 106, 0.2);
 
   --card-black-background: #242424;
 }
@@ -88,7 +88,7 @@
   --popover: #020617;
   --popover-foreground: #f9fafb;
 
-  --primary: #f97316;              /* you can tweak this */
+  --primary: #f97316; /* you can tweak this */
   --primary-foreground: #111827;
 
   --secondary: #1f2937;
