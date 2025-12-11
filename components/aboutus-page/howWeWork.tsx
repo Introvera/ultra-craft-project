@@ -132,52 +132,62 @@ export default function HowWeWork() {
               position: "relative",
             }}
           >
-            <div
-              style={{
-                position: "absolute",
-                left: "20px",
-                top: "0",
-                bottom: "0",
-                width: "2px",
-                background: "#000000",
-                opacity: 0.75,
-              }}
-            />
-
             {steps.map((step, index) => (
               <div
                 key={step.number}
                 style={{
                   display: "flex",
-                  marginBottom: index === steps.length - 1 ? 0 : 24,
+                  marginBottom: index === steps.length - 1 ? 0 : 0,
+                  position: "relative",
                 }}
               >
+                {/* Number badge with line */}
                 <div
                   style={{
-                    zIndex: 1,
-                    marginRight: "12px",
-                    marginTop: "4px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    marginRight: "16px",
+                    position: "relative",
                   }}
                 >
                   <div
                     style={{
-                      width: "32px",
-                      height: "32px",
+                      width: "40px",
+                      height: "40px",
                       borderRadius: "999px",
                       backgroundColor: "#000000",
                       color: "#FAFAFA",
                       fontFamily: "Inter",
-                      fontSize: "14px",
+                      fontSize: "16px",
                       fontWeight: 600,
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
+                      zIndex: 2,
+                      flexShrink: 0,
                     }}
                   >
                     {step.number}
                   </div>
+
+                  {/* Vertical line - only show if not last item */}
+                  {index !== steps.length - 1 && (
+                    <div
+                      style={{
+                        width: "2px",
+                        flex: 1,
+                        background: "#000000",
+                        opacity: 0.75,
+                        marginTop: "8px",
+                        marginBottom: "8px",
+                        minHeight: "40px",
+                      }}
+                    />
+                  )}
                 </div>
 
+                {/* Card */}
                 <div
                   style={{
                     flex: 1,
@@ -185,7 +195,7 @@ export default function HowWeWork() {
                     borderRadius: "16px",
                     padding: "20px",
                     boxShadow: "0 18px 45px rgba(0,0,0,0.06)",
-                    marginLeft: "8px",
+                    marginBottom: index === steps.length - 1 ? 0 : 24,
                   }}
                 >
                   <h3
