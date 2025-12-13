@@ -34,7 +34,7 @@
 // type Product = {
 //   id: number;
 //   name: string;
-//   image: string[]; 
+//   image: string[];
 //   short_description: string;
 //   long_description: string;
 //   created_at: string;
@@ -62,7 +62,8 @@
 //   { key: "outdoor", label: "Outdoor" },
 // ];
 
-// const ITEMS_PER_PAGE = 12;
+// const MOBILE_ITEMS_PER_PAGE = 10;   // 5 rows × 2 columns
+// const DESKTOP_ITEMS_PER_PAGE = 12;  // 3 rows × 4 columns
 
 // export default function ProductsGridClient() {
 //   const [products, setProducts] = React.useState<Product[]>([]);
@@ -78,70 +79,65 @@
 //   const [search, setSearch] = React.useState("");
 //   const [page, setPage] = React.useState(1);
 
+//   const [itemsPerPage, setItemsPerPage] = React.useState(
+//     DESKTOP_ITEMS_PER_PAGE,
+//   );
+
 //   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-//   // fetch from /api/products
-//   // React.useEffect(() => {
-//   //   const load = async () => {
-//   //     try {
-//   //       setLoading(true);
-//   //       setError(null);
-//   //       const res = await fetch("/api/products");
-//   //       if (!res.ok) throw new Error("Failed to fetch products");
-//   //       const data = (await res.json()) as Product[];
+//   const sectionRef = React.useRef<HTMLElement | null>(null);
 
-//   //       const normalized = data.map((p) => ({
-//   //         ...p,
-//   //         categories: Array.isArray(p.categories) ? p.categories : [],
-//   //         filters: Array.isArray(p.filters) ? p.filters : [],
-//   //       }));
-
-//   //       setProducts(normalized);
-//   //     } catch (err: any) {
-//   //       setError(err.message ?? "Something went wrong");
-//   //     } finally {
-//   //       setLoading(false);
-//   //     }
-//   //   };
-
-//   //   load();
-//   // }, []);
-
+//   // responsive items per page
 //   React.useEffect(() => {
-//   const load = async () => {
-//     try {
-//       setLoading(true);
-//       setError(null);
-//       const res = await fetch("/api/products");
-//       if (!res.ok) throw new Error("Failed to fetch products");
-//       const data = await res.json();
+//     const mq = window.matchMedia("(min-width: 1024px)"); // lg+
 
-//       const normalized: Product[] = (data as any[]).map((p) => {
-//         let images: string[] = [];
-//         if (Array.isArray(p.image)) {
-//           images = p.image;
-//         } else if (typeof p.image === "string" && p.image.trim().length > 0) {
-//           images = [p.image];
-//         }
+//     const updateItemsPerPage = () => {
+//       setItemsPerPage(mq.matches ? DESKTOP_ITEMS_PER_PAGE : MOBILE_ITEMS_PER_PAGE);
+//       setPage(1);
+//     };
 
-//         return {
-//           ...p,
-//           image: images,
-//           categories: Array.isArray(p.categories) ? p.categories : [],
-//           filters: Array.isArray(p.filters) ? p.filters : [],
-//         };
-//       });
+//     updateItemsPerPage();
+//     mq.addEventListener("change", updateItemsPerPage);
 
-//       setProducts(normalized);
-//     } catch (err: any) {
-//       setError(err.message ?? "Something went wrong");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+//     return () => mq.removeEventListener("change", updateItemsPerPage);
+//   }, []);
 
-//   load();
-// }, []);
+//   // fetch from /api/products
+//   React.useEffect(() => {
+//     const load = async () => {
+//       try {
+//         setLoading(true);
+//         setError(null);
+//         const res = await fetch("/api/products");
+//         if (!res.ok) throw new Error("Failed to fetch products");
+//         const data = await res.json();
+
+//         const normalized: Product[] = (data as any[]).map((p) => {
+//           let images: string[] = [];
+//           if (Array.isArray(p.image)) {
+//             images = p.image;
+//           } else if (typeof p.image === "string" && p.image.trim().length > 0) {
+//             images = [p.image];
+//           }
+
+//           return {
+//             ...p,
+//             image: images,
+//             categories: Array.isArray(p.categories) ? p.categories : [],
+//             filters: Array.isArray(p.filters) ? p.filters : [],
+//           };
+//         });
+
+//         setProducts(normalized);
+//       } catch (err: any) {
+//         setError(err.message ?? "Something went wrong");
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     load();
+//   }, []);
 
 //   const toggleFilter = (key: string) => {
 //     setPage(1);
@@ -181,14 +177,28 @@
 
 //   const totalPages =
 //     filteredProducts.length > 0
-//       ? Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)
+//       ? Math.ceil(filteredProducts.length / itemsPerPage)
 //       : 1;
 
 //   const pagedProducts = React.useMemo(() => {
-//     const start = (page - 1) * ITEMS_PER_PAGE;
-//     const end = start + ITEMS_PER_PAGE;
+//     const start = (page - 1) * itemsPerPage;
+//     const end = start + itemsPerPage;
 //     return filteredProducts.slice(start, end);
-//   }, [filteredProducts, page]);
+//   }, [filteredProducts, page, itemsPerPage]);
+
+//   const scrollToGridTop = () => {
+//     if (sectionRef.current) {
+//       const top = sectionRef.current.offsetTop;
+//       window.scrollTo({ top: top - 80, behavior: "smooth" });
+//     } else {
+//       window.scrollTo({ top: 0, behavior: "smooth" });
+//     }
+//   };
+
+//   const handlePageChange = (newPage: number) => {
+//     setPage(newPage);
+//     scrollToGridTop();
+//   };
 
 //   // custom pagination item renderer
 //   const renderPaginationItem = ({
@@ -198,7 +208,7 @@
 //     isActive,
 //     onNext,
 //     onPrevious,
-//     setPage,
+//     setPage: _setPage,
 //     className,
 //   }: any) => {
 //     if (value === PaginationItemType.NEXT) {
@@ -209,7 +219,10 @@
 //             className,
 //             "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center",
 //           )}
-//           onClick={onNext}
+//           onClick={() => {
+//             onNext();
+//             scrollToGridTop();
+//           }}
 //         >
 //           <ChevronRight className="h-4 w-4" />
 //         </button>
@@ -224,7 +237,10 @@
 //             className,
 //             "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center",
 //           )}
-//           onClick={onPrevious}
+//           onClick={() => {
+//             onPrevious();
+//             scrollToGridTop();
+//           }}
 //         >
 //           <ChevronLeft className="h-4 w-4" />
 //         </button>
@@ -250,7 +266,7 @@
 //             : "text-default-600 bg-transparent hover:bg-default-100",
 //           className,
 //         )}
-//         onClick={() => setPage(value)}
+//         onClick={() => handlePageChange(value)}
 //       >
 //         {value}
 //       </button>
@@ -263,7 +279,10 @@
 //   );
 
 //   return (
-//     <section className="flex min-h-screen flex-col py-6 mx-auto w-full max-w-7xl sm:mt-20">
+//     <section
+//       ref={sectionRef}
+//       className="flex min-h-screen flex-col py-6 mx-auto w-full max-w-7xl sm:mt-20"
+//     >
 //       {/* Top row: categories, search, filter button */}
 //       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 //         {/* Categories row */}
@@ -276,6 +295,7 @@
 //                 onClick={() => {
 //                   setActiveCategory(cat.key);
 //                   setPage(1);
+//                   scrollToGridTop();
 //                 }}
 //                 className={cn(
 //                   "rounded-full px-4 py-2 text-sm font-medium transition-colors",
@@ -301,10 +321,9 @@
 //             onValueChange={(v) => {
 //               setSearch(v);
 //               setPage(1);
+//               scrollToGridTop();
 //             }}
-//             startContent={
-//               <Search className="h-4 w-4 text-default-400" />
-//             }
+//             startContent={<Search className="h-4 w-4 text-default-400" />}
 //           />
 
 //           <Button
@@ -369,20 +388,12 @@
 //                 shadow="sm"
 //                 className="overflow-hidden rounded-3xl border border-black/5 bg-[#F5F6F8]"
 //               >
-//                 {/* <div className="relative">
-//                   <Image
-//                     removeWrapper
-//                     alt={product.name}
-//                     src={product.image}
-//                     className="h-40 w-full object-cover md:h-60 sm:h-80 p-2 rounded-3xl"
-//                   />
-//                 </div> */}
 //                 <div className="relative">
 //                   {product.image[0] ? (
 //                     <Image
 //                       removeWrapper
 //                       alt={product.name}
-//                       src={product.image[0]}          // only first image
+//                       src={product.image[0]} // only first image
 //                       className="h-40 w-full object-cover md:h-72 sm:h-80 p-1 rounded-3xl"
 //                     />
 //                   ) : (
@@ -435,7 +446,7 @@
 //             <button
 //               className="flex items-center gap-1 text-xs sm:text-sm disabled:opacity-40"
 //               disabled={page === 1}
-//               onClick={() => page > 1 && setPage(page - 1)}
+//               onClick={() => page > 1 && handlePageChange(page - 1)}
 //             >
 //               <ChevronLeft className="h-3 w-3" />
 //               Previous
@@ -450,14 +461,14 @@
 //               radius="full"
 //               variant="light"
 //               renderItem={renderPaginationItem}
-//               onChange={setPage}
+//               onChange={handlePageChange}
 //             />
 
 //             <button
 //               className="flex items-center gap-1 text-xs sm:text-sm disabled:opacity-40"
 //               disabled={page === totalPages}
 //               onClick={() =>
-//                 page < totalPages && setPage(page + 1)
+//                 page < totalPages && handlePageChange(page + 1)
 //               }
 //             >
 //               Next
@@ -467,7 +478,7 @@
 //         </>
 //       )}
 
-//       {/* Filter modal – this is where you pick filters; selected ones show as chips above */}
+//       {/* Filter modal */}
 //       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
 //         <ModalContent>
 //           {(onClose) => (
@@ -516,6 +527,11 @@
 // }
 
 
+// // THE ABOVE UNCOMMENTED CODE IS FOR THE GRID LAYOUT LIKE IN TE DESKTOP 16 CARDS AND THE MOBILE 10 CARDS THATS IT 🚨🚨🚨🚨🚨🚨🚨🚨🚨
+
+
+
+
 "use client";
 
 import React from "react";
@@ -532,8 +548,8 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
+  ModalFooter,
   useDisclosure,
 } from "@heroui/react";
 import {
@@ -542,6 +558,7 @@ import {
   ChevronRight,
   ArrowUpRight,
   SlidersHorizontal,
+  X,
 } from "lucide-react";
 
 /* simple classnames helper */
@@ -580,8 +597,8 @@ const FILTER_OPTIONS = [
   { key: "outdoor", label: "Outdoor" },
 ];
 
-const MOBILE_ITEMS_PER_PAGE = 10;   // 5 rows × 2 columns
-const DESKTOP_ITEMS_PER_PAGE = 12;  // 3 rows × 4 columns
+const MOBILE_ITEMS_PER_PAGE = 10; // 5 rows × 2 columns
+const DESKTOP_ITEMS_PER_PAGE = 12; // 3 rows × 4 columns
 
 export default function ProductsGridClient() {
   const [products, setProducts] = React.useState<Product[]>([]);
@@ -597,11 +614,21 @@ export default function ProductsGridClient() {
   const [search, setSearch] = React.useState("");
   const [page, setPage] = React.useState(1);
 
-  const [itemsPerPage, setItemsPerPage] = React.useState(
-    DESKTOP_ITEMS_PER_PAGE,
-  );
+  const [itemsPerPage, setItemsPerPage] = React.useState(DESKTOP_ITEMS_PER_PAGE);
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  // Filter Modal (existing)
+  const {
+    isOpen: isFilterOpen,
+    onOpen: onFilterOpen,
+    onOpenChange: onFilterOpenChange,
+  } = useDisclosure();
+
+  // Details Modal (new)
+  const { isOpen: isDetailsOpen, onOpen: onDetailsOpen, onClose: onDetailsClose } =
+    useDisclosure();
+
+  const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(null);
+  const [activeImageIndex, setActiveImageIndex] = React.useState(0);
 
   const sectionRef = React.useRef<HTMLElement | null>(null);
 
@@ -626,17 +653,16 @@ export default function ProductsGridClient() {
       try {
         setLoading(true);
         setError(null);
+
         const res = await fetch("/api/products");
         if (!res.ok) throw new Error("Failed to fetch products");
         const data = await res.json();
 
         const normalized: Product[] = (data as any[]).map((p) => {
           let images: string[] = [];
-          if (Array.isArray(p.image)) {
-            images = p.image;
-          } else if (typeof p.image === "string" && p.image.trim().length > 0) {
+          if (Array.isArray(p.image)) images = p.image;
+          else if (typeof p.image === "string" && p.image.trim().length > 0)
             images = [p.image];
-          }
 
           return {
             ...p,
@@ -672,12 +698,9 @@ export default function ProductsGridClient() {
     setPage(1);
   };
 
-  // filtering
   const filteredProducts = React.useMemo(() => {
     return products.filter((p) => {
-      if (activeCategory && !p.categories.includes(activeCategory)) {
-        return false;
-      }
+      if (activeCategory && !p.categories.includes(activeCategory)) return false;
 
       if (activeFilters.size > 0) {
         const hasAny = p.filters.some((f) => activeFilters.has(f));
@@ -718,7 +741,6 @@ export default function ProductsGridClient() {
     scrollToGridTop();
   };
 
-  // custom pagination item renderer
   const renderPaginationItem = ({
     ref,
     key,
@@ -726,7 +748,6 @@ export default function ProductsGridClient() {
     isActive,
     onNext,
     onPrevious,
-    setPage: _setPage,
     className,
   }: any) => {
     if (value === PaginationItemType.NEXT) {
@@ -796,6 +817,30 @@ export default function ProductsGridClient() {
     [activeFilters],
   );
 
+  const openDetails = (product: Product) => {
+    setSelectedProduct(product);
+    setActiveImageIndex(0);
+    onDetailsOpen();
+  };
+
+  const closeDetails = () => {
+    onDetailsClose();
+    // optional cleanup (keeps UI snappy on reopen)
+    setTimeout(() => {
+      setSelectedProduct(null);
+      setActiveImageIndex(0);
+    }, 150);
+  };
+
+  const getCategoryLabel = (key: string) =>
+    CATEGORY_OPTIONS.find((c) => c.key === key)?.label ?? key;
+
+  const getFilterLabel = (key: string) =>
+    FILTER_OPTIONS.find((f) => f.key === key)?.label ?? key;
+
+  const detailsImageSrc =
+    selectedProduct?.image?.[activeImageIndex] ?? selectedProduct?.image?.[0] ?? "";
+
   return (
     <section
       ref={sectionRef}
@@ -849,32 +894,28 @@ export default function ProductsGridClient() {
             variant="flat"
             className="bg-white/80 text-sm font-medium"
             startContent={<SlidersHorizontal className="h-4 w-4" />}
-            onPress={onOpen}
+            onPress={onFilterOpen}
           >
             Filters
           </Button>
         </div>
       </div>
 
-      {/* Active filter chips (only show when something is selected) */}
+      {/* Active filter chips */}
       {activeFilterArray.length > 0 && (
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          {activeFilterArray.map((key) => {
-            const label =
-              FILTER_OPTIONS.find((f) => f.key === key)?.label ?? key;
-            return (
-              <Chip
-                key={key}
-                radius="full"
-                variant="flat"
-                color="warning"
-                className="cursor-pointer text-xs sm:text-sm"
-                onClick={() => toggleFilter(key)}
-              >
-                {label}
-              </Chip>
-            );
-          })}
+          {activeFilterArray.map((key) => (
+            <Chip
+              key={key}
+              radius="full"
+              variant="flat"
+              color="warning"
+              className="cursor-pointer text-xs sm:text-sm"
+              onClick={() => toggleFilter(key)}
+            >
+              {getFilterLabel(key)}
+            </Chip>
+          ))}
 
           <button
             className="text-xs font-medium text-default-500 underline-offset-2 hover:underline"
@@ -885,7 +926,6 @@ export default function ProductsGridClient() {
         </div>
       )}
 
-      {/* Loading / error states */}
       {loading && (
         <div className="mt-10 text-center text-sm text-default-500">
           Loading products...
@@ -911,7 +951,7 @@ export default function ProductsGridClient() {
                     <Image
                       removeWrapper
                       alt={product.name}
-                      src={product.image[0]} // only first image
+                      src={product.image[0]}
                       className="h-40 w-full object-cover md:h-72 sm:h-80 p-1 rounded-3xl"
                     />
                   ) : (
@@ -930,23 +970,24 @@ export default function ProductsGridClient() {
 
                 <CardFooter className="flex items-center justify-between px-5 pb-4 pt-0">
                   <div className="flex flex-wrap gap-1">
-                    {product.filters.slice(0, 2).map((key) => {
-                      const label =
-                        FILTER_OPTIONS.find((f) => f.key === key)?.label ??
-                        key;
-                      return (
-                        <span
-                          key={key}
-                          className="rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-medium text-default-500"
-                        >
-                          {label}
-                        </span>
-                      );
-                    })}
+                    {product.filters.slice(0, 2).map((key) => (
+                      <span
+                        key={key}
+                        className="rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-medium text-default-500"
+                      >
+                        {getFilterLabel(key)}
+                      </span>
+                    ))}
                   </div>
 
-                  <button className="flex h-8 w-8 items-center justify-center rounded-full bg-black text-white text-xs shadow-sm">
-                    <ArrowUpRight className="h-4 w-4" />
+                  {/* OPEN DETAILS MODAL */}
+                  <button
+                    type="button"
+                    onClick={() => openDetails(product)}
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-black text-white text-xs shadow-sm"
+                    aria-label={`View ${product.name}`}
+                  >
+                    <ArrowUpRight className="h-4 w-4 cursor-pointer" />
                   </button>
                 </CardFooter>
               </Card>
@@ -985,9 +1026,7 @@ export default function ProductsGridClient() {
             <button
               className="flex items-center gap-1 text-xs sm:text-sm disabled:opacity-40"
               disabled={page === totalPages}
-              onClick={() =>
-                page < totalPages && handlePageChange(page + 1)
-              }
+              onClick={() => page < totalPages && handlePageChange(page + 1)}
             >
               Next
               <ChevronRight className="h-3 w-3" />
@@ -996,14 +1035,12 @@ export default function ProductsGridClient() {
         </>
       )}
 
-      {/* Filter modal */}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
+      {/* FILTER MODAL (existing) */}
+      <Modal isOpen={isFilterOpen} onOpenChange={onFilterOpenChange} placement="top-center">
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="text-base font-semibold">
-                Filters
-              </ModalHeader>
+              <ModalHeader className="text-base font-semibold">Filters</ModalHeader>
               <ModalBody className="flex flex-col gap-4">
                 <div>
                   <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-default-400">
@@ -1040,9 +1077,144 @@ export default function ProductsGridClient() {
           )}
         </ModalContent>
       </Modal>
+
+      {/* DETAILS MODAL (new) */}
+      <Modal
+        isOpen={isDetailsOpen}
+        onClose={closeDetails}
+        size="5xl"
+        backdrop="blur"
+        placement="center"
+      >
+        <ModalContent className="overflow-hidden rounded-3xl">
+          {(onClose) => (
+            <>
+              {/* Custom header row with close (like screenshot) */}
+              <ModalHeader className="relative pb-0">
+                <div className="h-1" />
+              </ModalHeader>
+
+              <ModalBody className="px-5 pb-6 pt-2 sm:px-6 sm:pb-7">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                  {/* Left: image + thumbnails */}
+                  <div className="rounded-3xl">
+                    <div className="overflow-hidden rounded-3xl">
+                      {detailsImageSrc ? (
+                        <Image
+                          removeWrapper
+                          alt={selectedProduct?.name ?? "Product"}
+                          src={detailsImageSrc}
+                          className="h-[320px] w-full object-cover sm:h-[420px]"
+                        />
+                      ) : (
+                        <div className="h-[320px] w-full sm:h-[420px]" />
+                      )}
+                    </div>
+
+                    {/* Thumbnails */}
+                    {selectedProduct?.image?.length ? (
+                      <div className="mt-3 flex gap-3">
+                        {selectedProduct.image.slice(0, 3).map((src, idx) => {
+                          const isActive = idx === activeImageIndex;
+                          return (
+                            <button
+                              key={`${src}-${idx}`}
+                              type="button"
+                              onClick={() => setActiveImageIndex(idx)}
+                              className={cn(
+                                "overflow-hidden rounded-2xl border p-1 transition",
+                                isActive
+                                  ? "border-[#c9a16d] bg-white"
+                                  : "border-black/10 bg-white/70 hover:bg-white",
+                              )}
+                              aria-label={`Preview image ${idx + 1}`}
+                            >
+                              <Image
+                                removeWrapper
+                                alt={`Thumbnail ${idx + 1}`}
+                                src={src}
+                                className="h-20 w-28 object-cover sm:h-24 sm:w-32 cursor-pointer"
+                              />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {/* Right: title, long description, more details */}
+                  <div className="flex flex-col">
+                    <h2 className="text-2xl font-semibold text-default-900 sm:text-3xl">
+                      {selectedProduct?.name ?? ""}
+                    </h2>
+
+                    <p className="mt-3 text-sm leading-6 text-default-600 sm:text-base">
+                      {selectedProduct?.long_description ?? ""}
+                    </p>
+
+                    <div className="mt-6 pt-5">
+                      <h3 className="text-base font-semibold text-default-900">
+                        More Details
+                      </h3>
+
+                      {/* Categories */}
+                      <div className="mt-4">
+                        <p className="text-sm font-semibold text-default-900">
+                          Categories:
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {(selectedProduct?.categories ?? []).length > 0 ? (
+                            (selectedProduct?.categories ?? []).map((c) => (
+                              <Chip
+                                key={c}
+                                radius="full"
+                                variant="flat"
+                                className="bg-default-100 text-default-700"
+                              >
+                                {getCategoryLabel(c)}
+                              </Chip>
+                            ))
+                          ) : (
+                            <span className="text-sm text-default-500">No categories</span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Filters */}
+                      <div className="mt-4">
+                        <p className="text-sm font-semibold text-default-900">Filters:</p>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {(selectedProduct?.filters ?? []).length > 0 ? (
+                            (selectedProduct?.filters ?? []).map((f) => (
+                              <Chip
+                                key={f}
+                                radius="full"
+                                variant="flat"
+                                color="warning"
+                                className="cursor-default"
+                              >
+                                {getFilterLabel(f)}
+                              </Chip>
+                            ))
+                          ) : (
+                            <span className="text-sm text-default-500">No filters</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ModalBody>
+
+              <ModalFooter className="justify-end">
+                <Button variant="flat" color="warning" onPress={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </section>
   );
 }
-
-
-// THE ABOVE UNCOMMENTED CODE IS FOR THE GRID LAYOUT LIKE IN TE DESKTOP 16 CARDS AND THE MOBILE 10 CARDS THATS IT 🚨🚨🚨🚨🚨🚨🚨🚨🚨
