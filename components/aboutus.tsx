@@ -67,7 +67,7 @@ export function AboutUs({
   statsData = defaultStats,
   showButtons = true,
   layout = "collage", // home: collage, about: single
-  singleImageSrc = "/aboutus/about01.jpg",
+  singleImageSrc = "/aboutus/about01.webp",
 }: AboutUsProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [inView, setInView] = useState(false);
@@ -298,7 +298,7 @@ export function AboutUs({
                   }`}
                 >
                   <Image
-                    src="/aboutus/about01.jpg"
+                    src="/aboutus/about01.webp"
                     alt="Main interior"
                     fill
                     className="object-cover"
