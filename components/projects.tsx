@@ -16,27 +16,27 @@ interface Project {
 const projects: Project[] = [
   {
     id: "1",
-    title: "Havelock City Apartments",
-    location: "Colombo 6",
-    image: "/projects/uc01.png",
+    title: "Epiric Supply chain Solutions",
+    location: "Colombo 4",
+    image: "/projects/epric.png",
   },
   {
     id: "2",
-    title: "Havelock City Apartments",
-    location: "Colombo 6",
-    image: "/projects/uc02.png",
+    title: "Medihub",
+    location: "Colombo",
+    image: "/projects/mediahub.jpeg",
   },
   {
     id: "3",
-    title: "Havelock City Apartments",
-    location: "Colombo 6",
-    image: "/projects/uc03.png",
+    title: "SMW Global",
+    location: "Colombo",
+    image: "/projects/smwglobal.jpeg",
   },
   {
     id: "4",
-    title: "Havelock City Apartments",
-    location: "Colombo 6",
-    image: "/projects/uc04.png",
+    title: "Trizen",
+    location: "Colombo",
+    image: "/projects/trizen.jpg",
   },
   {
     id: "5",
@@ -286,11 +286,11 @@ function ProjectCard({ project }: { project: Project }) {
   return (
     <Card className="overflow-hidden rounded-4xl border-0 bg-white p-2">
       {/* Image */}
-      <div className="relative h-full overflow-hidden rounded-t-2xl">
+      <div className="relative aspect-[5/6] overflow-hidden rounded-4xl">
         <img
           src={project.image || "/placeholder.svg"}
           alt={project.title}
-          className="w-full h-full object-cover rounded-4xl"
+          className="w-full h-full object-cover"
         />
 
         {/* Location badge */}
@@ -306,10 +306,11 @@ function ProjectCard({ project }: { project: Project }) {
           <h3 className="text-base sm:text-lg font-bold text-foreground line-clamp-2">
             {project.title}
           </h3>
-
-          <button className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-black text-white rounded-full hover:bg-neutral-900 transition cursor-pointer">
+          <Link href="/projects">
+          <button className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-black text-white rounded-full hover:bg-neutral-900 transition cursor-pointer">     
             <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
+          </Link>
         </div>
       </CardContent>
     </Card>

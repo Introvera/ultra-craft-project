@@ -242,7 +242,7 @@ const ContactUs = () => {
                 </h3>
                 <div className="flex gap-4">
                   <a
-                    href="https://facebook.com/yourprofile"
+                    href="https://www.facebook.com/ultracraftfurniturelk"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#604d37] hover:text-[#977C5A] transition-colors"
@@ -250,7 +250,7 @@ const ContactUs = () => {
                     <FaFacebookF size={24} />
                   </a>
                   <a
-                    href="https://instagram.com/yourprofile"
+                    href="https://www.instagram.com/ultracraft.lk/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#604d37] hover:text-[#977C5A] transition-colors"
@@ -258,7 +258,7 @@ const ContactUs = () => {
                     <FaInstagram size={24} />
                   </a>
                   <a
-                    href="https://linkedin.com/in/yourprofile"
+                    href="https://www.linkedin.com/company/ultracraft-pvt-ltd/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#604d37] hover:text-[#977C5A] transition-colors"
