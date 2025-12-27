@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar";
 import { Poppins } from "next/font/google";
-import Footer from "@/components/footer-component/footer";
 import { Providers } from "./providers";
 import LayoutShell from "./layoutshell";
 

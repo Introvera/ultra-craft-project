@@ -48,7 +48,7 @@ export default function Craftsmanship() {
             transition={{ duration: 0.7 }}
           >
             <Image
-              src="/aboutus-page/left.png"
+              src="/aboutus-page/left.webp"
               alt="Craftsmanship"
               fill
               className="object-cover"
@@ -66,7 +66,7 @@ export default function Craftsmanship() {
             transition={{ duration: 0.7, delay: 0.1 }}
           >
             <Image
-              src="/aboutus-page/mid-top.png"
+              src="/aboutus-page/mid-top.webp"
               alt="Middle Top"
               fill
               className="object-cover"
@@ -81,7 +81,7 @@ export default function Craftsmanship() {
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <Image
-              src="/aboutus-page/mid-bottom.png"
+              src="/aboutus-page/mid-bottom.webp"
               alt="Middle Bottom"
               fill
               className="object-cover"
@@ -98,7 +98,7 @@ export default function Craftsmanship() {
           transition={{ duration: 0.7, delay: 0.15 }}
         >
           <Image
-            src="/aboutus-page/right.png"
+            src="/aboutus-page/right.webp"
             alt="Tall Chair"
             fill
             className="object-cover"
@@ -137,7 +137,7 @@ export default function Craftsmanship() {
         <div className="grid grid-cols-2 gap-3">
           <div className="relative h-[180px] rounded-[20px] overflow-hidden">
             <Image
-              src="/aboutus-page/mid-top.png"
+              src="/aboutus-page/mid-top.webp"
               alt="img1"
               fill
               className="object-cover"
@@ -146,7 +146,7 @@ export default function Craftsmanship() {
 
           <div className="relative h-[180px] rounded-[20px] overflow-hidden">
             <Image
-              src="/aboutus-page/mid-bottom.png"
+              src="/aboutus-page/mid-bottom.webp"
               alt="img2"
               fill
               className="object-cover"
@@ -155,7 +155,7 @@ export default function Craftsmanship() {
 
           <div className="relative h-[180px] rounded-[20px] overflow-hidden">
             <Image
-              src="/aboutus-page/left.png"
+              src="/aboutus-page/left.webp"
               alt="img3"
               fill
               className="object-cover"
@@ -164,7 +164,7 @@ export default function Craftsmanship() {
 
           <div className="relative h-[180px] rounded-[20px] overflow-hidden">
             <Image
-              src="/aboutus-page/right.png"
+              src="/aboutus-page/right.webp"
               alt="img4"
               fill
               className="object-cover"

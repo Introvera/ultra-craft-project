@@ -49,7 +49,7 @@ export default function LoginPage() {
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center bg-black/40 bg-blend-overlay p-4"
       style={{
-        backgroundImage: `url('/backgrounds/adminbackground.jpg')`,
+        backgroundImage: `url('/backgrounds/adminbackground.webp')`,
       }}
     >
       <div className="backdrop-blur-xl bg-white/30 border border-white/20 p-8 rounded-2xl w-full max-w-md shadow-2xl">

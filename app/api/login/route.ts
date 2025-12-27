@@ -62,8 +62,8 @@ export async function POST(req: Request) {
       { status: 200 },
     );
 
-    // For learning purposes: value = admin.id.
-    // In a real app, you’d use a signed token or session id.
+   
+    // In a real app,  use a signed token or session id.
     res.cookies.set({
       name: "admin_session",
       value: String(admin.id),

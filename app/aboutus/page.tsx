@@ -13,7 +13,7 @@ const page = () => {
   return (
     <>
       <ParallaxHero
-        imageUrl="/aboutus-page/abtusbackground.png"
+        imageUrl="/aboutus-page/abtusbackground.webp"
         heading={
           <>
             Shaping Spaces <br /> With Purpose
@@ -31,7 +31,7 @@ const page = () => {
         description={`Ultracraft began with a simple belief: that interior spaces should feel as meaningful as they look. What started as a small design practice grew into a multidisciplinary studio shaped by curiosity, craftsmanship, and a deep respect for the way people live and work. Over the years, we’ve built a reputation for creating warm, refined interiors that balance beauty, function, and emotional comfort, one thoughtfully crafted project at a time. What started as a small design practice grew into a multidisciplinary studio shaped by curiosity, craftsmanship, and a deep respect for the way people live and work.`}
         showButtons={false}
         layout="single"
-        singleImageSrc="/aboutus-page/abtuspage.png"
+        singleImageSrc="/aboutus-page/abtuspage.webp"
       />
 
       <VisionMission />

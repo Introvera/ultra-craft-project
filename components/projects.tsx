@@ -24,31 +24,31 @@ const projects: Project[] = [
     id: "2",
     title: "Medihub",
     location: "Colombo",
-    image: "/projects/mediahub.jpeg",
+    image: "/projects/mediahub.webp",
   },
   {
     id: "3",
     title: "SMW Global",
     location: "Colombo",
-    image: "/projects/smwglobal.jpeg",
+    image: "/projects/smwglobal.webp",
   },
   {
     id: "4",
-    title: "Trizen",
-    location: "Colombo",
+    title: "Trizen Apartment",
+    location: "Colombo 04",
     image: "/projects/trizen.jpg",
   },
   {
     id: "5",
-    title: "Havelock City Apartments",
-    location: "Colombo 6",
-    image: "/projects/uc05.png",
+    title: "Prime Beachfront Apartments",
+    location: "Colombo 04",
+    image: "/projects/uc02.webp",
   },
   {
     id: "6",
-    title: "Havelock City Apartments",
-    location: "Colombo 6",
-    image: "/projects/uc06.png",
+    title: "Prime Beachfront Apartments",
+    location: "Colombo 04",
+    image: "/projects/uc03.webp",
   },
 ];
 
@@ -135,16 +135,16 @@ export default function Projects() {
             </button>
 
             <Link href="/projects">
-            <button
-              className="
+              <button
+                className="
                 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
                 text-white shadow-sm
                 bg-black
               "
-            >
-              More Projects
-              <ArrowUpRight className="ml-2 size-5" />
-            </button>
+              >
+                More Projects
+                <ArrowUpRight className="ml-2 size-5" />
+              </button>
             </Link>
           </div>
         </div>
@@ -307,9 +307,9 @@ function ProjectCard({ project }: { project: Project }) {
             {project.title}
           </h3>
           <Link href="/projects">
-          <button className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-black text-white rounded-full hover:bg-neutral-900 transition cursor-pointer">     
-            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
+            <button className="flex-shrink-0 flex items-center justify-center w-8 h-8 bg-black text-white rounded-full hover:bg-neutral-900 transition cursor-pointer">
+              <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
           </Link>
         </div>
       </CardContent>
