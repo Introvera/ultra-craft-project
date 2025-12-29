@@ -1,31 +1,29 @@
 "use client";
 
-import React from "react";
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
   Chip,
   Image,
   Input,
-  Pagination,
-  PaginationItemType,
-  Button,
   Modal,
   ModalBody,
   ModalContent,
-  ModalHeader,
   ModalFooter,
+  Pagination,
+  PaginationItemType,
   useDisclosure,
 } from "@heroui/react";
 import {
-  Search,
+  ArrowUpRight,
   ChevronLeft,
   ChevronRight,
-  ArrowUpRight,
+  Search,
   SlidersHorizontal,
-  X,
 } from "lucide-react";
+import React from "react";
 
 /* simple classnames helper */
 function cn(...classes: Array<string | false | null | undefined>) {
@@ -72,15 +70,17 @@ export default function ProductsGridClient() {
   const [error, setError] = React.useState<string | null>(null);
 
   const [activeCategory, setActiveCategory] = React.useState<string>(
-    CATEGORY_OPTIONS[0]?.key ?? "",
+    CATEGORY_OPTIONS[0]?.key ?? ""
   );
   const [activeFilters, setActiveFilters] = React.useState<Set<string>>(
-    new Set(),
+    new Set()
   );
   const [search, setSearch] = React.useState("");
   const [page, setPage] = React.useState(1);
 
-  const [itemsPerPage, setItemsPerPage] = React.useState(DESKTOP_ITEMS_PER_PAGE);
+  const [itemsPerPage, setItemsPerPage] = React.useState(
+    DESKTOP_ITEMS_PER_PAGE
+  );
 
   // Filter Modal (existing)
   const {
@@ -90,10 +90,15 @@ export default function ProductsGridClient() {
   } = useDisclosure();
 
   // Details Modal (new)
-  const { isOpen: isDetailsOpen, onOpen: onDetailsOpen, onClose: onDetailsClose } =
-    useDisclosure();
+  const {
+    isOpen: isDetailsOpen,
+    onOpen: onDetailsOpen,
+    onClose: onDetailsClose,
+  } = useDisclosure();
 
-  const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
+    null
+  );
   const [activeImageIndex, setActiveImageIndex] = React.useState(0);
 
   const sectionRef = React.useRef<HTMLElement | null>(null);
@@ -103,7 +108,9 @@ export default function ProductsGridClient() {
     const mq = window.matchMedia("(min-width: 1024px)"); // lg+
 
     const updateItemsPerPage = () => {
-      setItemsPerPage(mq.matches ? DESKTOP_ITEMS_PER_PAGE : MOBILE_ITEMS_PER_PAGE);
+      setItemsPerPage(
+        mq.matches ? DESKTOP_ITEMS_PER_PAGE : MOBILE_ITEMS_PER_PAGE
+      );
       setPage(1);
     };
 
@@ -166,7 +173,8 @@ export default function ProductsGridClient() {
 
   const filteredProducts = React.useMemo(() => {
     return products.filter((p) => {
-      if (activeCategory && !p.categories.includes(activeCategory)) return false;
+      if (activeCategory && !p.categories.includes(activeCategory))
+        return false;
 
       if (activeFilters.size > 0) {
         const hasAny = p.filters.some((f) => activeFilters.has(f));
@@ -222,7 +230,7 @@ export default function ProductsGridClient() {
           key={key}
           className={cn(
             className,
-            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center",
+            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center"
           )}
           onClick={() => {
             onNext();
@@ -240,7 +248,7 @@ export default function ProductsGridClient() {
           key={key}
           className={cn(
             className,
-            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center",
+            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center"
           )}
           onClick={() => {
             onPrevious();
@@ -269,7 +277,7 @@ export default function ProductsGridClient() {
           isActive
             ? "text-white bg-gradient-to-br from-[#c9a16d] to-[#b38449] font-semibold"
             : "text-default-600 bg-transparent hover:bg-default-100",
-          className,
+          className
         )}
         onClick={() => handlePageChange(value)}
       >
@@ -280,7 +288,7 @@ export default function ProductsGridClient() {
 
   const activeFilterArray = React.useMemo(
     () => Array.from(activeFilters),
-    [activeFilters],
+    [activeFilters]
   );
 
   const openDetails = (product: Product) => {
@@ -305,7 +313,9 @@ export default function ProductsGridClient() {
     FILTER_OPTIONS.find((f) => f.key === key)?.label ?? key;
 
   const detailsImageSrc =
-    selectedProduct?.image?.[activeImageIndex] ?? selectedProduct?.image?.[0] ?? "";
+    selectedProduct?.image?.[activeImageIndex] ??
+    selectedProduct?.image?.[0] ??
+    "";
 
   return (
     <section
@@ -330,7 +340,7 @@ export default function ProductsGridClient() {
                   "rounded-full px-4 py-2 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-[#c9a16d] text-white shadow-sm"
-                    : "bg-white/70 text-default-700 hover:bg-white",
+                    : "bg-white/70 text-default-700 hover:bg-white"
                 )}
               >
                 {cat.label}
@@ -415,6 +425,7 @@ export default function ProductsGridClient() {
                 <div className="relative">
                   {product.image[0] ? (
                     <Image
+                      loading="lazy"
                       removeWrapper
                       alt={product.name}
                       src={product.image[0]}
@@ -502,49 +513,6 @@ export default function ProductsGridClient() {
       )}
 
       {/* FILTER MODAL (existing) */}
-      <Modal isOpen={isFilterOpen} onOpenChange={onFilterOpenChange} placement="top-center">
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="text-base font-semibold">Filters</ModalHeader>
-              <ModalBody className="flex flex-col gap-4">
-                <div>
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-default-400">
-                    Materials / Tags
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {FILTER_OPTIONS.map((opt) => {
-                      const selected = activeFilters.has(opt.key);
-                      return (
-                        <Chip
-                          key={opt.key}
-                          radius="full"
-                          variant={selected ? "solid" : "bordered"}
-                          color="warning"
-                          className="cursor-pointer text-xs sm:text-sm"
-                          onClick={() => toggleFilter(opt.key)}
-                        >
-                          {opt.label}
-                        </Chip>
-                      );
-                    })}
-                  </div>
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button variant="flat" onPress={clearAllFilters}>
-                  Clear all
-                </Button>
-                <Button color="primary" variant="flat" onPress={onClose}>
-                  Done
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-
-      {/* DETAILS MODAL (new) */}
       <Modal
         isOpen={isDetailsOpen}
         onClose={closeDetails}
@@ -552,34 +520,30 @@ export default function ProductsGridClient() {
         backdrop="blur"
         placement="center"
       >
-        <ModalContent className="overflow-hidden rounded-3xl">
+        <ModalContent className="overflow-hidden rounded-3xl max-h-[90vh]">
           {(onClose) => (
             <>
-              {/* Custom header row with close (like screenshot) */}
-              <ModalHeader className="relative pb-0">
-                <div className="h-1" />
-              </ModalHeader>
-
-              <ModalBody className="px-5 pb-6 pt-2 sm:px-6 sm:pb-7">
+              <ModalBody className="px-5 pb-6 pt-6 sm:px-6 sm:pb-7 overflow-auto">
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                   {/* Left: image + thumbnails */}
-                  <div className="rounded-3xl">
-                    <div className="overflow-hidden rounded-3xl">
+                  <div className="flex flex-col rounded-3xl">
+                    <div className="overflow-hidden rounded-3xl w-full max-h-[60vh] sm:max-h-[70vh]">
                       {detailsImageSrc ? (
                         <Image
+                          loading="lazy"
                           removeWrapper
                           alt={selectedProduct?.name ?? "Product"}
                           src={detailsImageSrc}
-                          className="h-[320px] w-full object-cover sm:h-[420px]"
+                          className="w-full h-full object-contain"
                         />
                       ) : (
-                        <div className="h-[320px] w-full sm:h-[420px]" />
+                        <div className="w-full h-64 sm:h-80 bg-default-200" />
                       )}
                     </div>
 
                     {/* Thumbnails */}
                     {selectedProduct?.image?.length ? (
-                      <div className="mt-3 flex gap-3">
+                      <div className="mt-3 flex gap-3 overflow-x-auto">
                         {selectedProduct.image.slice(0, 3).map((src, idx) => {
                           const isActive = idx === activeImageIndex;
                           return (
@@ -588,14 +552,15 @@ export default function ProductsGridClient() {
                               type="button"
                               onClick={() => setActiveImageIndex(idx)}
                               className={cn(
-                                "overflow-hidden rounded-2xl border p-1 transition",
+                                "flex-shrink-0 overflow-hidden rounded-2xl border p-1 transition",
                                 isActive
                                   ? "border-[#c9a16d] bg-white"
-                                  : "border-black/10 bg-white/70 hover:bg-white",
+                                  : "border-black/10 bg-white/70 hover:bg-white"
                               )}
                               aria-label={`Preview image ${idx + 1}`}
                             >
                               <Image
+                                loading="lazy"
                                 removeWrapper
                                 alt={`Thumbnail ${idx + 1}`}
                                 src={src}
@@ -608,7 +573,7 @@ export default function ProductsGridClient() {
                     ) : null}
                   </div>
 
-                  {/* Right: title, long description, more details */}
+                  {/* Right: title, description, categories */}
                   <div className="flex flex-col">
                     <h2 className="text-2xl font-semibold text-default-900 sm:text-3xl">
                       {selectedProduct?.name ?? ""}
@@ -641,14 +606,18 @@ export default function ProductsGridClient() {
                               </Chip>
                             ))
                           ) : (
-                            <span className="text-sm text-default-500">No categories</span>
+                            <span className="text-sm text-default-500">
+                              No categories
+                            </span>
                           )}
                         </div>
                       </div>
 
                       {/* Filters */}
                       <div className="mt-4">
-                        <p className="text-sm font-semibold text-default-900">Filters:</p>
+                        <p className="text-sm font-semibold text-default-900">
+                          Filters:
+                        </p>
                         <div className="mt-2 flex flex-wrap gap-2">
                           {(selectedProduct?.filters ?? []).length > 0 ? (
                             (selectedProduct?.filters ?? []).map((f) => (
@@ -663,7 +632,9 @@ export default function ProductsGridClient() {
                               </Chip>
                             ))
                           ) : (
-                            <span className="text-sm text-default-500">No filters</span>
+                            <span className="text-sm text-default-500">
+                              No filters
+                            </span>
                           )}
                         </div>
                       </div>

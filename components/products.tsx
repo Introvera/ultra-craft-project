@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 
@@ -172,10 +173,17 @@ export function Products() {
               <ArrowUpRight className="ml-2 size-4 sm:size-5" />
             </Button>
 
-            <Button variant="coffee" size="pill" className="cursor-pointer">
+            <Link
+              href="/products"
+              className="
+    inline-flex items-center rounded-full px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm font-medium cursor-pointer
+    text-white shadow-sm
+    bg-linear-to-r from-[var(--gradient-1)] to-[var(--gradient-2)]
+  "
+            >
               Explore Products
-              <ArrowUpRight className="ml-2 size-4 sm:size-5" />
-            </Button>
+              <ArrowUpRight className="ml-2 size-4 md:size-5" />
+            </Link>
           </div>
         </div>
 
@@ -206,16 +214,17 @@ export function Products() {
               <ArrowUpRight className="ml-2 size-5" />
             </button>
 
-            <button
+            <Link
+              href="/products"
               className="
-                inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
-                text-white shadow-sm
-                bg-linear-to-r from-[var(--gradient-1)] to-[var(--gradient-2)]
-              "
+    inline-flex items-center rounded-full px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm font-medium cursor-pointer
+    text-white shadow-sm
+    bg-linear-to-r from-[var(--gradient-1)] to-[var(--gradient-2)]
+  "
             >
               Explore Products
-              <ArrowUpRight className="ml-2 size-5" />
-            </button>
+              <ArrowUpRight className="ml-2 size-4 md:size-5" />
+            </Link>
           </div>
         </div>
 
@@ -387,16 +396,17 @@ export function Products() {
                   <ArrowUpRight className="ml-2 size-4 md:size-5" />
                 </button>
 
-                <button
+                <Link
+                  href="/products"
                   className="
-                    inline-flex items-center rounded-full px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm font-medium cursor-pointer
-                    text-white shadow-sm
-                    bg-linear-to-r from-[var(--gradient-1)] to-[var(--gradient-2)]
-                  "
+    inline-flex items-center rounded-full px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm font-medium cursor-pointer
+    text-white shadow-sm
+    bg-linear-to-r from-[var(--gradient-1)] to-[var(--gradient-2)]
+  "
                 >
                   Explore Products
                   <ArrowUpRight className="ml-2 size-4 md:size-5" />
-                </button>
+                </Link>
               </div>
             </div>
 

@@ -20,7 +20,7 @@ const VisionMission = () => {
           <Card className="relative h-full overflow-hidden border-none bg-black text-white shadow-medium rounded-3xl">
             <Image
               src="/aboutus-page/mission.webp"
-              alt="Modern interior living room"
+              alt="Vision illustration representing Ultracraft's modern interior design approach"
               fill
               priority
               className="object-cover"

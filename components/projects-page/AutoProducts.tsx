@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { Card, CardBody, Image as HeroImage, Link } from "@heroui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, MapPin } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
 type Project = {
@@ -40,9 +40,7 @@ const AutoProducts: React.FC = () => {
   useEffect(() => {
     if (!projects.length) return;
     const interval = setInterval(() => {
-      setActiveIndex((prev) =>
-        prev + 1 >= projects.length ? 0 : prev + 1
-      );
+      setActiveIndex((prev) => (prev + 1 >= projects.length ? 0 : prev + 1));
     }, AUTO_INTERVAL_MS);
     return () => clearInterval(interval);
   }, [projects.length]);
@@ -94,6 +92,7 @@ const AutoProducts: React.FC = () => {
                       <div className="relative w-full overflow-hidden rounded-4xl">
                         <div className="w-full aspect-[4/3]">
                           <HeroImage
+                            loading="lazy"
                             alt={project.name}
                             src={heroImageSrc}
                             radius="lg"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type Step = {
   number: number;
@@ -238,7 +238,8 @@ export default function HowWeWork() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: "clamp(24px, 4vw, 36px) clamp(24px, 5vw, 68px) clamp(48px, 6vw, 68px)",
+        padding:
+          "clamp(24px, 4vw, 36px) clamp(24px, 5vw, 68px) clamp(48px, 6vw, 68px)",
         background: "rgba(212, 184, 150, 0.13)",
       }}
     >
@@ -273,7 +274,9 @@ export default function HowWeWork() {
           the final installation.
         </p>
 
-        <div style={{ marginTop: "clamp(48px, 6vw, 72px)", overflow: "hidden" }}>
+        <div
+          style={{ marginTop: "clamp(48px, 6vw, 72px)", overflow: "hidden" }}
+        >
           <div
             style={{
               display: "flex",
@@ -283,11 +286,11 @@ export default function HowWeWork() {
             }}
           >
             {pages.map((page: Step[], pageIndex) => (
-              <div 
-                key={pageIndex} 
-                style={{ 
+              <div
+                key={pageIndex}
+                style={{
                   flex: `0 0 ${100 / pageCount}%`,
-                  width: `${100 / pageCount}%`
+                  width: `${100 / pageCount}%`,
                 }}
               >
                 <div
@@ -417,6 +420,8 @@ export default function HowWeWork() {
           </div>
 
           <div
+            role="tablist"
+            aria-label="Steps pages"
             style={{
               marginTop: "16px",
               display: "flex",
@@ -426,6 +431,7 @@ export default function HowWeWork() {
           >
             <button
               onClick={handlePrev}
+              aria-label="Previous step page"
               disabled={currentPage === 0}
               style={{
                 display: "flex",
@@ -459,6 +465,7 @@ export default function HowWeWork() {
 
             <button
               onClick={handleNext}
+              aria-label="Next step page"
               disabled={currentPage === pageCount - 1}
               style={{
                 display: "flex",
@@ -473,8 +480,7 @@ export default function HowWeWork() {
                 border: "1px solid #604D37",
                 background: "#0A0A0A",
                 opacity: currentPage === pageCount - 1 ? 0.4 : 1,
-                cursor:
-                  currentPage === pageCount - 1 ? "default" : "pointer",
+                cursor: currentPage === pageCount - 1 ? "default" : "pointer",
               }}
             >
               <svg
