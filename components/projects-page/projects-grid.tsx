@@ -1,26 +1,21 @@
 "use client";
 
-import React from "react";
 import {
   Card,
   CardBody,
   CardFooter,
   Image,
-  Pagination,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Pagination,
+  PaginationItemType,
   useDisclosure,
 } from "@heroui/react";
-import { PaginationItemType } from "@heroui/react";
-import {
-  MapPin,
-  ArrowUpRight,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import React from "react";
 
 /* simple classnames helper */
 function cn(...classes: Array<string | false | null | undefined>) {
@@ -53,10 +48,15 @@ const ProjectsGrid: React.FC = () => {
   const hasMounted = React.useRef(false);
 
   // -------- Details Modal state --------
-  const { isOpen: isDetailsOpen, onOpen: onDetailsOpen, onClose: onDetailsClose } =
-    useDisclosure();
+  const {
+    isOpen: isDetailsOpen,
+    onOpen: onDetailsOpen,
+    onClose: onDetailsClose,
+  } = useDisclosure();
 
-  const [selectedProject, setSelectedProject] = React.useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = React.useState<Project | null>(
+    null
+  );
 
   // -------- Carousel state (inside modal) --------
   const [currentIndex, setCurrentIndex] = React.useState(0);
@@ -264,7 +264,7 @@ const ProjectsGrid: React.FC = () => {
           key={key}
           className={cn(
             className,
-            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center",
+            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center"
           )}
           onClick={onNext}
         >
@@ -279,7 +279,7 @@ const ProjectsGrid: React.FC = () => {
           key={key}
           className={cn(
             className,
-            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center",
+            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center"
           )}
           onClick={onPrevious}
         >
@@ -305,7 +305,7 @@ const ProjectsGrid: React.FC = () => {
           isActive
             ? "text-white bg-gradient-to-br from-[#c9a16d] to-[#b38449] font-semibold"
             : "text-default-600 bg-transparent hover:bg-default-100",
-          className,
+          className
         )}
         onClick={() => setPage(value)}
       >
@@ -347,6 +347,7 @@ const ProjectsGrid: React.FC = () => {
                 <div className="relative">
                   {project.image[0] ? (
                     <Image
+                      loading="lazy"
                       removeWrapper
                       alt={project.name}
                       src={project.image[0]}
@@ -443,11 +444,11 @@ const ProjectsGrid: React.FC = () => {
 
                   <div className="mt-2 flex items-center gap-2 text-sm text-default-500">
                     <MapPin className="h-4 w-4" />
-                    <span className="truncate">{selectedProject?.location ?? ""}</span>
+                    <span className="truncate">
+                      {selectedProject?.location ?? ""}
+                    </span>
                   </div>
                 </div>
-
-                
               </ModalHeader>
 
               {/* Middle: Carousel (2-up desktop, 1-up mobile) */}
@@ -471,7 +472,8 @@ const ProjectsGrid: React.FC = () => {
                           currentIndex * (100 / itemsPerView)
                         }% + ${currentTranslate}px))`,
                         transitionDuration: isDragging ? "0ms" : "500ms",
-                        transitionTimingFunction: "cubic-bezier(0.22, 0.61, 0.36, 1)",
+                        transitionTimingFunction:
+                          "cubic-bezier(0.22, 0.61, 0.36, 1)",
                       }}
                     >
                       {(slides.length ? slides : [""]).map((src, idx) => (
@@ -524,7 +526,10 @@ const ProjectsGrid: React.FC = () => {
                           ) : (
                             <div
                               className="h-2 w-2 rounded-full transition-all duration-300"
-                              style={{ backgroundColor: "rgba(0,0,0,1)", opacity }}
+                              style={{
+                                backgroundColor: "rgba(0,0,0,1)",
+                                opacity,
+                              }}
                             />
                           )}
                         </button>

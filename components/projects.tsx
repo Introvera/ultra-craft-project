@@ -120,6 +120,7 @@ export default function Projects() {
           {/* Desktop / tablet buttons */}
           <div className="hidden md:flex flex-wrap gap-3 md:gap-4">
             <button
+              aria-label="Request Consultation"
               className="
                 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
                 text-black shadow-sm
@@ -134,17 +135,16 @@ export default function Projects() {
               <ArrowUpRight className="ml-2 size-5" />
             </button>
 
-            <Link href="/projects">
-              <button
-                className="
-                inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
-                text-white shadow-sm
-                bg-black
-              "
-              >
-                More Projects
-                <ArrowUpRight className="ml-2 size-5" />
-              </button>
+            <Link
+              href="/projects"
+              aria-label="View more projects"
+              className="
+    inline-flex items-center rounded-full px-6 py-3 text-sm font-medium
+    text-white shadow-sm bg-black hover:bg-neutral-900 transition
+  "
+            >
+              More Projects
+              <ArrowUpRight className="ml-2 size-5" aria-hidden="true" />
             </Link>
           </div>
         </div>
@@ -212,6 +212,7 @@ export default function Projects() {
         {/* Mobile buttons under card */}
         <div className="mt-4 flex w-full max-w-sm flex-wrap gap-3 mb-10 md:hidden">
           <button
+            aria-label="Request Consultation"
             className="
                 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
                 text-black shadow-sm
@@ -225,16 +226,18 @@ export default function Projects() {
             Request Consultation
             <ArrowUpRight className="ml-2 size-5" />
           </button>
-          <button
+          <Link
+            href="/projects"
+            aria-label="View more projects"
             className="
                 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium cursor-pointer
                 text-white shadow-sm
                 bg-black
               "
           >
-            Explore Products
-            <ArrowUpRight className="ml-2 size-5" />
-          </button>
+            More Projects
+            <ArrowUpRight className="ml-2 size-5" aria-hidden="true" />
+          </Link>
         </div>
         {/* MOBILE CAROUSEL */}
         <div className="md:hidden flex flex-col items-center gap-4">
@@ -265,6 +268,7 @@ export default function Projects() {
                   setDirection(index > activeIndex ? 1 : -1);
                   setActiveIndex(index);
                 }}
+                aria-label={`Go to slide ${index + 1}`}
                 className={`
                   h-2 rounded-full transition-all duration-300
                   ${

@@ -18,7 +18,7 @@ type ParallaxHeroProps = {
 };
 
 export default function ParallaxHero({
-  imageUrl = "/home/heroBackgroundimage.webp",
+  imageUrl = "/home/herobackgroundimage.webp",
   heading,
   description = "Experience unparalleled craftsmanship and timeless design with Ultra Craft, where every creation tells a story of legacy and infinite living.",
   showCta = true,
@@ -92,6 +92,7 @@ export default function ParallaxHero({
 
             {showCta && (
               <motion.button
+                aria-label={ctaLabel}
                 variants={fadeUp}
                 className="inline-flex items-center rounded-full mt-10 px-6 py-3 text-sm font-medium cursor-pointer text-black shadow-sm bg-linear-to-r from-[var(--gradient-3)] to-[var(--gradient-4)]"
                 onClick={() => {
@@ -129,7 +130,7 @@ export default function ParallaxHero({
               className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white animate-bounce"
               style={{ opacity: Math.max(0, 1 - scrollY / 300) }}
             >
-              <ChevronDown className="w-6 h-6" />
+              <ChevronDown className="w-6 h-6" aria-hidden="true" />
             </motion.div>
           )}
         </div>

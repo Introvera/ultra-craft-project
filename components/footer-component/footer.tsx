@@ -1,3 +1,5 @@
+
+
 const Footer = () => {
   return (
     <div className="w-full bg-[#1E1A17] text-white mt-36">
@@ -72,6 +74,7 @@ const Footer = () => {
                     href="https://www.facebook.com/ultracraftfurniturelk"
                     target="_blank"
                     rel="noreferrer"
+                    aria-label="Follow Ultracraft on Facebook"
                     className="flex items-center gap-3 hover:opacity-80 cursor-pointer"
                   >
                     <svg
@@ -96,6 +99,7 @@ const Footer = () => {
                     href="https://www.linkedin.com/company/ultracraft-pvt-ltd/"
                     target="_blank"
                     rel="noreferrer"
+                    aria-label="Follow Ultracraft on LinkedIn"
                     className="flex items-center gap-3 hover:opacity-80 cursor-pointer"
                   >
                     <svg
@@ -120,6 +124,7 @@ const Footer = () => {
                     href="https://www.instagram.com/ultracraft.lk/"
                     target="_blank"
                     rel="noreferrer"
+                    aria-label="Follow Ultracraft on Instagram"
                     className="flex items-center gap-3 hover:opacity-80 cursor-pointer"
                   >
                     <svg
