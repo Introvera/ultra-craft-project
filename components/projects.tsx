@@ -18,7 +18,7 @@ const projects: Project[] = [
     id: "1",
     title: "Epiric Supply chain Solutions",
     location: "Colombo 4",
-    image: "/projects/epric.png",
+    image: "/projects/epric.webp",
   },
   {
     id: "2",
@@ -36,7 +36,7 @@ const projects: Project[] = [
     id: "4",
     title: "Trizen Apartment",
     location: "Colombo 04",
-    image: "/projects/trizen.jpg",
+    image: "/projects/trizen.webp",
   },
   {
     id: "5",

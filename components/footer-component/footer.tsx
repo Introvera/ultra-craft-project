@@ -15,7 +15,7 @@ const Footer = () => {
           {/* Left: Logo + description */}
           <div className="flex flex-col shrink-0 w-full max-w-[321px]">
             <img
-              src="/footer/UltracraftBrandLogo.png"
+              src="/footer/UltracraftBrandLogo.webp"
               alt="Ultracraft Logo"
               className="w-[180px] sm:w-[200px] lg:w-[210px] h-auto object-cover shadow-[0_2px_4px_rgba(0,0,0,0.08)]"
               style={{ aspectRatio: "105/58" }}

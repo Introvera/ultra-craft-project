@@ -65,28 +65,28 @@ export default function Services() {
       title: "Commercial Interiors",
       description:
         "Modern, functional interiors for offices, corporate floors, reception areas, workstations, and commercial spaces, designed to improve efficiency and elevate presence.",
-      image: "/services/image 56.png",
+      image: "/services/image 56.webp",
     },
     {
       number: 2,
       title: "Residential Interiors",
       description:
         "Interior solutions for living rooms, bedrooms, kitchens, dining areas, and entire apartments, blending comfort, beauty, and everyday function.",
-      image: "/services/image 64.png",
+      image: "/services/image 64.webp",
     },
     {
       number: 3,
       title: "Sustainable Interiors",
       description:
         "Eco-conscious interiors using recycled materials, upcycled furniture, and energy-efficient design choices for greener living.",
-      image: "/services/image 65.png",
+      image: "/services/image 65.webp",
     },
     {
       number: 4,
       title: "Project Management",
       description:
         "End-to-end coordination, scheduling, vendor management, and smooth project execution.",
-      image: "/services/image 67.png",
+      image: "/services/image 67.webp",
     },
   ];
 
@@ -308,20 +308,20 @@ export default function Services() {
                   sm:w-[24px] sm:h-[10px]
                   w-[20px] h-[8px]
                 "
-                style={{
-                  backgroundColor: "var(--uc-dot-active-bg)",
-                }}
-              />
-            ) : (
-              <svg width="10" height="10" viewBox="0 0 10 10">
-                <circle
-                  cx="5"
-                  cy="5"
-                  r="5"
-                  fill="var(--uc-dot-color)"
-                  fillOpacity={index === currentIndex - 1 ? "0.40" : "0.20"}
+                  style={{
+                    backgroundColor: "var(--uc-dot-active-bg)",
+                  }}
                 />
               ) : (
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <circle
+                    cx="5"
+                    cy="5"
+                    r="5"
+                    fill="var(--uc-dot-color)"
+                    fillOpacity={index === currentIndex - 1 ? "0.40" : "0.20"}
+                  />
+                  ) : (
                 </svg>
               )}
             </button>

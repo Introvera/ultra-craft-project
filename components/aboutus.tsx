@@ -257,7 +257,7 @@ export function AboutUs({
                     `}
                   >
                     <Image
-                      src="/aboutus/about03.jpg"
+                      src="/aboutus/about03.webp"
                       alt="Living room"
                       fill
                       className="object-cover"
@@ -276,7 +276,7 @@ export function AboutUs({
                     `}
                   >
                     <Image
-                      src="/aboutus/about02.jpg"
+                      src="/aboutus/about02.webp"
                       alt="Accent chair"
                       fill
                       className="object-cover"
@@ -313,7 +313,7 @@ export function AboutUs({
                   }`}
                 >
                   <Image
-                    src="/aboutus/about02.jpg"
+                    src="/aboutus/about02.webp"
                     alt="Warm living room"
                     fill
                     className="object-cover"
@@ -328,7 +328,7 @@ export function AboutUs({
                   }`}
                 >
                   <Image
-                    src="/aboutus/about03.jpg"
+                    src="/aboutus/about03.webp"
                     alt="Accent chair"
                     fill
                     className="object-cover"

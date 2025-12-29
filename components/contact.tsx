@@ -86,12 +86,14 @@ const ContactUs = () => {
     setStatus("Sending...");
 
     const data = {
-      service_id: "service_6jybba9",
-      template_id: "template_yaup53k",
-      user_id: "2IuW0Sj0bTx8RGlan",
+      service_id: "service_cvjg0bc",
+      template_id: "template_smclisv",
+      user_id: "IwQroNTwE3mf4YtEa",
       template_params: {
         from_name: formData.get("fullName"),
         from_email: formData.get("email"),
+        phone: formData.get("phone"),
+        company: formData.get("company"),
         message: formData.get("message"),
       },
     };
@@ -242,7 +244,7 @@ const ContactUs = () => {
                 </h3>
                 <div className="flex gap-4">
                   <a
-                    href="https://www.facebook.com/ultracraftfurniturelk"
+                    href="https://facebook.com/yourprofile"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#604d37] hover:text-[#977C5A] transition-colors"
@@ -250,7 +252,7 @@ const ContactUs = () => {
                     <FaFacebookF size={24} />
                   </a>
                   <a
-                    href="https://www.instagram.com/ultracraft.lk/"
+                    href="https://instagram.com/yourprofile"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#604d37] hover:text-[#977C5A] transition-colors"
@@ -258,7 +260,7 @@ const ContactUs = () => {
                     <FaInstagram size={24} />
                   </a>
                   <a
-                    href="https://www.linkedin.com/company/ultracraft-pvt-ltd/"
+                    href="https://linkedin.com/in/yourprofile"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#604d37] hover:text-[#977C5A] transition-colors"

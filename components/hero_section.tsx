@@ -18,7 +18,7 @@ type ParallaxHeroProps = {
 };
 
 export default function ParallaxHero({
-  imageUrl = "/home/Backgroundimage.jpg",
+  imageUrl = "/home/Backgroundimage.webp",
   heading,
   description = "Experience unparalleled craftsmanship and timeless design with Ultra Craft, where every creation tells a story of legacy and infinite living.",
   showCta = true,
