@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const mdify = (pos: string) =>
   pos
@@ -26,8 +26,8 @@ const services: Service[] = [
     title: "Complete Service Coverage",
     description:
       "We manage everything from concept and design to furniture production and project execution, so every stage feels effortless.",
-    image: "/backgrounds/service.jpg",
-    imageMobile: "/backgrounds/service.jpg",
+    image: "/backgrounds/service.webp",
+    imageMobile: "/backgrounds/service.webp",
     mdSpan: "md:col-span-2 md:row-span-2",
     posMd: "top-10",
     mColSpan: "col-span-2",
@@ -38,8 +38,8 @@ const services: Service[] = [
     title: "Designed for Real Living",
     description:
       "We shape interiors that enhance daily comfort, rhythm, and lifestyle.",
-    image: "/backgrounds/designed.jpg",
-    imageMobile: "/backgrounds/designed.jpg",
+    image: "/backgrounds/designed.webp",
+    imageMobile: "/backgrounds/designed.webp",
     mdSpan: "md:col-span-4",
     posMd: "top-10 left-6",
     mColSpan: "col-span-2",
@@ -50,8 +50,8 @@ const services: Service[] = [
     title: "Trusted by Leading Clients",
     description:
       "Crafted with precision and durable materials to ensure timeless beauty and lasting performance.",
-    image: "/backgrounds/trusted.jpg",
-    imageMobile: "/backgrounds/trusted.jpg",
+    image: "/backgrounds/trusted.webp",
+    imageMobile: "/backgrounds/trusted.webp",
     mdSpan: "md:col-span-2",
     posMd: "bottom-6 left-6",
     mColSpan: "col-span-1",
@@ -63,8 +63,8 @@ const services: Service[] = [
     title: "Lasting Quality",
     description:
       "Crafted with precision and durable materials to ensure timeless beauty and lasting performance.",
-    image: "/backgrounds/lasting.jpg",
-    imageMobile: "/backgrounds/lasting.jpg",
+    image: "/backgrounds/lasting.webp",
+    imageMobile: "/backgrounds/lasting.webp",
     mdSpan: "md:col-span-2",
     posMd: "bottom-26 left-6",
     mColSpan: "col-span-1",

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /home/
+Allow: /
+Sitemap: https://www.ultracraft.lk/sitemap.xml
