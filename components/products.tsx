@@ -29,10 +29,10 @@ type Product = {
 const products: Product[] = [
   {
     id: 1,
-    name: "Boucle Dining Armchair",
+    name: "Stylish Mahogany Dining Chair",
     price: "",
     description:
-      "Soft boucle upholstery and slim oak legs for a refined, cozy dining look.",
+      "Supported by stable, narrow legs and finished with matching fabric upholstery.",
 
     image: "/products/pro3.webp",
     imageSizesBig: { mobile: 180, tablet: 240, desktop: 420 },
@@ -40,30 +40,30 @@ const products: Product[] = [
   },
   {
     id: 2,
-    name: "Oak Lounge Chair",
+    name: "Stylish Teak Bar Chair",
     price: "",
     description:
-      "Gently curved frame with generous cushioning, perfect for reading corners.",
+      "Thoughtfully crafted for comfort and sophistication.",
     image: "/products/pro4.webp",
     imageSizesBig: { mobile: 180, tablet: 384, desktop: 420 },
     imageSizesSmall: { mobile: 110, tablet: 130, desktop: 290 },
   },
   {
     id: 3,
-    name: "Boucle Dining Armchair",
+    name: "Custom Mahogany Coffee Table",
     price: "",
     description:
-      "A boucle upholstered accent chair with natural wooden legs and a modern silhouette.",
+      "Perfectly sized for compact spaces, finished with a high-gloss PU coat",
     image: "/products/pro2.webp",
     imageSizesBig: { mobile: 180, tablet: 400, desktop: 420 },
     imageSizesSmall: { mobile: 110, tablet: 140, desktop: 290 },
   },
   {
     id: 4,
-    name: "Minimalist Armchair",
+    name: "Tailored Coffee Table",
     price: "",
     description:
-      "Clean lines and soft padding for modern living rooms and studios.",
+      "Showcasing a timber top with painted finish and a powder-coated bottom.",
     image: "/products/pro5.webp",
     imageSizesBig: { mobile: 180, tablet: 280, desktop: 420 },
     imageSizesSmall: { mobile: 110, tablet: 220, desktop: 290 },
@@ -292,10 +292,11 @@ export function Products() {
                         {bigCard.description}
                       </p>
                     </div>
-
+                    <Link href="/products">
                     <button className="flex-shrink-0 flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 bg-black text-white rounded-full hover:bg-neutral-900 transition cursor-pointer">
                       <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
+                    </Link>
                   </div>
                 </div>
               </motion.div>
@@ -322,14 +323,14 @@ export function Products() {
               <div className="hidden md:flex items-center gap-3">
                 <button
                   onClick={handlePrev}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-400 bg-white hover:bg-neutral-900 hover:text-white transition"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-400 bg-white hover:bg-neutral-900 hover:text-white transition cursor-pointer"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
 
                 <button
                   onClick={handleNext}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-400 bg-white hover:bg-neutral-900 hover:text-white transition"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-400 bg-white hover:bg-neutral-900 hover:text-white transition cursor-pointer"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
@@ -459,10 +460,11 @@ export function Products() {
                           {smallCard.description}
                         </p>
                       </div>
-
+                      <Link href="/products">
                       <button className="flex-shrink-0 flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 bg-black text-white rounded-full hover:bg-neutral-900 transition cursor-pointer">
                         <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
+                      </Link>
                     </div>
                   </div>
                 </motion.div>
