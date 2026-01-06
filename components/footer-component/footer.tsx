@@ -1,5 +1,3 @@
-
-
 const Footer = () => {
   return (
     <div className="w-full bg-[#1E1A17] text-white mt-36">
@@ -17,10 +15,10 @@ const Footer = () => {
           {/* Left: Logo + description */}
           <div className="flex flex-col shrink-0 w-full max-w-[321px]">
             <img
-              src="/footer/UltracraftBrandLogo.webp"
+              src="/logo.png"
               alt="Ultracraft Logo"
               className="w-[180px] sm:w-[200px] lg:w-[210px] h-auto object-cover shadow-[0_2px_4px_rgba(0,0,0,0.08)]"
-              style={{ aspectRatio: "105/58" }}
+              style={{ aspectRatio: "158/68" }}
             />
 
             <p className="mt-4 sm:mt-6 text-[14px] sm:text-[15px] lg:text-[16px] leading-relaxed">
