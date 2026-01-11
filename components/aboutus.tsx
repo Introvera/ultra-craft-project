@@ -14,8 +14,8 @@ type Stat = {
 };
 
 const defaultStats: Stat[] = [
-  { label: "Years of Experience", value: 10, prefix: "+" },
-  { label: "Delivered Solutions", value: 375, prefix: "+" },
+  { label: "Years of Experience", value: 5, prefix: "+" },
+  { label: "Delivered Solutions", value: 15, prefix: "+" },
   { label: "Satisfied Clients", value: 45, prefix: "+" },
 ];
 

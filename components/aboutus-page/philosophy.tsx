@@ -34,7 +34,7 @@ const philosophyItems: PhilosophyItem[] = [
   },
   {
     id: 2,
-    title: "Honest Craftsmanship",
+    title: "Excellent Craftsmanship",
     description:
       "Materials matter. Craft matters. We prioritize quality, longevity, and attention to detail, ensuring every piece and every space is built to last and feel meaningful.",
     image: "/aboutus-page/philosophy2.webp",
