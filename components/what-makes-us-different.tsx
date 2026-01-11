@@ -49,7 +49,7 @@ const services: Service[] = [
   {
     title: "Trusted by Leading Clients",
     description:
-      "Crafted with precision and durable materials to ensure timeless beauty and lasting performance.",
+      "Every project is one ofa kind, tailored to each client's vision and lifestyle.",
     image: "/backgrounds/trusted.webp",
     imageMobile: "/backgrounds/trusted.webp",
     mdSpan: "md:col-span-2",
@@ -60,9 +60,9 @@ const services: Service[] = [
     align: "center",
   },
   {
-    title: "Lasting Quality",
+    title: "Flexibility",
     description:
-      "Crafted with precision and durable materials to ensure timeless beauty and lasting performance.",
+      "We embrace the challenge of blending various material choices and design themes.",
     image: "/backgrounds/lasting.webp",
     imageMobile: "/backgrounds/lasting.webp",
     mdSpan: "md:col-span-2",

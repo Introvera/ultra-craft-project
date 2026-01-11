@@ -16,28 +16,28 @@ const steps: Step[] = [
   },
   {
     number: 2,
-    title: "Concept &\nMoodboard",
-    text: "Creating visual direction through colors, materials, and inspiration.",
+    title: "Site Visit",
+    text: "To obtain better understanding of site and scope of works.",
   },
   {
     number: 3,
-    title: "Design\nDevelopment",
-    text: "Finalizing furniture layouts, spatial planning, and detailing.",
+    title: "Designing\nPlanning",
+    text: "Conceptual development, Creating layouts and models.",
   },
   {
     number: 4,
-    title: "Material\nSelection",
-    text: "Finalizing furniture layouts, spatial planning, and detailing.",
+    title: "Fabrication",
+    text: "Creating verious interior components to approved specifications.",
   },
   {
     number: 5,
-    title: "Design\nDevelopment",
-    text: "Finalizing furniture layouts, spatial planning, and detailing.",
+    title: "Installation",
+    text: "Offering seamless, efficient and stress free implementation.",
   },
   {
     number: 6,
-    title: "Material\nSelection",
-    text: "Finalizing furniture layouts, spatial planning, and detailing.",
+    title: "Project\nManagement",
+    text: "Effective project management with timely progress updates.",
   },
 ];
 
