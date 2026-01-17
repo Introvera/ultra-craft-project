@@ -40,10 +40,7 @@ const VisionMission = () => {
 
               <CardBody className="px-0 pt-0 text-sm leading-relaxed text-white/80">
                 <p>
-                  To become a trusted interior design partner recognized for
-                  meaningful spaces, honest materials, and a human-centered
-                  approach that elevates modern living across homes, apartments,
-                  and workspaces.
+                  To become the most preferred brand for exclusive living in Sri Lanka with Global presence.
                 </p>
               </CardBody>
             </div>
@@ -70,10 +67,9 @@ const VisionMission = () => {
               </CardHeader>
               <CardBody className="pt-0 text-sm leading-relaxed text-default-500">
                 <p>
-                  To design and build interiors that enhance everyday living
-                  through intention, craftsmanship, and thoughtful simplicity.
-                  We aim to create spaces that feel warm, purposeful, and deeply
-                  connected to the people who inhabit them.
+                  Our mission is to transform houses into homes and offices into 
+                  inspiring workplaces by crafting spaces that are welcoming, 
+                  practical, and full of joy.
                 </p>
               </CardBody>
             </Card>
@@ -92,15 +88,21 @@ const VisionMission = () => {
                   <Heart className="h-7 w-7 text-default-700" />
                 </div>
                 <h3 className="text-2xl font-semibold text-default-900">
-                  Values
+                  Our Values
                 </h3>
               </CardHeader>
               <CardBody className="pt-0 text-sm leading-relaxed text-default-500">
-                <p>
-                  Honesty, craftsmanship, and intention. We believe in materials
-                  that age beautifully, relationships built on trust, and design
-                  that respects both people and planet.
-                </p>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-4 py-1.5 border border-default-200 text-default-600 rounded-full text-sm font-medium">
+                    Customer first
+                  </span>
+                  <span className="px-4 py-1.5 border border-default-200 text-default-600 rounded-full text-sm font-medium">
+                    Continuous improvement
+                  </span>
+                  <span className="px-4 py-1.5 border border-default-200 text-default-600 rounded-full text-sm font-medium">
+                    Concern for the environment
+                  </span>
+                </div>
               </CardBody>
             </Card>
           </motion.div>

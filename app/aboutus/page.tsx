@@ -27,8 +27,8 @@ const page = () => {
       />
 
       <AboutUs
-        title="The Journey Behind Us"
-        description={`Ultracraft began with a simple belief: that interior spaces should feel as meaningful as they look. What started as a small design practice grew into a multidisciplinary studio shaped by curiosity, craftsmanship, and a deep respect for the way people live and work. Over the years, we’ve built a reputation for creating warm, refined interiors that balance beauty, function, and emotional comfort, one thoughtfully crafted project at a time. What started as a small design practice grew into a multidisciplinary studio shaped by curiosity, craftsmanship, and a deep respect for the way people live and work.`}
+        title="The Ultracraft Journey"
+        description={`At Ultracraft, we believe the spaces around us whether at home or work profoundly influence our peace, productivity, and happiness. That's why we specialize in bespoke, custom-made interior solutions, featuring high-quality furniture crafted to perfection.\n\nOur artisans pour their expertise and passion into every piece, transforming premium material into functional works of art. From intricate joinery to flawless finishes, every grain, curve, and edge reflects our commitment to superior craftsmanship and attention to detail.\n\nWe ensure that each creation is not only visually stunning but also durable and practical, designed to seamlessly enhance your daily life. 'Beyond design and crafts'.`}
         showButtons={false}
         layout="single"
         singleImageSrc="/aboutus-page/abtuspage.webp"

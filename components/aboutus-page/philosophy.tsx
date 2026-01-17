@@ -111,23 +111,20 @@ const Philosophy = () => {
         }`}
       >
         {/* Heading + text */}
-        <div className="flex flex-col gap-6 md:gap-8 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex flex-col gap-6 md:gap-8 lg:flex-row lg:items-start lg:justify-between pb-8 lg:pb-16">
           <div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-[var(--color-topic)]">
               The Ultracraft Philosophy
             </h2>
           </div>
 
-          <div className="max-w-xl">
+          <div className="max-w-xl lg:min-h-[180px] flex flex-col justify-end lg:pt-12">
             <p className="text-sm sm:text-base md:text-lg leading-relaxed text-black mb-4 sm:mb-6">
-              We believe interiors should be felt as much as they are seen.
-              Every space we design begins with understanding how people live,
-              what they value, and how a room should make them feel. From
-              materials to mood, we craft with intention, creating environments
-              that bring comfort, clarity, and a sense of belonging. We approach
-              each project as a collaboration, listening closely, observing the
-              way light moves through a space, and carefully shaping elements
-              that enhance both function and atmosphere.
+              We embrace individuality by creating bespoke furniture and interior 
+              solutions tailored to each customer. Our strength lies in collaboration 
+              with clients, artisans, and partners ensuring every detail is 
+              intentional. We are dedicated to quality, productivity, and exceptional 
+              service.
             </p>
 
             <Link href="/products">
