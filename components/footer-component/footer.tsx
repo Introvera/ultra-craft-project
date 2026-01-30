@@ -230,7 +230,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <p className="w-full text-center text-[13px] sm:text-[14px] lg:text-[16px] leading-normal">
-          © 2025 Ultracraft. All rights reserved. Website designed by{" "}
+          © 2026 Ultracraft. All rights reserved. Website designed by{" "}
           <a
             href="https://introvera.com"
             target="_blank"
