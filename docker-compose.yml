@@ -17,9 +17,10 @@ services:
       - db
     networks:
       - ultracraft-network
+      - coolify
     labels:
       - "traefik.enable=true"
-      # REPLACE 'your-domain.com' below with your actual domain (e.g., myapp.coolify.io)
+      # REPLACE 'ultracraft.introvera.com' (and line 33) with your actual domain (e.g., myapp.coolify.io)
       - "traefik.http.routers.ultracraft-app.rule=Host(`ultracraft.introvera.com`)" 
       - "traefik.http.routers.ultracraft-app.entrypoints=web,websecure"
       - "traefik.http.routers.ultracraft-app.tls.certresolver=letsencrypt"
@@ -43,6 +44,8 @@ services:
 networks:
   ultracraft-network:
     driver: bridge
+  coolify:
+    external: true
 
 volumes:
   db-data:
