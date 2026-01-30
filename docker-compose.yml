@@ -21,7 +21,7 @@ services:
       - "traefik.enable=true"
       # REPLACE 'ultracraft.introvera.com' (and line 33) with your actual domain (e.g., myapp.coolify.io)
       - "traefik.http.routers.ultracraft-app.rule=Host(`ultracraft.introvera.com`)" 
-      - "traefik.http.routers.ultracraft-app.entrypoints=web,websecure"
+      - "traefik.http.routers.ultracraft-app.entrypoints=http,https"
       - "traefik.http.routers.ultracraft-app.tls.certresolver=letsencrypt"
       - "traefik.http.services.ultracraft-app.loadbalancer.server.port=3000"
 
