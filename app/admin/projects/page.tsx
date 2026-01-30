@@ -1,6 +1,8 @@
 import { query } from "@/lib/db";
 import ProjectsTableClient from "./ProjectsTableClient";
 
+export const dynamic = "force-dynamic";
+
 type ProjectRow = {
   id: number;
   name: string;
@@ -25,7 +27,7 @@ export default async function AdminProjectsPage() {
     `
   );
 
-  const projects = result.rows.map((p) => ({
+  const projects = result.rows.map((p: ProjectRow) => ({
     ...p,
     created_at: p.created_at.toISOString(),
     image: (p.image ?? []) as string[],

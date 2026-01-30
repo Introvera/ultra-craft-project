@@ -1,10 +1,12 @@
 import { query } from "@/lib/db";
 import ProductsTableClient from "./ProductsTableClient";
 
+export const dynamic = "force-dynamic";
+
 type ProductRow = {
   id: number;
   name: string;
-  image: string [] | null;
+  image: string[] | null;
   short_description: string;
   long_description: string;
   created_at: Date;
@@ -29,7 +31,7 @@ export default async function AdminProductsPage() {
     `,
   );
 
-  const products = result.rows.map((p) => ({
+  const products = result.rows.map((p: ProductRow) => ({
     ...p,
     created_at: p.created_at.toISOString(),
     // ensure arrays, never null
@@ -40,7 +42,7 @@ export default async function AdminProductsPage() {
 
   return (
     <div className="h-screen p-8">
-      
+
       <ProductsTableClient initialProducts={products} />
     </div>
   );
