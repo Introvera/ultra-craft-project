@@ -2,11 +2,13 @@ import { Pool, QueryResult, QueryResultRow } from "pg";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes("localhost")
-    ? false
-    : {
-      rejectUnauthorized: false,
-    },
+  ssl:
+    process.env.DATABASE_URL?.includes("localhost") ||
+      process.env.DATABASE_URL?.includes("@db") // Docker service name
+      ? false
+      : {
+        rejectUnauthorized: false,
+      },
 });
 
 // Generic helper: query<T>() returns typed rows
