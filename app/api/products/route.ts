@@ -5,7 +5,7 @@ import { query } from "@/lib/db";
 type ProductRow = {
   id: number;
   name: string;
-  image: string[];                
+  image: string[];
   short_description: string;
   long_description: string;
   created_at: string;
@@ -30,6 +30,9 @@ export async function GET() {
     return NextResponse.json(rows);
   } catch (error) {
     console.error("Error fetching products:", error);
+    if (error instanceof Error) {
+      console.error("Stack:", error.stack);
+    }
     return NextResponse.json(
       { error: "Failed to fetch products" },
       { status: 500 },
@@ -60,8 +63,8 @@ export async function POST(req: Request) {
     const imageArray: string[] = Array.isArray(image)
       ? image
       : image
-      ? [image]
-      : [];
+        ? [image]
+        : [];
 
     if (
       !name ||
