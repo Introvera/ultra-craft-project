@@ -41,7 +41,7 @@ services:
       - ultracraft-network
 
   backup:
-    image: jkaninda/pg-backup
+    image: jkaninda/pg-bkup
     restart: always
     environment:
       - DB_HOST=db
