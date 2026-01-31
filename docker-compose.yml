@@ -42,7 +42,7 @@ services:
 
   backup:
     image: jkaninda/pg-bkup
-    command: backup
+    command: backup --storage s3
     restart: always
     environment:
       - DB_HOST=db
