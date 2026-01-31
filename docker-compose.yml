@@ -42,7 +42,7 @@ services:
 
   backup:
     image: jkaninda/pg-bkup
-    command: backup --storage s3
+    command: backup --storage s3 --cron-expression "@weekly"
     restart: always
     environment:
       - DB_HOST=db
@@ -50,7 +50,6 @@ services:
       - DB_NAME=ultracraft
       - DB_USERNAME=user
       - DB_PASSWORD=${POSTGRES_PASSWORD}
-      - CRON_SCHEDULE=@weekly
       - BACKUP_KEEP_DAYS=7
       # S3 / Cloudflare R2 Settings
       - AWS_S3_BUCKET_NAME=${S3_BUCKET}
