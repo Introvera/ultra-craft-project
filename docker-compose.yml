@@ -60,8 +60,6 @@ services:
       # jkaninda/pg-backup uses these specific vars
     volumes:
       - ./backups:/backups
-    volumes:
-      - ./backups:/backups
     depends_on:
       - db
     networks:
