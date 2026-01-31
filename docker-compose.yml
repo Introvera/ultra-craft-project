@@ -24,6 +24,11 @@ services:
       # Removed explicit entrypoints to allow Traefik to use defaults (http/https/web/websecure)
       - "traefik.http.routers.ultracraft-app.tls.certresolver=letsencrypt"
       - "traefik.http.services.ultracraft-app.loadbalancer.server.port=3000"
+      # Middleware to redirect www to apex
+      - "traefik.http.middlewares.redirect-www-to-apex.redirectregex.regex=^https?://www\\.(.+)"
+      - "traefik.http.middlewares.redirect-www-to-apex.redirectregex.replacement=https://$${1}"
+      - "traefik.http.middlewares.redirect-www-to-apex.redirectregex.permanent=true"
+      - "traefik.http.routers.ultracraft-app.middlewares=redirect-www-to-apex"
 
   db:
     image: postgres:15-alpine
