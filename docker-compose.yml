@@ -48,7 +48,7 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_NAME=ultracraft
-      - DB_USER=user
+      - DB_USERNAME=user
       - DB_PASSWORD=${POSTGRES_PASSWORD}
       - CRON_SCHEDULE=@weekly
       - BACKUP_KEEP_DAYS=7
