@@ -8,11 +8,12 @@ type RouteContext = {
 type ProductRow = {
   id: number;
   name: string;
-  image: string[];                
+  image: string[];
   short_description: string;
   long_description: string;
   created_at: string;
-  categories: string[] | null;
+  main_category: string | null;
+  sub_type: string | null;
   filters: string[] | null;
 };
 
@@ -32,14 +33,16 @@ export async function PATCH(req: Request, { params }: RouteContext) {
       image,
       short_description,
       long_description,
-      categories,
+      main_category,
+      sub_type,
       filters,
     } = body as {
       name: string;
       image: string | string[];
       short_description: string;
       long_description: string;
-      categories?: string[] | null;
+      main_category?: string | null;
+      sub_type?: string | null;
       filters?: string[] | null;
     };
 
@@ -49,16 +52,7 @@ export async function PATCH(req: Request, { params }: RouteContext) {
       ? [image]
       : [];
 
-    const categoriesArray: string[] = Array.isArray(categories)
-      ? categories
-      : [];
-
-    const filtersArray: string[] = Array.isArray(filters)
-      ? filters
-      : [];
-
-    const categoriesJson = JSON.stringify(categoriesArray);
-    const filtersJson = JSON.stringify(filtersArray);
+    const filtersArray: string[] = Array.isArray(filters) ? filters : [];
 
     const result = await query<ProductRow>(
       `
@@ -67,9 +61,10 @@ export async function PATCH(req: Request, { params }: RouteContext) {
           image = $2::text[],
           short_description = $3,
           long_description = $4,
-          categories = $5::jsonb,
-          filters = $6::jsonb
-      WHERE id = $7
+          main_category = $5,
+          sub_type = $6,
+          filters = $7::jsonb
+      WHERE id = $8
       RETURNING *
       `,
       [
@@ -77,8 +72,9 @@ export async function PATCH(req: Request, { params }: RouteContext) {
         imageArray,
         short_description,
         long_description,
-        categoriesJson,
-        filtersJson,
+        main_category ?? null,
+        sub_type ?? null,
+        JSON.stringify(filtersArray),
         id,
       ],
     );
@@ -94,7 +90,6 @@ export async function PATCH(req: Request, { params }: RouteContext) {
 
     const normalized: ProductRow = {
       ...row,
-      categories: (row.categories ?? []) as string[],
       filters: (row.filters ?? []) as string[],
     };
 

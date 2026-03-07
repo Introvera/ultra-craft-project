@@ -31,22 +31,33 @@ import {
   SearchIcon,
   VerticalDotsIcon,
 } from "../icons";
+import {
+  CATEGORY_TREE,
+  getCategory,
+  getCategoryLabel,
+  getSubTypeLabel,
+  getFilterLabel,
+  getFiltersForBranch,
+  type MainCategoryId,
+} from "@/lib/category-tree";
 
 type Product = {
   id: number;
   name: string;
-  image: string[]; // array of image URLs
+  image: string[];
   short_description: string;
   long_description: string;
   created_at: string;
-  categories: string[];
+  main_category: string | null;
+  sub_type: string | null;
   filters: string[];
 };
 
 type ProductsTableProps = {
   initialProducts: (Product & {
     image?: string[] | string | null;
-    categories?: string[] | null;
+    main_category?: string | null;
+    sub_type?: string | null;
     filters?: string[] | null;
   })[];
 };
@@ -54,7 +65,8 @@ type ProductsTableProps = {
 const columns = [
   { name: "ID", uid: "id", sortable: true },
   { name: "NAME", uid: "name", sortable: true },
-  { name: "CATEGORIES", uid: "categories", sortable: false },
+  { name: "CATEGORY", uid: "main_category", sortable: false },
+  { name: "SUB TYPE", uid: "sub_type", sortable: false },
   { name: "FILTERS", uid: "filters", sortable: false },
   { name: "SHORT DESCRIPTION", uid: "short_description", sortable: false },
   { name: "ACTIONS", uid: "actions" },
@@ -62,34 +74,12 @@ const columns = [
 
 const INITIAL_VISIBLE_COLUMNS = [
   "name",
-  "categories",
+  "main_category",
+  "sub_type",
   "filters",
   "short_description",
   "actions",
 ];
-
-const CATEGORY_OPTIONS = [
-  { key: "seating", label: "Seating" },
-  { key: "sofas", label: "Sofas" },
-  { key: "chairs", label: "Chairs" },
-  { key: "tables", label: "Tables" },
-  { key: "storage", label: "Storage" },
-  { key: "beds", label: "Beds" },
-  { key: "lighting", label: "Lighting" },
-];
-
-const FILTER_OPTIONS = [
-  { key: "wood", label: "Wood" },
-  { key: "metal", label: "Metal" },
-  { key: "fabric", label: "Fabric" },
-  { key: "leather", label: "Leather" },
-  { key: "premium", label: "Premium" },
-  { key: "compact", label: "Compact" },
-  { key: "outdoor", label: "Outdoor" },
-];
-
-const categoryLabelMap = new Map(CATEGORY_OPTIONS.map((c) => [c.key, c.label]));
-const filterLabelMap = new Map(FILTER_OPTIONS.map((f) => [f.key, f.label]));
 
 function selectionToArray(selection: Selection, allKeys: string[]): string[] {
   if (selection === "all") return allKeys;
@@ -98,17 +88,16 @@ function selectionToArray(selection: Selection, allKeys: string[]): string[] {
 
 function normalizeProduct(p: any): Product {
   let images: string[] = [];
-
   if (Array.isArray(p.image)) {
     images = p.image;
   } else if (typeof p.image === "string" && p.image.trim().length > 0) {
     images = [p.image];
   }
-
   return {
     ...p,
     image: images,
-    categories: Array.isArray(p.categories) ? p.categories : [],
+    main_category: p.main_category ?? null,
+    sub_type: p.sub_type ?? null,
     filters: Array.isArray(p.filters) ? p.filters : [],
   };
 }
@@ -118,6 +107,7 @@ type FormErrors = {
   short_description?: string;
   long_description?: string;
   image?: string;
+  main_category?: string;
 };
 
 type FilePreview = {
@@ -172,14 +162,18 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   // NEW: file previews (local object URLs) for selected files
   const [filePreviews, setFilePreviews] = React.useState<FilePreview[]>([]);
 
-  const [selectedCategories, setSelectedCategories] = React.useState<Selection>(
-    new Set()
+  const [selectedMainCategory, setSelectedMainCategory] = React.useState<
+    string | null
+  >(null);
+  const [selectedSubType, setSelectedSubType] = React.useState<string | null>(
+    null
   );
   const [selectedFilters, setSelectedFilters] = React.useState<Selection>(
     new Set()
   );
 
   const [saving, setSaving] = React.useState(false);
+  const [saveError, setSaveError] = React.useState<string | null>(null);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -229,9 +223,11 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
       long_description: "",
     });
     setFormErrors({});
+    setSaveError(null);
     setImageUrls([]);
     setImageFiles([]);
-    setSelectedCategories(new Set());
+    setSelectedMainCategory(null);
+    setSelectedSubType(null);
     setSelectedFilters(new Set());
 
     setFilePreviews((prev) => {
@@ -248,6 +244,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
   function openEditModal(product: Product) {
     setEditingProduct(product);
+    setSaveError(null);
 
     // clear previews when switching/entering edit
     setFilePreviews((prev) => {
@@ -263,7 +260,8 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     setFormErrors({});
     setImageUrls(product.image ?? []);
     setImageFiles([]);
-    setSelectedCategories(new Set(product.categories ?? []));
+    setSelectedMainCategory(product.main_category ?? null);
+    setSelectedSubType(product.sub_type ?? null);
     setSelectedFilters(new Set(product.filters ?? []));
     onOpen();
   }
@@ -295,6 +293,10 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         "Long description must be 300 characters or less.";
     }
 
+    if (!selectedMainCategory) {
+      errors.main_category = "Please select a category.";
+    }
+
     setFormErrors((prev) => ({
       ...prev,
       ...errors,
@@ -318,6 +320,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     }
 
     setSaving(true);
+    setSaveError(null);
     try {
       // start from current image list (including any removals)
       const finalImages = [...imageUrls];
@@ -352,21 +355,21 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         }
       }
 
-      const categoriesArray = selectionToArray(
-        selectedCategories,
-        CATEGORY_OPTIONS.map((c) => c.key)
+      const currentFilterOptions = getFiltersForBranch(
+        selectedMainCategory as MainCategoryId,
+        selectedSubType
       );
-      const filtersArray = selectionToArray(
-        selectedFilters,
-        FILTER_OPTIONS.map((f) => f.key)
-      );
+      const filterIds = currentFilterOptions.map((f) => f.id);
+      const selectedArray = selectionToArray(selectedFilters, filterIds);
+      const filtersArray = selectedArray.filter((id) => filterIds.includes(id));
 
       const payload = {
         name: formValues.name.trim(),
         image: finalImages,
         short_description: formValues.short_description.trim(),
         long_description: formValues.long_description.trim(),
-        categories: categoriesArray,
+        main_category: selectedMainCategory ?? null,
+        sub_type: selectedSubType ?? null,
         filters: filtersArray,
       };
 
@@ -378,7 +381,8 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         });
 
         if (!res.ok) {
-          console.error("Failed to update");
+          const errData = await res.json().catch(() => ({}));
+          setSaveError(errData?.error ?? "Failed to update product.");
           setSaving(false);
           return;
         }
@@ -397,7 +401,8 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         });
 
         if (!res.ok) {
-          console.error("Failed to create");
+          const errData = await res.json().catch(() => ({}));
+          setSaveError(errData?.error ?? "Failed to create product.");
           setSaving(false);
           return;
         }
@@ -455,21 +460,27 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
             <p className="text-sm line-clamp-2">{product.short_description}</p>
           );
 
-        case "categories": {
-          const cats = product.categories ?? [];
-          if (!cats.length) return <span className="text-xs text-default-400">—</span>;
-
+        case "main_category": {
+          const cat = product.main_category;
+          if (!cat) return <span className="text-xs text-default-400">—</span>;
+          const label = getCategoryLabel(cat);
           return (
-            <div className="flex flex-wrap gap-1">
-              {cats.map((key) => (
-                <span
-                  key={key}
-                  className="px-2 py-0.5 rounded-full border text-[11px] leading-tight"
-                >
-                  {categoryLabelMap.get(key) ?? key}
-                </span>
-              ))}
-            </div>
+            <span className="px-2 py-0.5 rounded-full border text-[11px] leading-tight">
+              {label}
+            </span>
+          );
+        }
+
+        case "sub_type": {
+          const cat = product.main_category;
+          const sub = product.sub_type;
+          if (!cat || !sub)
+            return <span className="text-xs text-default-400">—</span>;
+          const subLabel = getSubTypeLabel(cat as MainCategoryId, sub);
+          return (
+            <span className="px-2 py-0.5 rounded-full border text-[11px] leading-tight text-default-500">
+              {subLabel}
+            </span>
           );
         }
 
@@ -484,7 +495,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                   key={key}
                   className="px-2 py-0.5 rounded-full border text-[11px] leading-tight"
                 >
-                  {filterLabelMap.get(key) ?? key}
+                  {getFilterLabel(key)}
                 </span>
               ))}
             </div>
@@ -533,21 +544,10 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     []
   );
 
-  const selectedCategoryLabels = React.useMemo(() => {
-    const keys = selectionToArray(
-      selectedCategories,
-      CATEGORY_OPTIONS.map((c) => c.key)
-    );
-    return keys.map((k) => categoryLabelMap.get(k) ?? k);
-  }, [selectedCategories]);
-
-  const selectedFilterLabels = React.useMemo(() => {
-    const keys = selectionToArray(
-      selectedFilters,
-      FILTER_OPTIONS.map((f) => f.key)
-    );
-    return keys.map((k) => filterLabelMap.get(k) ?? k);
-  }, [selectedFilters]);
+  const availableFilters = React.useMemo(
+    () => getFiltersForBranch(selectedMainCategory as MainCategoryId, selectedSubType),
+    [selectedMainCategory, selectedSubType]
+  );
 
   const topContent = React.useMemo(() => {
     return (
@@ -912,53 +912,109 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
                 <div className="flex flex-col gap-3">
                   <div>
-                    <span className="block text-sm mb-1">Categories</span>
-                    <Dropdown>
-                      <DropdownTrigger>
-                        <Button variant="bordered" className="w-full justify-between">
-                          {selectedCategoryLabels.length > 0
-                            ? selectedCategoryLabels.join(", ")
-                            : "Select categories"}
-                        </Button>
-                      </DropdownTrigger>
-                      <DropdownMenu
-                        aria-label="Select categories"
-                        closeOnSelect={false}
-                        selectionMode="multiple"
-                        selectedKeys={selectedCategories}
-                        onSelectionChange={setSelectedCategories}
-                      >
-                        {CATEGORY_OPTIONS.map((c) => (
-                          <DropdownItem key={c.key}>{c.label}</DropdownItem>
-                        ))}
-                      </DropdownMenu>
-                    </Dropdown>
+                    <label className="block text-sm font-medium mb-1">
+                      Category
+                    </label>
+                    {formErrors.main_category && (
+                      <p className="text-xs text-danger mb-1">
+                        {formErrors.main_category}
+                      </p>
+                    )}
+                    <select
+                      value={selectedMainCategory ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value || null;
+                        setSelectedMainCategory(value);
+                        setSelectedSubType(null);
+                        setSelectedFilters(new Set());
+                      }}
+                      className="w-full rounded-lg border border-default-300 bg-default-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                      aria-label="Select category"
+                    >
+                      <option value="">Select category</option>
+                      {CATEGORY_TREE.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
+                  {selectedMainCategory &&
+                    getCategory(selectedMainCategory as MainCategoryId)
+                      ?.subtypes && (
+                      <div>
+                        <label className="block text-sm font-medium mb-1">
+                          Sub-type
+                        </label>
+                        <select
+                          value={selectedSubType ?? ""}
+                          onChange={(e) => {
+                            const value = e.target.value || null;
+                            setSelectedSubType(value);
+                            setSelectedFilters(new Set());
+                          }}
+                          className="w-full rounded-lg border border-default-300 bg-default-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                          aria-label="Select sub-type"
+                        >
+                          <option value="">Select sub-type</option>
+                          {getCategory(
+                            selectedMainCategory as MainCategoryId
+                          )?.subtypes?.map((s) => (
+                            <option key={s.id} value={s.id}>
+                              {s.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
                   <div>
-                    <span className="block text-sm mb-1">Filters</span>
-                    <Dropdown>
-                      <DropdownTrigger>
-                        <Button variant="bordered" className="w-full justify-between">
-                          {selectedFilterLabels.length > 0
-                            ? selectedFilterLabels.join(", ")
-                            : "Select filters"}
-                        </Button>
-                      </DropdownTrigger>
-                      <DropdownMenu
-                        aria-label="Select filters"
-                        closeOnSelect={false}
-                        selectionMode="multiple"
-                        selectedKeys={selectedFilters}
-                        onSelectionChange={setSelectedFilters}
-                      >
-                        {FILTER_OPTIONS.map((f) => (
-                          <DropdownItem key={f.key}>{f.label}</DropdownItem>
-                        ))}
-                      </DropdownMenu>
-                    </Dropdown>
+                    <span className="block text-sm font-medium mb-2">
+                      Filters
+                    </span>
+                    {availableFilters.length === 0 ? (
+                      <p className="text-xs text-default-500">
+                        Select a category
+                        {selectedMainCategory === "home_furniture"
+                          ? " and sub-type"
+                          : ""}{" "}
+                        to see filters.
+                      </p>
+                    ) : (
+                      <div className="max-h-40 overflow-y-auto rounded-lg border border-default-200 p-2 space-y-1.5">
+                        {availableFilters.map((f) => {
+                          const isChecked = selectedFilters.has(f.id);
+                          return (
+                            <label
+                              key={f.id}
+                              className="flex items-center gap-2 cursor-pointer text-sm hover:bg-default-100 rounded px-2 py-1"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={() => {
+                                  setSelectedFilters((prev) => {
+                                    const next = new Set(prev);
+                                    if (next.has(f.id)) next.delete(f.id);
+                                    else next.add(f.id);
+                                    return next;
+                                  });
+                                }}
+                                className="rounded border-default-300"
+                              />
+                              {f.label}
+                            </label>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
+
+                {saveError && (
+                  <p className="text-sm text-danger mt-2">{saveError}</p>
+                )}
               </ModalBody>
 
               <ModalFooter>
@@ -1016,17 +1072,20 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                   </p>
 
                   <div className="mb-2">
-                    <p className="text-sm font-medium mb-1">Categories</p>
-                    {viewProduct.categories.length ? (
+                    <p className="text-sm font-medium mb-1">Category</p>
+                    {viewProduct.main_category ? (
                       <div className="flex flex-wrap gap-1">
-                        {viewProduct.categories.map((key) => (
-                          <span
-                            key={key}
-                            className="px-2 py-0.5 rounded-full border text-[11px]"
-                          >
-                            {categoryLabelMap.get(key) ?? key}
+                        <span className="px-2 py-0.5 rounded-full border text-[11px]">
+                          {getCategoryLabel(viewProduct.main_category)}
+                        </span>
+                        {viewProduct.sub_type && (
+                          <span className="px-2 py-0.5 rounded-full border text-[11px] text-default-500">
+                            {getSubTypeLabel(
+                              viewProduct.main_category as MainCategoryId,
+                              viewProduct.sub_type
+                            )}
                           </span>
-                        ))}
+                        )}
                       </div>
                     ) : (
                       <span className="text-xs text-default-400">None</span>
@@ -1042,7 +1101,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                             key={key}
                             className="px-2 py-0.5 rounded-full border text-[11px]"
                           >
-                            {filterLabelMap.get(key) ?? key}
+                            {getFilterLabel(key)}
                           </span>
                         ))}
                       </div>

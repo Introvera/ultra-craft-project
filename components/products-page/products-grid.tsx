@@ -6,6 +6,10 @@ import {
   CardBody,
   CardFooter,
   Chip,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Image,
   Input,
   Modal,
@@ -30,6 +34,15 @@ function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
+import {
+  CATEGORY_TREE,
+  getCategoryLabel,
+  getSubTypeLabel,
+  getFilterLabel,
+  getFiltersForBranch,
+  type MainCategoryId,
+} from "@/lib/category-tree";
+
 type Product = {
   id: number;
   name: string;
@@ -37,29 +50,10 @@ type Product = {
   short_description: string;
   long_description: string;
   created_at: string;
-  categories: string[];
+  main_category: string | null;
+  sub_type: string | null;
   filters: string[];
 };
-
-const CATEGORY_OPTIONS = [
-  { key: "seating", label: "Seating" },
-  { key: "sofas", label: "Sofas" },
-  { key: "chairs", label: "Chairs" },
-  { key: "tables", label: "Tables" },
-  { key: "storage", label: "Storage" },
-  { key: "beds", label: "Beds" },
-  { key: "lighting", label: "Lighting" },
-];
-
-const FILTER_OPTIONS = [
-  { key: "wood", label: "Wood" },
-  { key: "metal", label: "Metal" },
-  { key: "fabric", label: "Fabric" },
-  { key: "leather", label: "Leather" },
-  { key: "premium", label: "Premium" },
-  { key: "compact", label: "Compact" },
-  { key: "outdoor", label: "Outdoor" },
-];
 
 const MOBILE_ITEMS_PER_PAGE = 10; // 5 rows × 2 columns
 const DESKTOP_ITEMS_PER_PAGE = 12; // 3 rows × 4 columns
@@ -70,8 +64,9 @@ export default function ProductsGridClient() {
   const [error, setError] = React.useState<string | null>(null);
 
   const [activeCategory, setActiveCategory] = React.useState<string>(
-    CATEGORY_OPTIONS[0]?.key ?? ""
+    CATEGORY_TREE[0]?.id ?? ""
   );
+  const [activeSubType, setActiveSubType] = React.useState<string | null>(null);
   const [activeFilters, setActiveFilters] = React.useState<Set<string>>(
     new Set()
   );
@@ -81,13 +76,6 @@ export default function ProductsGridClient() {
   const [itemsPerPage, setItemsPerPage] = React.useState(
     DESKTOP_ITEMS_PER_PAGE
   );
-
-  // Filter Modal (existing)
-  const {
-    isOpen: isFilterOpen,
-    onOpen: onFilterOpen,
-    onOpenChange: onFilterOpenChange,
-  } = useDisclosure();
 
   // Details Modal (new)
   const {
@@ -140,7 +128,8 @@ export default function ProductsGridClient() {
           return {
             ...p,
             image: images,
-            categories: Array.isArray(p.categories) ? p.categories : [],
+            main_category: p.main_category ?? null,
+            sub_type: p.sub_type ?? null,
             filters: Array.isArray(p.filters) ? p.filters : [],
           };
         });
@@ -173,7 +162,11 @@ export default function ProductsGridClient() {
 
   const filteredProducts = React.useMemo(() => {
     return products.filter((p) => {
-      if (activeCategory && !p.categories.includes(activeCategory))
+      if (activeCategory && p.main_category !== activeCategory) return false;
+      if (
+        activeSubType &&
+        (p.main_category !== activeCategory || p.sub_type !== activeSubType)
+      )
         return false;
 
       if (activeFilters.size > 0) {
@@ -188,7 +181,7 @@ export default function ProductsGridClient() {
 
       return true;
     });
-  }, [products, activeCategory, activeFilters, search]);
+  }, [products, activeCategory, activeSubType, activeFilters, search]);
 
   const totalPages =
     filteredProducts.length > 0
@@ -306,11 +299,15 @@ export default function ProductsGridClient() {
     }, 150);
   };
 
-  const getCategoryLabel = (key: string) =>
-    CATEGORY_OPTIONS.find((c) => c.key === key)?.label ?? key;
-
-  const getFilterLabel = (key: string) =>
-    FILTER_OPTIONS.find((f) => f.key === key)?.label ?? key;
+  const currentCategoryLabel = getCategoryLabel(activeCategory);
+  const availableFiltersForBranch = React.useMemo(
+    () =>
+      getFiltersForBranch(
+        activeCategory as MainCategoryId,
+        activeSubType
+      ),
+    [activeCategory, activeSubType]
+  );
 
   const detailsImageSrc =
     selectedProduct?.image?.[activeImageIndex] ??
@@ -324,15 +321,16 @@ export default function ProductsGridClient() {
     >
       {/* Top row: categories, search, filter button */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        {/* Categories row */}
+        {/* Main categories row */}
         <div className="flex flex-wrap gap-2">
-          {CATEGORY_OPTIONS.map((cat) => {
-            const isActive = cat.key === activeCategory;
+          {CATEGORY_TREE.map((cat) => {
+            const isActive = cat.id === activeCategory;
             return (
               <button
-                key={cat.key}
+                key={cat.id}
                 onClick={() => {
-                  setActiveCategory(cat.key);
+                  setActiveCategory(cat.id);
+                  setActiveSubType(null);
                   setPage(1);
                   scrollToGridTop();
                 }}
@@ -349,7 +347,39 @@ export default function ProductsGridClient() {
           })}
         </div>
 
-        {/* Search + Filter button */}
+        {/* Sub-types dropdown (only for Home Furniture) */}
+        {activeCategory === "home_furniture" &&
+          (() => {
+            const cat = CATEGORY_TREE.find((c) => c.id === "home_furniture");
+            const subtypes = cat?.subtypes ?? [];
+            if (subtypes.length === 0) return null;
+            return (
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-default-600">
+                  Room type:
+                </span>
+                <select
+                  value={activeSubType ?? ""}
+                  onChange={(e) => {
+                    const value = e.target.value || null;
+                    setActiveSubType(value);
+                    setPage(1);
+                    scrollToGridTop();
+                  }}
+                  className="rounded-full border border-default-300 bg-white/80 px-3 py-1 text-xs text-default-700 focus:outline-none focus:ring-2 focus:ring-[#c9a16d]"
+                >
+                  <option value="">All</option>
+                  {subtypes.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            );
+          })()}
+
+        {/* Search + Filter dropdown */}
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-end">
           <Input
             className="w-full md:w-72"
@@ -365,31 +395,66 @@ export default function ProductsGridClient() {
             startContent={<Search className="h-4 w-4 text-default-400" />}
           />
 
-          <Button
-            radius="full"
-            variant="flat"
-            className="bg-white/80 text-sm font-medium"
-            startContent={<SlidersHorizontal className="h-4 w-4" />}
-            onPress={onFilterOpen}
-          >
-            Filters
-          </Button>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                radius="full"
+                variant="flat"
+                className="bg-white/80 text-sm font-medium"
+                startContent={<SlidersHorizontal className="h-4 w-4" />}
+              >
+                Filters
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Filter products"
+              closeOnSelect={false}
+              selectionMode="multiple"
+              selectedKeys={activeFilters}
+              onSelectionChange={(keys) => {
+                if (keys === "all") {
+                  const allIds = availableFiltersForBranch.map((f) => f.id);
+                  setActiveFilters(new Set(allIds));
+                } else {
+                  const next = new Set<string>();
+                  for (const key of keys as Set<React.Key>) {
+                    next.add(String(key));
+                  }
+                  setActiveFilters(next);
+                }
+                setPage(1);
+                scrollToGridTop();
+              }}
+            >
+              {availableFiltersForBranch.length === 0 ? (
+                <DropdownItem key="no-filters" isDisabled>
+                  Select a category
+                  {activeCategory === "home_furniture" ? " and sub-type" : ""}{" "}
+                  to see filters.
+                </DropdownItem>
+              ) : (
+                availableFiltersForBranch.map((f) => (
+                  <DropdownItem key={f.id}>{f.label}</DropdownItem>
+                ))
+              )}
+            </DropdownMenu>
+          </Dropdown>
         </div>
       </div>
 
       {/* Active filter chips */}
       {activeFilterArray.length > 0 && (
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          {activeFilterArray.map((key) => (
+          {activeFilterArray.map((id) => (
             <Chip
-              key={key}
+              key={id}
               radius="full"
               variant="flat"
               color="warning"
               className="cursor-pointer text-xs sm:text-sm"
-              onClick={() => toggleFilter(key)}
+              onClick={() => toggleFilter(id)}
             >
-              {getFilterLabel(key)}
+              {getFilterLabel(id)}
             </Chip>
           ))}
 
@@ -512,7 +577,7 @@ export default function ProductsGridClient() {
         </>
       )}
 
-      {/* FILTER MODAL (existing) */}
+      {/* Product details modal */}
       <Modal
         isOpen={isDetailsOpen}
         onClose={closeDetails}
@@ -588,26 +653,37 @@ export default function ProductsGridClient() {
                         More Details
                       </h3>
 
-                      {/* Categories */}
+                      {/* Category */}
                       <div className="mt-4">
                         <p className="text-sm font-semibold text-default-900">
-                          Categories:
+                          Category:
                         </p>
                         <div className="mt-2 flex flex-wrap gap-2">
-                          {(selectedProduct?.categories ?? []).length > 0 ? (
-                            (selectedProduct?.categories ?? []).map((c) => (
+                          {selectedProduct?.main_category ? (
+                            <>
                               <Chip
-                                key={c}
                                 radius="full"
                                 variant="flat"
                                 className="bg-default-100 text-default-700"
                               >
-                                {getCategoryLabel(c)}
+                                {getCategoryLabel(selectedProduct.main_category)}
                               </Chip>
-                            ))
+                              {selectedProduct.sub_type && (
+                                <Chip
+                                  radius="full"
+                                  variant="flat"
+                                  className="bg-default-100 text-default-600"
+                                >
+                                  {getSubTypeLabel(
+                                    selectedProduct.main_category as MainCategoryId,
+                                    selectedProduct.sub_type
+                                  )}
+                                </Chip>
+                              )}
+                            </>
                           ) : (
                             <span className="text-sm text-default-500">
-                              No categories
+                              No category
                             </span>
                           )}
                         </div>

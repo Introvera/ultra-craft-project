@@ -9,7 +9,8 @@ type ProductRow = {
   short_description: string;
   long_description: string;
   created_at: string;
-  categories: string[] | null;
+  main_category: string | null;
+  sub_type: string | null;
   filters: string[] | null;
 };
 
@@ -20,10 +21,8 @@ export async function GET() {
       "SELECT * FROM products ORDER BY created_at DESC",
     );
 
-    const rows = result.rows.map((r: { categories: any; filters: any; }) => ({
+    const rows = result.rows.map((r: ProductRow) => ({
       ...r,
-      // image is already string[] from PG
-      categories: (r.categories ?? []) as string[],
       filters: (r.filters ?? []) as string[],
     }));
 
@@ -46,17 +45,19 @@ export async function POST(req: Request) {
     const body = await req.json();
     const {
       name,
-      image, // can be string | string[]
+      image,
       short_description,
       long_description,
-      categories,
+      main_category,
+      sub_type,
       filters,
     } = body as {
       name: string;
       image: string | string[];
       short_description: string;
       long_description: string;
-      categories?: string[] | null;
+      main_category?: string | null;
+      sub_type?: string | null;
       filters?: string[] | null;
     };
 
@@ -78,23 +79,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const categoriesArray: string[] = Array.isArray(categories)
-      ? categories
-      : [];
-
-    const filtersArray: string[] = Array.isArray(filters)
-      ? filters
-      : [];
-
-    const categoriesJson = JSON.stringify(categoriesArray);
-    const filtersJson = JSON.stringify(filtersArray);
+    const filtersArray: string[] = Array.isArray(filters) ? filters : [];
 
     const result = await query<ProductRow>(
       `
       INSERT INTO products 
-        (name, image, short_description, long_description, categories, filters)
+        (name, image, short_description, long_description, main_category, sub_type, filters)
       VALUES 
-        ($1, $2::text[], $3, $4, $5::jsonb, $6::jsonb)
+        ($1, $2::text[], $3, $4, $5, $6, $7::jsonb)
       RETURNING *
       `,
       [
@@ -102,8 +94,9 @@ export async function POST(req: Request) {
         imageArray,
         short_description,
         long_description,
-        categoriesJson,
-        filtersJson,
+        main_category ?? null,
+        sub_type ?? null,
+        JSON.stringify(filtersArray),
       ],
     );
 
@@ -111,7 +104,6 @@ export async function POST(req: Request) {
 
     const normalized: ProductRow = {
       ...row,
-      categories: (row.categories ?? []) as string[],
       filters: (row.filters ?? []) as string[],
     };
 
