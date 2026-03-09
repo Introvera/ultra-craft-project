@@ -1,4 +1,5 @@
 User-agent: *
-Disallow: /home/
 Allow: /
+Disallow: /admin/
+Disallow: /api/
 Sitemap: https://www.ultracraft.lk/sitemap.xml
