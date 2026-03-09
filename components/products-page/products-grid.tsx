@@ -22,6 +22,7 @@ import {
 } from "@heroui/react";
 import {
   ArrowUpRight,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Search,
@@ -37,9 +38,9 @@ function cn(...classes: Array<string | false | null | undefined>) {
 import {
   CATEGORY_TREE,
   getCategoryLabel,
-  getSubTypeLabel,
   getFilterLabel,
   getFiltersForBranch,
+  getSubTypeLabel,
   type MainCategoryId,
 } from "@/lib/category-tree";
 
@@ -64,17 +65,17 @@ export default function ProductsGridClient() {
   const [error, setError] = React.useState<string | null>(null);
 
   const [activeCategory, setActiveCategory] = React.useState<string>(
-    CATEGORY_TREE[0]?.id ?? ""
+    CATEGORY_TREE[0]?.id ?? "",
   );
   const [activeSubType, setActiveSubType] = React.useState<string | null>(null);
   const [activeFilters, setActiveFilters] = React.useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [search, setSearch] = React.useState("");
   const [page, setPage] = React.useState(1);
 
   const [itemsPerPage, setItemsPerPage] = React.useState(
-    DESKTOP_ITEMS_PER_PAGE
+    DESKTOP_ITEMS_PER_PAGE,
   );
 
   // Details Modal (new)
@@ -85,7 +86,7 @@ export default function ProductsGridClient() {
   } = useDisclosure();
 
   const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
-    null
+    null,
   );
   const [activeImageIndex, setActiveImageIndex] = React.useState(0);
 
@@ -97,7 +98,7 @@ export default function ProductsGridClient() {
 
     const updateItemsPerPage = () => {
       setItemsPerPage(
-        mq.matches ? DESKTOP_ITEMS_PER_PAGE : MOBILE_ITEMS_PER_PAGE
+        mq.matches ? DESKTOP_ITEMS_PER_PAGE : MOBILE_ITEMS_PER_PAGE,
       );
       setPage(1);
     };
@@ -223,7 +224,7 @@ export default function ProductsGridClient() {
           key={key}
           className={cn(
             className,
-            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center"
+            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center",
           )}
           onClick={() => {
             onNext();
@@ -241,7 +242,7 @@ export default function ProductsGridClient() {
           key={key}
           className={cn(
             className,
-            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center"
+            "bg-default-200/50 min-w-8 w-8 h-8 rounded-full flex items-center justify-center",
           )}
           onClick={() => {
             onPrevious();
@@ -270,7 +271,7 @@ export default function ProductsGridClient() {
           isActive
             ? "text-white bg-gradient-to-br from-[#c9a16d] to-[#b38449] font-semibold"
             : "text-default-600 bg-transparent hover:bg-default-100",
-          className
+          className,
         )}
         onClick={() => handlePageChange(value)}
       >
@@ -281,7 +282,7 @@ export default function ProductsGridClient() {
 
   const activeFilterArray = React.useMemo(
     () => Array.from(activeFilters),
-    [activeFilters]
+    [activeFilters],
   );
 
   const openDetails = (product: Product) => {
@@ -301,12 +302,8 @@ export default function ProductsGridClient() {
 
   const currentCategoryLabel = getCategoryLabel(activeCategory);
   const availableFiltersForBranch = React.useMemo(
-    () =>
-      getFiltersForBranch(
-        activeCategory as MainCategoryId,
-        activeSubType
-      ),
-    [activeCategory, activeSubType]
+    () => getFiltersForBranch(activeCategory as MainCategoryId, activeSubType),
+    [activeCategory, activeSubType],
   );
 
   const detailsImageSrc =
@@ -338,7 +335,7 @@ export default function ProductsGridClient() {
                   "rounded-full px-4 py-2 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-[#c9a16d] text-white shadow-sm"
-                    : "bg-white/70 text-default-700 hover:bg-white"
+                    : "bg-white/70 text-default-700 hover:bg-white",
                 )}
               >
                 {cat.label}
@@ -358,23 +355,26 @@ export default function ProductsGridClient() {
                 <span className="text-xs font-medium text-default-600">
                   Room type:
                 </span>
-                <select
-                  value={activeSubType ?? ""}
-                  onChange={(e) => {
-                    const value = e.target.value || null;
-                    setActiveSubType(value);
-                    setPage(1);
-                    scrollToGridTop();
-                  }}
-                  className="rounded-full border border-default-300 bg-white/80 px-3 py-1 text-xs text-default-700 focus:outline-none focus:ring-2 focus:ring-[#c9a16d]"
-                >
-                  <option value="">All</option>
-                  {subtypes.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.label}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={activeSubType ?? ""}
+                    onChange={(e) => {
+                      const value = e.target.value || null;
+                      setActiveSubType(value);
+                      setPage(1);
+                      scrollToGridTop();
+                    }}
+                    className="appearance-none rounded-full border border-default-300 bg-white/80 pl-3 pr-10 py-1 text-xs text-default-700 focus:outline-none focus:ring-2 focus:ring-[#c9a16d]"
+                  >
+                    <option value="">All</option>
+                    {subtypes.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-default-500" />
+                </div>
               </div>
             );
           })()}
@@ -429,7 +429,9 @@ export default function ProductsGridClient() {
               {availableFiltersForBranch.length === 0 ? (
                 <DropdownItem key="no-filters" isDisabled>
                   Select a category
-                  {activeCategory === "home_furniture" ? " and sub-type" : ""}{" "}
+                  {activeCategory === "home_furniture"
+                    ? " and sub-type"
+                    : ""}{" "}
                   to see filters.
                 </DropdownItem>
               ) : (
@@ -620,7 +622,7 @@ export default function ProductsGridClient() {
                                 "flex-shrink-0 overflow-hidden rounded-2xl border p-1 transition",
                                 isActive
                                   ? "border-[#c9a16d] bg-white"
-                                  : "border-black/10 bg-white/70 hover:bg-white"
+                                  : "border-black/10 bg-white/70 hover:bg-white",
                               )}
                               aria-label={`Preview image ${idx + 1}`}
                             >
@@ -666,7 +668,9 @@ export default function ProductsGridClient() {
                                 variant="flat"
                                 className="bg-default-100 text-default-700"
                               >
-                                {getCategoryLabel(selectedProduct.main_category)}
+                                {getCategoryLabel(
+                                  selectedProduct.main_category,
+                                )}
                               </Chip>
                               {selectedProduct.sub_type && (
                                 <Chip
@@ -676,7 +680,7 @@ export default function ProductsGridClient() {
                                 >
                                   {getSubTypeLabel(
                                     selectedProduct.main_category as MainCategoryId,
-                                    selectedProduct.sub_type
+                                    selectedProduct.sub_type,
                                   )}
                                 </Chip>
                               )}

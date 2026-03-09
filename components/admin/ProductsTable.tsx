@@ -1,8 +1,15 @@
 "use client";
 
+import {
+  CATEGORY_TREE,
+  getCategory,
+  getCategoryLabel,
+  getFilterLabel,
+  getFiltersForBranch,
+  getSubTypeLabel,
+  type MainCategoryId,
+} from "@/lib/category-tree";
 import type { Selection, SortDescriptor } from "@heroui/react";
-import { useRouter } from "next/navigation";
-import React from "react";
 import {
   Button,
   Dropdown,
@@ -25,21 +32,14 @@ import {
   Textarea,
   useDisclosure,
 } from "@heroui/react";
+import { useRouter } from "next/navigation";
+import React from "react";
 import {
   ChevronDownIcon,
   PlusIcon,
   SearchIcon,
   VerticalDotsIcon,
 } from "../icons";
-import {
-  CATEGORY_TREE,
-  getCategory,
-  getCategoryLabel,
-  getSubTypeLabel,
-  getFilterLabel,
-  getFiltersForBranch,
-  type MainCategoryId,
-} from "@/lib/category-tree";
 
 type Product = {
   id: number;
@@ -120,12 +120,12 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   const router = useRouter();
 
   const [products, setProducts] = React.useState<Product[]>(() =>
-    initialProducts.map((p) => normalizeProduct(p))
+    initialProducts.map((p) => normalizeProduct(p)),
   );
 
   const [filterValue, setFilterValue] = React.useState("");
   const [visibleColumns, setVisibleColumns] = React.useState<any>(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS),
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
@@ -142,7 +142,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   const [viewProduct, setViewProduct] = React.useState<Product | null>(null);
 
   const [editingProduct, setEditingProduct] = React.useState<Product | null>(
-    null
+    null,
   );
 
   const [formValues, setFormValues] = React.useState({
@@ -166,10 +166,10 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     string | null
   >(null);
   const [selectedSubType, setSelectedSubType] = React.useState<string | null>(
-    null
+    null,
   );
   const [selectedFilters, setSelectedFilters] = React.useState<Selection>(
-    new Set()
+    new Set(),
   );
 
   const [saving, setSaving] = React.useState(false);
@@ -180,7 +180,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
   const headerColumns = React.useMemo(() => {
     if (visibleColumns === "all") return columns;
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -188,9 +188,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     let items = [...products];
     if (hasSearchFilter) {
       const q = filterValue.toLowerCase();
-      items = items.filter((product) =>
-        product.name.toLowerCase().includes(q)
-      );
+      items = items.filter((product) => product.name.toLowerCase().includes(q));
     }
     return items;
   }, [products, filterValue, hasSearchFilter]);
@@ -357,7 +355,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
       const currentFilterOptions = getFiltersForBranch(
         selectedMainCategory as MainCategoryId,
-        selectedSubType
+        selectedSubType,
       );
       const filterIds = currentFilterOptions.map((f) => f.id);
       const selectedArray = selectionToArray(selectedFilters, filterIds);
@@ -391,7 +389,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         const updated = normalizeProduct(updatedFromApi);
 
         setProducts((prev) =>
-          prev.map((p) => (p.id === updated.id ? updated : p))
+          prev.map((p) => (p.id === updated.id ? updated : p)),
         );
       } else {
         const res = await fetch("/api/products", {
@@ -486,7 +484,8 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
         case "filters": {
           const fltrs = product.filters ?? [];
-          if (!fltrs.length) return <span className="text-xs text-default-400">—</span>;
+          if (!fltrs.length)
+            return <span className="text-xs text-default-400">—</span>;
 
           return (
             <div className="flex flex-wrap gap-1">
@@ -533,7 +532,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
           return product[key as keyof Product] as any;
       }
     },
-    []
+    [],
   );
 
   const onRowsPerPageChange = React.useCallback(
@@ -541,12 +540,16 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
       setRowsPerPage(Number(e.target.value));
       setPage(1);
     },
-    []
+    [],
   );
 
   const availableFilters = React.useMemo(
-    () => getFiltersForBranch(selectedMainCategory as MainCategoryId, selectedSubType),
-    [selectedMainCategory, selectedSubType]
+    () =>
+      getFiltersForBranch(
+        selectedMainCategory as MainCategoryId,
+        selectedSubType,
+      ),
+    [selectedMainCategory, selectedSubType],
   );
 
   const topContent = React.useMemo(() => {
@@ -613,7 +616,9 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-small">Total {filteredItems.length} products</span>
+          <span className="text-small">
+            Total {filteredItems.length} products
+          </span>
 
           <label className="flex items-center text-small">
             Rows per page:
@@ -630,7 +635,14 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
         </div>
       </div>
     );
-  }, [router, filterValue, visibleColumns, filteredItems.length, onRowsPerPageChange, rowsPerPage]);
+  }, [
+    router,
+    filterValue,
+    visibleColumns,
+    filteredItems.length,
+    onRowsPerPageChange,
+    rowsPerPage,
+  ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -756,7 +768,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                             className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-xs text-white"
                             onClick={() =>
                               setImageUrls((prev) =>
-                                prev.filter((_, i) => i !== idx)
+                                prev.filter((_, i) => i !== idx),
                               )
                             }
                           >
@@ -802,8 +814,8 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                                       f.name === p.file.name &&
                                       f.size === p.file.size &&
                                       f.lastModified === p.file.lastModified
-                                    )
-                                )
+                                    ),
+                                ),
                               );
                             }}
                           >
@@ -828,7 +840,9 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                     if (!files.length) return;
 
                     const MAX_MB = 8;
-                    const tooBig = files.find((f) => f.size > MAX_MB * 1024 * 1024);
+                    const tooBig = files.find(
+                      (f) => f.size > MAX_MB * 1024 * 1024,
+                    );
 
                     if (tooBig) {
                       setFormErrors((prev) => ({
@@ -874,7 +888,9 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                     const trimmed = v.trim();
                     setFormErrors((prev) => {
                       const next = { ...prev };
-                      if (!trimmed) next.short_description = "Short description is required.";
+                      if (!trimmed)
+                        next.short_description =
+                          "Short description is required.";
                       else if (trimmed.length > 80)
                         next.short_description =
                           "Short description must be 80 characters or less.";
@@ -900,7 +916,8 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                     const trimmed = v.trim();
                     setFormErrors((prev) => {
                       const next = { ...prev };
-                      if (!trimmed) next.long_description = "Long description is required.";
+                      if (!trimmed)
+                        next.long_description = "Long description is required.";
                       else if (trimmed.length > 300)
                         next.long_description =
                           "Long description must be 300 characters or less.";
@@ -920,24 +937,27 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                         {formErrors.main_category}
                       </p>
                     )}
-                    <select
-                      value={selectedMainCategory ?? ""}
-                      onChange={(e) => {
-                        const value = e.target.value || null;
-                        setSelectedMainCategory(value);
-                        setSelectedSubType(null);
-                        setSelectedFilters(new Set());
-                      }}
-                      className="w-full rounded-lg border border-default-300 bg-default-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
-                      aria-label="Select category"
-                    >
-                      <option value="">Select category</option>
-                      {CATEGORY_TREE.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.label}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        value={selectedMainCategory ?? ""}
+                        onChange={(e) => {
+                          const value = e.target.value || null;
+                          setSelectedMainCategory(value);
+                          setSelectedSubType(null);
+                          setSelectedFilters(new Set());
+                        }}
+                        className="w-full appearance-none rounded-lg border border-default-300 bg-default-50 pl-3 pr-10 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                        aria-label="Select category"
+                      >
+                        <option value="">Select category</option>
+                        {CATEGORY_TREE.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.label}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-default-500" />
+                    </div>
                   </div>
 
                   {selectedMainCategory &&
@@ -947,25 +967,28 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                         <label className="block text-sm font-medium mb-1">
                           Sub-type
                         </label>
-                        <select
-                          value={selectedSubType ?? ""}
-                          onChange={(e) => {
-                            const value = e.target.value || null;
-                            setSelectedSubType(value);
-                            setSelectedFilters(new Set());
-                          }}
-                          className="w-full rounded-lg border border-default-300 bg-default-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
-                          aria-label="Select sub-type"
-                        >
-                          <option value="">Select sub-type</option>
-                          {getCategory(
-                            selectedMainCategory as MainCategoryId
-                          )?.subtypes?.map((s) => (
-                            <option key={s.id} value={s.id}>
-                              {s.label}
-                            </option>
-                          ))}
-                        </select>
+                        <div className="relative">
+                          <select
+                            value={selectedSubType ?? ""}
+                            onChange={(e) => {
+                              const value = e.target.value || null;
+                              setSelectedSubType(value);
+                              setSelectedFilters(new Set());
+                            }}
+                            className="w-full appearance-none rounded-lg border border-default-300 bg-default-50 pl-3 pr-10 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                            aria-label="Select sub-type"
+                          >
+                            <option value="">Select sub-type</option>
+                            {getCategory(
+                              selectedMainCategory as MainCategoryId,
+                            )?.subtypes?.map((s) => (
+                              <option key={s.id} value={s.id}>
+                                {s.label}
+                              </option>
+                            ))}
+                          </select>
+                          <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-default-500" />
+                        </div>
                       </div>
                     )}
 
@@ -984,7 +1007,9 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                     ) : (
                       <div className="max-h-40 overflow-y-auto rounded-lg border border-default-200 p-2 space-y-1.5">
                         {availableFilters.map((f) => {
-                          const isChecked = selectedFilters.has(f.id);
+                          const isChecked =
+                            selectedFilters === "all" ||
+                            selectedFilters.has(f.id);
                           return (
                             <label
                               key={f.id}
@@ -995,7 +1020,14 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                                 checked={isChecked}
                                 onChange={() => {
                                   setSelectedFilters((prev) => {
-                                    const next = new Set(prev);
+                                    const next =
+                                      prev === "all"
+                                        ? new Set(
+                                            availableFilters.map(
+                                              (filter) => filter.id,
+                                            ),
+                                          )
+                                        : new Set(Array.from(prev));
                                     if (next.has(f.id)) next.delete(f.id);
                                     else next.add(f.id);
                                     return next;
@@ -1043,7 +1075,11 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
       </Modal>
 
       {/* View details modal */}
-      <Modal isOpen={viewOpen} placement="top-center" onOpenChange={setViewOpen}>
+      <Modal
+        isOpen={viewOpen}
+        placement="top-center"
+        onOpenChange={setViewOpen}
+      >
         <ModalContent>
           {() =>
             viewProduct && (
@@ -1064,7 +1100,9 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                   )}
 
                   <p className="text-sm font-medium">Short description:</p>
-                  <p className="text-sm mb-2">{viewProduct.short_description}</p>
+                  <p className="text-sm mb-2">
+                    {viewProduct.short_description}
+                  </p>
 
                   <p className="text-sm font-medium">Long description:</p>
                   <p className="text-sm whitespace-pre-line mb-3">
@@ -1082,7 +1120,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                           <span className="px-2 py-0.5 rounded-full border text-[11px] text-default-500">
                             {getSubTypeLabel(
                               viewProduct.main_category as MainCategoryId,
-                              viewProduct.sub_type
+                              viewProduct.sub_type,
                             )}
                           </span>
                         )}
