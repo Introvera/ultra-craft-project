@@ -328,6 +328,7 @@ export default function ProductsGridClient() {
                 onClick={() => {
                   setActiveCategory(cat.id);
                   setActiveSubType(null);
+                  setActiveFilters(new Set());
                   setPage(1);
                   scrollToGridTop();
                 }}
@@ -361,6 +362,7 @@ export default function ProductsGridClient() {
                     onChange={(e) => {
                       const value = e.target.value || null;
                       setActiveSubType(value);
+                      setActiveFilters(new Set());
                       setPage(1);
                       scrollToGridTop();
                     }}
