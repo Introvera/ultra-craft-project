@@ -10,7 +10,8 @@ type ProductRow = {
   short_description: string;
   long_description: string;
   created_at: Date;
-  categories: string[] | null;
+  main_category: string | null;
+  sub_type: string | null;
   filters: string[] | null;
 };
 
@@ -24,7 +25,8 @@ export default async function AdminProductsPage() {
       short_description,
       long_description,
       created_at,
-      categories,
+      main_category,
+      sub_type,
       filters
     FROM products
     ORDER BY created_at DESC
@@ -34,8 +36,6 @@ export default async function AdminProductsPage() {
   const products = result.rows.map((p: ProductRow) => ({
     ...p,
     created_at: p.created_at.toISOString(),
-    // ensure arrays, never null
-    categories: (p.categories ?? []) as string[],
     filters: (p.filters ?? []) as string[],
     image: (p.image ?? []) as string[],
   }));
