@@ -349,7 +349,7 @@ const ProjectsGrid: React.FC = () => {
                     <Image
                       loading="lazy"
                       removeWrapper
-                      alt={project.name}
+                      alt={project.name.trim() || "Project"}
                       src={project.image[0]}
                       className="w-full object-cover h-96 p-2 rounded-4xl"
                     />
@@ -359,14 +359,18 @@ const ProjectsGrid: React.FC = () => {
                 </div>
 
                 <CardBody className="flex flex-col gap-2 px-5 pb-4 pt-4">
-                  <h3 className="text-sm font-semibold text-default-900 sm:text-base">
-                    {project.name}
-                  </h3>
+                  {project.name.trim() ? (
+                    <h3 className="text-sm font-semibold text-default-900 sm:text-base">
+                      {project.name}
+                    </h3>
+                  ) : null}
 
-                  <div className="flex items-center gap-1 text-xs text-default-500 sm:text-sm">
-                    <MapPin className="h-4 w-4" />
-                    <span>{project.location}</span>
-                  </div>
+                  {project.location.trim() ? (
+                    <div className="flex items-center gap-1 text-xs text-default-500 sm:text-sm">
+                      <MapPin className="h-4 w-4" />
+                      <span>{project.location}</span>
+                    </div>
+                  ) : null}
                 </CardBody>
 
                 <CardFooter className="flex items-center px-5 pb-4 pt-0">
@@ -438,16 +442,23 @@ const ProjectsGrid: React.FC = () => {
               {/* Top: Title + Close */}
               <ModalHeader className="flex items-start justify-between gap-4 px-6 pt-6 pb-3">
                 <div className="min-w-0">
-                  <h2 className="truncate text-xl font-semibold text-default-900 sm:text-2xl">
-                    {selectedProject?.name ?? ""}
-                  </h2>
+                  {selectedProject?.name?.trim() ? (
+                    <h2 className="truncate text-xl font-semibold text-default-900 sm:text-2xl">
+                      {selectedProject.name}
+                    </h2>
+                  ) : null}
 
-                  <div className="mt-2 flex items-center gap-2 text-sm text-default-500">
-                    <MapPin className="h-4 w-4" />
-                    <span className="truncate">
-                      {selectedProject?.location ?? ""}
-                    </span>
-                  </div>
+                  {selectedProject?.location?.trim() ? (
+                    <div
+                      className={cn(
+                        "flex items-center gap-2 text-sm text-default-500",
+                        selectedProject?.name?.trim() ? "mt-2" : "",
+                      )}
+                    >
+                      <MapPin className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">{selectedProject.location}</span>
+                    </div>
+                  ) : null}
                 </div>
               </ModalHeader>
 
@@ -540,11 +551,13 @@ const ProjectsGrid: React.FC = () => {
               </ModalBody>
 
               {/* Bottom: Description */}
-              <ModalFooter className="px-6 pb-6 pt-5">
-                <p className="text-sm leading-6 text-default-600">
-                  {selectedProject?.description ?? ""}
-                </p>
-              </ModalFooter>
+              {selectedProject?.description?.trim() ? (
+                <ModalFooter className="px-6 pb-6 pt-5">
+                  <p className="text-sm leading-6 text-default-600">
+                    {selectedProject.description}
+                  </p>
+                </ModalFooter>
+              ) : null}
             </>
           )}
         </ModalContent>

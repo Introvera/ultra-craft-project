@@ -206,21 +206,15 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
     const desc = formValues.description.trim();
     const loc = formValues.location.trim();
 
-    if (!name) {
-      errors.name = "Name is required.";
-    } else if (name.length > 100) {
+    if (name.length > 100) {
       errors.name = "Name must be 100 characters or less.";
     }
 
-    if (!loc) {
-      errors.location = "Location is required.";
-    } else if (loc.length > 80) {
+    if (loc.length > 80) {
       errors.location = "Location must be 80 characters or less.";
     }
 
-    if (!desc) {
-      errors.description = "Description is required.";
-    } else if (desc.length > 500) {
+    if (desc.length > 500) {
       errors.description = "Description must be 500 characters or less.";
     }
 
@@ -343,11 +337,11 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
         return (
           <div className="flex items-center gap-3">
             {firstImage ? (
-              <img
-                src={firstImage}
-                className="w-8 h-8 rounded object-cover"
-                alt={project.name}
-              />
+                <img
+                  src={firstImage}
+                  className="w-8 h-8 rounded object-cover"
+                  alt={project.name.trim() || "Project"}
+                />
             ) : (
               <div className="w-8 h-8 rounded bg-default-200" />
             )}
@@ -564,7 +558,6 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
 
               <ModalBody>
                 <Input
-                  isRequired
                   label="Name"
                   variant="bordered"
                   value={formValues.name}
@@ -578,8 +571,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                     const trimmed = v.trim();
                     setFormErrors((prev) => {
                       const next = { ...prev };
-                      if (!trimmed) next.name = "Name is required.";
-                      else if (trimmed.length > 100)
+                      if (trimmed.length > 100)
                         next.name = "Name must be 100 characters or less.";
                       else next.name = undefined;
                       return next;
@@ -588,7 +580,6 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                 />
 
                 <Input
-                  isRequired
                   label="Location"
                   variant="bordered"
                   value={formValues.location}
@@ -603,8 +594,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                     const trimmed = v.trim();
                     setFormErrors((prev) => {
                       const next = { ...prev };
-                      if (!trimmed) next.location = "Location is required.";
-                      else if (trimmed.length > 80)
+                      if (trimmed.length > 80)
                         next.location = "Location must be 80 characters or less.";
                       else next.location = undefined;
                       return next;
@@ -730,7 +720,6 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                 />
 
                 <Textarea
-                  isRequired
                   label="Description"
                   variant="bordered"
                   value={formValues.description}
@@ -745,8 +734,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                     const trimmed = v.trim();
                     setFormErrors((prev) => {
                       const next = { ...prev };
-                      if (!trimmed) next.description = "Description is required.";
-                      else if (trimmed.length > 500)
+                      if (trimmed.length > 500)
                         next.description = "Description must be 500 characters or less.";
                       else next.description = undefined;
                       return next;
@@ -785,7 +773,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
           {() =>
             viewProject && (
               <>
-                <ModalHeader>{viewProject.name}</ModalHeader>
+                <ModalHeader>{viewProject.name.trim() || ""}</ModalHeader>
                 <ModalBody>
                   {viewProject.image.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-4">
@@ -800,13 +788,21 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                     </div>
                   )}
 
-                  <p className="text-sm font-bold">Location:</p>
-                  <p className="text-sm mb-2">{viewProject.location}</p>
+                  {viewProject.location.trim() ? (
+                    <>
+                      <p className="text-sm font-bold">Location:</p>
+                      <p className="text-sm mb-2">{viewProject.location}</p>
+                    </>
+                  ) : null}
 
-                  <p className="text-sm font-medium">Description:</p>
-                  <p className="text-sm whitespace-pre-line mb-3">
-                    {viewProject.description}
-                  </p>
+                  {viewProject.description.trim() ? (
+                    <>
+                      <p className="text-sm font-medium">Description:</p>
+                      <p className="text-sm whitespace-pre-line mb-3">
+                        {viewProject.description}
+                      </p>
+                    </>
+                  ) : null}
                 </ModalBody>
                 <ModalFooter>
                   <Button variant="flat" onPress={() => setViewOpen(false)}>

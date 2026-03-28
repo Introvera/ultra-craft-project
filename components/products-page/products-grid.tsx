@@ -496,7 +496,7 @@ export default function ProductsGridClient() {
                     <Image
                       loading="lazy"
                       removeWrapper
-                      alt={product.name}
+                      alt={product.name.trim() || "Product"}
                       src={product.image[0]}
                       className="h-40 w-full object-cover md:h-72 sm:h-80 p-1 rounded-3xl"
                     />
@@ -506,12 +506,16 @@ export default function ProductsGridClient() {
                 </div>
 
                 <CardBody className="flex flex-col gap-1 px-5 pb-4 pt-4">
-                  <h3 className="text-sm font-semibold text-default-900 sm:text-base">
-                    {product.name}
-                  </h3>
-                  <p className="text-xs text-default-500 sm:text-sm">
-                    {product.short_description}
-                  </p>
+                  {product.name.trim() ? (
+                    <h3 className="text-sm font-semibold text-default-900 sm:text-base">
+                      {product.name}
+                    </h3>
+                  ) : null}
+                  {product.short_description.trim() ? (
+                    <p className="text-xs text-default-500 sm:text-sm">
+                      {product.short_description}
+                    </p>
+                  ) : null}
                 </CardBody>
 
                 <CardFooter className="flex items-center justify-between px-5 pb-4 pt-0">
@@ -531,7 +535,7 @@ export default function ProductsGridClient() {
                     type="button"
                     onClick={() => openDetails(product)}
                     className="flex h-8 w-8 items-center justify-center rounded-full bg-black text-white text-xs shadow-sm"
-                    aria-label={`View ${product.name}`}
+                    aria-label={`View ${product.name.trim() || "product"}`}
                   >
                     <ArrowUpRight className="h-4 w-4 cursor-pointer" />
                   </button>
@@ -601,7 +605,7 @@ export default function ProductsGridClient() {
                         <Image
                           loading="lazy"
                           removeWrapper
-                          alt={selectedProduct?.name ?? "Product"}
+                          alt={selectedProduct?.name?.trim() || "Product"}
                           src={detailsImageSrc}
                           className="w-full h-full object-contain"
                         />
@@ -644,13 +648,22 @@ export default function ProductsGridClient() {
 
                   {/* Right: title, description, categories */}
                   <div className="flex flex-col">
-                    <h2 className="text-2xl font-semibold text-default-900 sm:text-3xl">
-                      {selectedProduct?.name ?? ""}
-                    </h2>
+                    {selectedProduct?.name?.trim() ? (
+                      <h2 className="text-2xl font-semibold text-default-900 sm:text-3xl">
+                        {selectedProduct.name}
+                      </h2>
+                    ) : null}
 
-                    <p className="mt-3 text-sm leading-6 text-default-600 sm:text-base">
-                      {selectedProduct?.long_description ?? ""}
-                    </p>
+                    {selectedProduct?.long_description?.trim() ? (
+                      <p
+                        className={cn(
+                          selectedProduct?.name?.trim() ? "mt-3" : "",
+                          "text-sm leading-6 text-default-600 sm:text-base",
+                        )}
+                      >
+                        {selectedProduct.long_description}
+                      </p>
+                    ) : null}
 
                     <div className="mt-6 pt-5">
                       <h3 className="text-base font-semibold text-default-900">

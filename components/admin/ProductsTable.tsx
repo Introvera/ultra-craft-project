@@ -271,22 +271,16 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
     const shortDesc = formValues.short_description.trim();
     const longDesc = formValues.long_description.trim();
 
-    if (!name) {
-      errors.name = "Name is required.";
-    } else if (name.length > 40) {
+    if (name.length > 40) {
       errors.name = "Name must be 40 characters or less.";
     }
 
-    if (!shortDesc) {
-      errors.short_description = "Short description is required.";
-    } else if (shortDesc.length > 80) {
+    if (shortDesc.length > 80) {
       errors.short_description =
         "Short description must be 80 characters or less.";
     }
 
-    if (!longDesc) {
-      errors.long_description = "Long description is required.";
-    } else if (longDesc.length > 300) {
+    if (longDesc.length > 300) {
       errors.long_description =
         "Long description must be 300 characters or less.";
     }
@@ -440,7 +434,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                 <img
                   src={firstImage}
                   className="w-8 h-8 rounded object-cover"
-                  alt={product.name}
+                  alt={product.name.trim() || "Product"}
                 />
               ) : (
                 <div className="w-8 h-8 rounded bg-default-200" />
@@ -727,7 +721,6 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
 
               <ModalBody>
                 <Input
-                  isRequired
                   label="Name"
                   variant="bordered"
                   value={formValues.name}
@@ -742,8 +735,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                     const trimmed = v.trim();
                     setFormErrors((prev) => {
                       const next = { ...prev };
-                      if (!trimmed) next.name = "Name is required.";
-                      else if (trimmed.length > 40)
+                      if (trimmed.length > 40)
                         next.name = "Name must be 40 characters or less.";
                       else next.name = undefined;
                       return next;
@@ -873,7 +865,6 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                 />
 
                 <Input
-                  isRequired
                   label="Short Description"
                   variant="bordered"
                   value={formValues.short_description}
@@ -888,10 +879,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                     const trimmed = v.trim();
                     setFormErrors((prev) => {
                       const next = { ...prev };
-                      if (!trimmed)
-                        next.short_description =
-                          "Short description is required.";
-                      else if (trimmed.length > 80)
+                      if (trimmed.length > 80)
                         next.short_description =
                           "Short description must be 80 characters or less.";
                       else next.short_description = undefined;
@@ -901,7 +889,6 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                 />
 
                 <Textarea
-                  isRequired
                   label="Long Description"
                   variant="bordered"
                   value={formValues.long_description}
@@ -916,9 +903,7 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                     const trimmed = v.trim();
                     setFormErrors((prev) => {
                       const next = { ...prev };
-                      if (!trimmed)
-                        next.long_description = "Long description is required.";
-                      else if (trimmed.length > 300)
+                      if (trimmed.length > 300)
                         next.long_description =
                           "Long description must be 300 characters or less.";
                       else next.long_description = undefined;
@@ -1084,7 +1069,9 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
           {() =>
             viewProduct && (
               <>
-                <ModalHeader>{viewProduct.name}</ModalHeader>
+                <ModalHeader>
+                  {viewProduct.name.trim() || ""}
+                </ModalHeader>
                 <ModalBody>
                   {viewProduct.image.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-4">
@@ -1099,15 +1086,23 @@ export default function ProductsTable({ initialProducts }: ProductsTableProps) {
                     </div>
                   )}
 
-                  <p className="text-sm font-medium">Short description:</p>
-                  <p className="text-sm mb-2">
-                    {viewProduct.short_description}
-                  </p>
+                  {viewProduct.short_description.trim() ? (
+                    <>
+                      <p className="text-sm font-medium">Short description:</p>
+                      <p className="text-sm mb-2">
+                        {viewProduct.short_description}
+                      </p>
+                    </>
+                  ) : null}
 
-                  <p className="text-sm font-medium">Long description:</p>
-                  <p className="text-sm whitespace-pre-line mb-3">
-                    {viewProduct.long_description}
-                  </p>
+                  {viewProduct.long_description.trim() ? (
+                    <>
+                      <p className="text-sm font-medium">Long description:</p>
+                      <p className="text-sm whitespace-pre-line mb-3">
+                        {viewProduct.long_description}
+                      </p>
+                    </>
+                  ) : null}
 
                   <div className="mb-2">
                     <p className="text-sm font-medium mb-1">Category</p>

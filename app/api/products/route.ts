@@ -52,10 +52,10 @@ export async function POST(req: Request) {
       sub_type,
       filters,
     } = body as {
-      name: string;
+      name?: string;
       image: string | string[];
-      short_description: string;
-      long_description: string;
+      short_description?: string;
+      long_description?: string;
       main_category?: string | null;
       sub_type?: string | null;
       filters?: string[] | null;
@@ -67,14 +67,15 @@ export async function POST(req: Request) {
         ? [image]
         : [];
 
-    if (
-      !name ||
-      imageArray.length === 0 ||
-      !short_description ||
-      !long_description
-    ) {
+    const nameStr = typeof name === "string" ? name.trim() : "";
+    const shortStr =
+      typeof short_description === "string" ? short_description.trim() : "";
+    const longStr =
+      typeof long_description === "string" ? long_description.trim() : "";
+
+    if (imageArray.length === 0) {
       return NextResponse.json(
-        { error: "All required fields must be provided" },
+        { error: "At least one image is required" },
         { status: 400 },
       );
     }
@@ -90,10 +91,10 @@ export async function POST(req: Request) {
       RETURNING *
       `,
       [
-        name,
+        nameStr,
         imageArray,
-        short_description,
-        long_description,
+        shortStr,
+        longStr,
         main_category ?? null,
         sub_type ?? null,
         JSON.stringify(filtersArray),

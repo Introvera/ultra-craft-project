@@ -38,25 +38,30 @@ export async function POST(req: Request) {
     const body = await req.json();
     const {
       name,
-      image,              // string | string[]
+      image, // string | string[]
       description,
       location,
     } = body as {
-      name: string;
+      name?: string;
       image: string | string[];
-      description: string;
-      location: string;
+      description?: string;
+      location?: string;
     };
 
     const imageArray: string[] = Array.isArray(image)
       ? image
       : image
-      ? [image]
-      : [];
+        ? [image]
+        : [];
 
-    if (!name || imageArray.length === 0 || !description || !location) {
+    const nameStr = typeof name === "string" ? name.trim() : "";
+    const descStr =
+      typeof description === "string" ? description.trim() : "";
+    const locStr = typeof location === "string" ? location.trim() : "";
+
+    if (imageArray.length === 0) {
       return NextResponse.json(
-        { error: "All required fields must be provided" },
+        { error: "At least one image is required" },
         { status: 400 }
       );
     }
@@ -69,7 +74,7 @@ export async function POST(req: Request) {
         ($1, $2::text[], $3, $4)
       RETURNING *
       `,
-      [name, imageArray, description, location]
+      [nameStr, imageArray, descStr, locStr]
     );
 
     const row = result.rows[0];

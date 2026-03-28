@@ -72,20 +72,26 @@ const AutoProducts: React.FC = () => {
                       Project Spotlight
                     </p>
 
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-neutral-900 leading-tight">
-                      {project.name}
-                    </h2>
+                    {project.name.trim() ? (
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-neutral-900 leading-tight">
+                        {project.name}
+                      </h2>
+                    ) : null}
 
-                    <div className="mt-2 flex items-center gap-2 text-sm text-neutral-600">
-                      <MapPin
-                        size={20}
-                        strokeWidth={2.5}
-                        className="text-neutral-800"
-                      />
-                      <span className="text-md font-medium">
-                        {project.location}
-                      </span>
-                    </div>
+                    {project.location.trim() ? (
+                      <div
+                        className={`flex items-center gap-2 text-sm text-neutral-600 ${project.name.trim() ? "mt-2" : ""}`}
+                      >
+                        <MapPin
+                          size={20}
+                          strokeWidth={2.5}
+                          className="text-neutral-800"
+                        />
+                        <span className="text-md font-medium">
+                          {project.location}
+                        </span>
+                      </div>
+                    ) : null}
 
                     {/* MOBILE IMAGE (between location and description) */}
                     <div className="mt-4 block md:hidden">
@@ -93,7 +99,7 @@ const AutoProducts: React.FC = () => {
                         <div className="w-full aspect-[4/3]">
                           <HeroImage
                             loading="lazy"
-                            alt={project.name}
+                            alt={project.name.trim() || "Project"}
                             src={heroImageSrc}
                             radius="lg"
                             className="w-full h-full object-cover"
@@ -102,9 +108,11 @@ const AutoProducts: React.FC = () => {
                       </div>
                     </div>
 
-                    <p className="mt-4 text-sm sm:text-base leading-relaxed text-neutral-700">
-                      {project.description}
-                    </p>
+                    {project.description.trim() ? (
+                      <p className="mt-4 text-sm sm:text-base leading-relaxed text-neutral-700">
+                        {project.description}
+                      </p>
+                    ) : null}
                   </div>
 
                   <div className="mt-6">
@@ -126,7 +134,7 @@ const AutoProducts: React.FC = () => {
                   <div className="relative w-full overflow-hidden rounded-4xl">
                     <div className="w-full aspect-[4/3]">
                       <HeroImage
-                        alt={project.name}
+                        alt={project.name.trim() || "Project"}
                         src={heroImageSrc}
                         radius="lg"
                         className="w-full h-full object-cover"
