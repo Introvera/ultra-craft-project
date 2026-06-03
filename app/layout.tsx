@@ -25,18 +25,20 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Ultracraft | Furniture Shop in Wellawaththa",
+    default: "Ultracraft | Furniture Shop in Bambalapitiya & Colombo",
     template: "%s | Ultracraft",
   },
   description:
-    "Ultracraft is a premium furniture shop in Wellawaththa, Colombo, serving homes and offices within a 30km range.",
+    "Ultracraft is a premium furniture shop serving Bambalapitiya, Wellawaththa, and Colombo, with delivery and consultations across nearby areas.",
   keywords: [
-    "furniture shop Wellawaththa",
+    "furniture shop Bambalapitiya",
+    "furniture shops in Bambalapitiya",
     "furniture shop Colombo",
-    "furniture near me Colombo",
+    "furniture shop near me Colombo",
+    "furniture shop Wellawatta",
     "custom furniture Sri Lanka",
     "interior solutions Colombo",
-    "furniture shop within 30km of Wellawaththa",
+    "furniture shop within 40km of Bambalapitiya",
   ],
   alternates: {
     canonical: "/",
@@ -44,9 +46,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: SITE_URL,
-    title: "Ultracraft | Furniture Shop in Wellawaththa",
+    title: "Ultracraft | Furniture Shop in Bambalapitiya & Colombo",
     description:
-      "Premium furniture and interior solutions in Wellawaththa, Colombo, with service coverage up to 30km.",
+      "Premium furniture and interior solutions serving Bambalapitiya, Colombo, and nearby areas within 40km.",
     siteName: "Ultracraft",
     locale: "en_LK",
     images: [
@@ -60,9 +62,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ultracraft | Furniture Shop in Wellawaththa",
+    title: "Ultracraft | Furniture Shop in Bambalapitiya & Colombo",
     description:
-      "Find premium furniture in Wellawaththa, Colombo. We serve locations within 30km.",
+      "Find premium furniture in Bambalapitiya, Colombo, and nearby locations within 40km.",
     images: ["/footer/UltracraftBrandLogo.webp"],
   },
   robots: {
