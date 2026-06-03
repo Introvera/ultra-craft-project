@@ -8,14 +8,17 @@ import Uniqueness from "@/components/what-makes-us-different";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Furniture Shop in Wellawaththa, Colombo",
+  title: "Furniture Shop in Bambalapitiya, Colombo",
   description:
-    "Ultracraft provides premium furniture and interior solutions in Wellawaththa, serving nearby locations within a 30km range.",
+    "Ultracraft provides premium furniture and interior solutions in Bambalapitiya, Colombo, and nearby locations within a 40km range.",
   keywords: [
-    "furniture shop around Wellawaththa",
-    "furniture shop within 30km",
+    "furniture shop in Bambalapitiya",
+    "furniture shops in Bambalapitiya",
+    "furniture shop in Colombo",
+    "furniture shop near me",
+    "furniture shop within 40km",
     "furniture Colombo 04",
-    "custom furniture Wellawaththa",
+    "custom furniture Bambalapitiya",
     "home furniture Sri Lanka",
   ],
   alternates: {
@@ -23,9 +26,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: "https://www.ultracraft.lk/home",
-    title: "Ultracraft Furniture Shop | Wellawaththa",
+    title: "Ultracraft Furniture Shop | Bambalapitiya",
     description:
-      "Looking for a furniture shop around 30km from Wellawaththa? Explore Ultracraft's custom and premium furniture collections.",
+      "Looking for a furniture shop in Bambalapitiya or Colombo? Explore Ultracraft's custom and premium furniture collections.",
     images: ["/footer/UltracraftBrandLogo.webp"],
   },
 };
@@ -37,7 +40,7 @@ const localBusinessSchema = {
   url: "https://www.ultracraft.lk/home",
   image: "https://www.ultracraft.lk/footer/UltracraftBrandLogo.webp",
   description:
-    "Premium furniture and interior solutions for homes, offices, and apartments in and around Wellawaththa.",
+    "Premium furniture and interior solutions for homes, offices, and apartments in Bambalapitiya, Colombo, and nearby areas.",
   telephone: "+94 11 255 6333",
   email: "hello@ultracraft.lk",
   address: {
@@ -51,16 +54,16 @@ const localBusinessSchema = {
   areaServed: [
     {
       "@type": "City",
-      name: "Wellawaththa",
+      name: "Bambalapitiya",
     },
     {
       "@type": "GeoCircle",
       geoMidpoint: {
         "@type": "GeoCoordinates",
-        latitude: 6.8762,
-        longitude: 79.8622,
+        latitude: 6.8967,
+        longitude: 79.8588,
       },
-      geoRadius: 30000,
+      geoRadius: 40000,
     },
   ],
   sameAs: [
