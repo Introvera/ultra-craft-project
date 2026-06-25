@@ -55,7 +55,7 @@ type AboutUsProps = {
 };
 
 export function AboutUs({
-  title = "About Us",
+  title = "",
   description = `Ultracraft is built on a passion for creating spaces that feel
   refined, purposeful, and deeply connected to the people who use
   them. With years of experience in residential and commercial

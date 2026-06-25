@@ -217,6 +217,7 @@ const ContactUs = () => {
                   <ContactInfo
                     title="Head Office"
                     text="19A, Visaka Road, Colombo 04"
+                    href="https://maps.google.com/?q=19A,+Visaka+Road,+Colombo+04"
                     bgColor="#4F4F4F"
                     icon={
                       <svg
@@ -244,7 +245,7 @@ const ContactUs = () => {
                 </h3>
                 <div className="flex gap-4">
                   <a
-                    href="https://facebook.com/yourprofile"
+                    href="https://www.facebook.com/ultracraftfurniturelk"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#604d37] hover:text-[#977C5A] transition-colors"
@@ -252,21 +253,21 @@ const ContactUs = () => {
                     <FaFacebookF size={24} />
                   </a>
                   <a
-                    href="https://instagram.com/yourprofile"
+                    href="https://www.instagram.com/ultracraft.lk?igsh=MWZvc2dwMmpjMzJnNA=="
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#604d37] hover:text-[#977C5A] transition-colors"
                   >
                     <FaInstagram size={24} />
                   </a>
-                  <a
+                  {/* <a
                     href="https://linkedin.com/in/yourprofile"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#604d37] hover:text-[#977C5A] transition-colors"
                   >
                     <FaLinkedinIn size={24} />
-                  </a>
+                  </a> */}
                 </div>
               </div>
             </div>
@@ -407,7 +408,7 @@ const InputField = ({
 );
 
 // Contact Info Component (responsive fonts)
-const ContactInfo = ({ title, text, icon, bgColor }: any) => (
+const ContactInfo = ({ title, text, icon, bgColor, href }: any) => (
   <div className="flex flex-row items-center gap-3 w-full">
     <div
       className="w-[48px] h-[48px] flex items-center justify-center rounded-full flex-shrink-0"
@@ -420,9 +421,20 @@ const ContactInfo = ({ title, text, icon, bgColor }: any) => (
       <h3 className="font-poppins font-semibold text-[16px] sm:text-[20px] leading-[28px]">
         {title}
       </h3>
-      <p className="font-poppins font-medium text-[16px] sm:text-[20px] leading-[28px]">
-        {text}
-      </p>
+      {href ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-poppins font-medium text-[16px] sm:text-[20px] leading-[28px] hover:underline"
+        >
+          {text}
+        </a>
+      ) : (
+        <p className="font-poppins font-medium text-[16px] sm:text-[20px] leading-[28px]">
+          {text}
+        </p>
+      )}
     </div>
   </div>
 );

@@ -39,6 +39,12 @@ export const metadata: Metadata = {
     "custom furniture Sri Lanka",
     "interior solutions Colombo",
     "furniture shop within 40km of Bambalapitiya",
+    "beds",
+    "wardrobe",
+    "sofa",
+    "dining table",
+    "pantry",
+    "furniture shops near me",
   ],
   alternates: {
     canonical: "/",
