@@ -20,6 +20,11 @@ export const metadata: Metadata = {
     "furniture Colombo 04",
     "custom furniture Bambalapitiya",
     "home furniture Sri Lanka",
+    "beds",
+    "wardrobe",
+    "sofa",
+    "dining table",
+    "pantry",
   ],
   alternates: {
     canonical: "/home",
@@ -40,7 +45,7 @@ const localBusinessSchema = {
   url: "https://www.ultracraft.lk/home",
   image: "https://www.ultracraft.lk/footer/UltracraftBrandLogo.webp",
   description:
-    "Premium furniture and interior solutions for homes, offices, and apartments in Bambalapitiya, Colombo, and nearby areas.",
+    "Premium furniture and interior solutions including beds, wardrobes, sofas, dining tables, and pantries for homes, offices, and apartments in Bambalapitiya, Colombo, and nearby areas.",
   telephone: "+94 11 255 6333",
   email: "hello@ultracraft.lk",
   address: {
