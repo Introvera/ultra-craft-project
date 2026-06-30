@@ -410,12 +410,24 @@ const InputField = ({
 // Contact Info Component (responsive fonts)
 const ContactInfo = ({ title, text, icon, bgColor, href }: any) => (
   <div className="flex flex-row items-center gap-3 w-full">
-    <div
-      className="w-[48px] h-[48px] flex items-center justify-center rounded-full flex-shrink-0"
-      style={{ backgroundColor: bgColor }}
-    >
-      <div className="w-[24px] h-[24px]">{icon}</div>
-    </div>
+    {href ? (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-[48px] h-[48px] flex items-center justify-center rounded-full flex-shrink-0 hover:opacity-80 transition-opacity"
+        style={{ backgroundColor: bgColor }}
+      >
+        <div className="w-[24px] h-[24px]">{icon}</div>
+      </a>
+    ) : (
+      <div
+        className="w-[48px] h-[48px] flex items-center justify-center rounded-full flex-shrink-0"
+        style={{ backgroundColor: bgColor }}
+      >
+        <div className="w-[24px] h-[24px]">{icon}</div>
+      </div>
+    )}
     <div className="flex flex-col gap-1">
       {/* responsive: smaller on very small screens, normal on sm+ */}
       <h3 className="font-poppins font-semibold text-[16px] sm:text-[20px] leading-[28px]">
