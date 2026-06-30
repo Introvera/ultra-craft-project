@@ -119,7 +119,7 @@ const Footer = () => {
                 {/* Instagram */}
                 <li>
                   <a
-                    href="https://www.instagram.com/ultracraft.lk?igsh=MWZvc2dwMmpjMzJnNA=="
+                    href="https://www.instagram.com/ultracraft.lk"
                     target="_blank"
                     rel="noreferrer"
                     aria-label="Follow Ultracraft on Instagram"
