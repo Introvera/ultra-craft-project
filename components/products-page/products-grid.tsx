@@ -496,7 +496,7 @@ export default function ProductsGridClient() {
                 <div className="relative overflow-hidden rounded-3xl bg-default-200/50">
                   {product.image[0] ? (
                     <Image
-                      loading={idx < 4 ? "eager" : "lazy"}
+                      loading="eager"
                       removeWrapper
                       alt={product.name.trim() || "Product"}
                       src={getOptimizedImageUrl(product.image[0], 600)}
