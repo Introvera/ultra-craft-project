@@ -35,6 +35,8 @@ function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
+import { getOptimizedImageUrl } from "@/lib/utils";
+
 import {
   CATEGORY_TREE,
   getCategoryLabel,
@@ -485,23 +487,23 @@ export default function ProductsGridClient() {
       {!loading && !error && (
         <>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-            {pagedProducts.map((product) => (
+            {pagedProducts.map((product, idx) => (
               <Card
                 key={product.id}
                 shadow="sm"
                 className="overflow-hidden rounded-3xl border border-black/5 bg-[#F5F6F8]"
               >
-                <div className="relative">
+                <div className="relative overflow-hidden rounded-3xl bg-default-200/50">
                   {product.image[0] ? (
                     <Image
-                      loading="lazy"
+                      loading={idx < 4 ? "eager" : "lazy"}
                       removeWrapper
                       alt={product.name.trim() || "Product"}
-                      src={product.image[0]}
-                      className="h-40 w-full object-cover md:h-72 sm:h-80 p-1 rounded-3xl"
+                      src={getOptimizedImageUrl(product.image[0], 600)}
+                      className="h-40 w-full object-cover md:h-72 sm:h-80 p-1 rounded-3xl transition-opacity duration-300"
                     />
                   ) : (
-                    <div className="h-40 w-full md:h-60 sm:h-80 p-2 rounded-3xl bg-default-200" />
+                    <div className="h-40 w-full md:h-72 sm:h-80 p-2 rounded-3xl bg-default-200" />
                   )}
                 </div>
 
@@ -600,13 +602,13 @@ export default function ProductsGridClient() {
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                   {/* Left: image + thumbnails */}
                   <div className="flex flex-col rounded-3xl">
-                    <div className="overflow-hidden rounded-3xl w-full max-h-[60vh] sm:max-h-[70vh]">
+                    <div className="overflow-hidden rounded-3xl w-full max-h-[60vh] sm:max-h-[70vh] bg-default-100">
                       {detailsImageSrc ? (
                         <Image
-                          loading="lazy"
+                          loading="eager"
                           removeWrapper
                           alt={selectedProduct?.name?.trim() || "Product"}
-                          src={detailsImageSrc}
+                          src={getOptimizedImageUrl(detailsImageSrc, 1200)}
                           className="w-full h-full object-contain"
                         />
                       ) : (
@@ -633,10 +635,10 @@ export default function ProductsGridClient() {
                               aria-label={`Preview image ${idx + 1}`}
                             >
                               <Image
-                                loading="lazy"
+                                loading="eager"
                                 removeWrapper
                                 alt={`Thumbnail ${idx + 1}`}
-                                src={src}
+                                src={getOptimizedImageUrl(src, 300)}
                                 className="h-20 w-28 object-cover sm:h-24 sm:w-32 cursor-pointer"
                               />
                             </button>
