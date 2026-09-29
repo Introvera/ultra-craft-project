@@ -26,6 +26,7 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { ChevronDownIcon, PlusIcon, SearchIcon, VerticalDotsIcon } from "../icons";
+import { getOptimizedImageUrl } from "@/lib/utils";
 
 type Project = {
   id: number;
@@ -338,7 +339,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
           <div className="flex items-center gap-3">
             {firstImage ? (
                 <img
-                  src={firstImage}
+                  src={getOptimizedImageUrl(firstImage, 100)}
                   className="w-8 h-8 rounded object-cover"
                   alt={project.name.trim() || "Project"}
                 />
@@ -780,7 +781,7 @@ export default function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                       {viewProject.image.map((url, idx) => (
                         <img
                           key={url}
-                          src={url}
+                          src={getOptimizedImageUrl(url, 400)}
                           className="w-24 h-24 rounded object-cover"
                           alt={`Project image ${idx + 1}`}
                         />

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { getOptimizedImageUrl } from "@/lib/utils";
 
 type Project = {
   id: number;
@@ -95,12 +96,12 @@ const AutoProducts: React.FC = () => {
 
                     {/* MOBILE IMAGE (between location and description) */}
                     <div className="mt-4 block md:hidden">
-                      <div className="relative w-full overflow-hidden rounded-4xl">
+                      <div className="relative w-full overflow-hidden rounded-4xl bg-default-200/50">
                         <div className="w-full aspect-[4/3]">
                           <HeroImage
-                            loading="lazy"
+                            loading="eager"
                             alt={project.name.trim() || "Project"}
-                            src={heroImageSrc}
+                            src={getOptimizedImageUrl(heroImageSrc, 1000)}
                             radius="lg"
                             className="w-full h-full object-cover"
                           />
@@ -131,11 +132,12 @@ const AutoProducts: React.FC = () => {
 
                 {/* RIGHT — IMAGE (desktop only) */}
                 <div className="md:w-5/12 hidden md:block">
-                  <div className="relative w-full overflow-hidden rounded-4xl">
+                  <div className="relative w-full overflow-hidden rounded-4xl bg-default-200/50">
                     <div className="w-full aspect-[4/3]">
                       <HeroImage
+                        loading="eager"
                         alt={project.name.trim() || "Project"}
-                        src={heroImageSrc}
+                        src={getOptimizedImageUrl(heroImageSrc, 1200)}
                         radius="lg"
                         className="w-full h-full object-cover"
                       />
