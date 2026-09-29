@@ -16,6 +16,7 @@ import {
 } from "@heroui/react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import React from "react";
+import { getOptimizedImageUrl } from "@/lib/utils";
 
 /* simple classnames helper */
 function cn(...classes: Array<string | false | null | undefined>) {
@@ -344,17 +345,17 @@ const ProjectsGrid: React.FC = () => {
                   footer: "bg-transparent",
                 }}
               >
-                <div className="relative">
+                <div className="relative overflow-hidden rounded-4xl bg-default-200/50">
                   {project.image[0] ? (
                     <Image
-                      loading="lazy"
+                      loading="eager"
                       removeWrapper
                       alt={project.name.trim() || "Project"}
-                      src={project.image[0]}
-                      className="w-full object-cover h-96 p-2 rounded-4xl"
+                      src={getOptimizedImageUrl(project.image[0], 800)}
+                      className="w-full object-cover h-96 p-2 rounded-4xl transition-opacity duration-300"
                     />
                   ) : (
-                    <div className="h-52 w-full sm:h-64 md:h-72 p-2 rounded-3xl bg-default-200" />
+                    <div className="h-96 w-full p-2 rounded-4xl bg-default-200" />
                   )}
                 </div>
 
@@ -496,10 +497,11 @@ const ProjectsGrid: React.FC = () => {
                           <div className="p-1">
                             {src ? (
                               <Image
+                                loading="eager"
                                 removeWrapper
                                 alt={`Project image ${idx + 1}`}
-                                src={src}
-                                className="h-[320px] w-full object-cover rounded-3xl sm:h-[380px] lg:h-[420px]"
+                                src={getOptimizedImageUrl(src, 1200)}
+                                className="h-[320px] w-full object-cover rounded-3xl sm:h-[380px] lg:h-[420px] transition-opacity duration-300"
                               />
                             ) : (
                               <div className="h-[320px] w-full rounded-3xl bg-default-200 sm:h-[380px] lg:h-[420px]" />
